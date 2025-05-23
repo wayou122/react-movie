@@ -1,0 +1,247 @@
+:root {
+  --topic1: #d45;
+  --topic2: #27d;
+  --topic3: #c72;
+  --midgray: #666;
+  --lightgray: #aaa;
+  --background-color: Teal;
+}
+
+* {
+  font-family: 'Noto Sans';
+}
+
+/* 實心圖示 */
+.filled-icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+  font-size: 24px;
+  line-height: 2.2rem;
+}
+
+/* 空心圖示 */
+.outlined-icon {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+  font-size: 24px;
+  line-height: 2.2rem;
+}
+
+.h2-title {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.stars {
+  color: #ffbb00;
+}
+
+
+.show-more-btn {
+  color: var(--topic2);
+  background: none;
+  border: none
+}
+
+
+.like-dislike-btn>button {
+  border: none;
+  background: none;
+}
+
+.review-like-btn {
+  color: var(--lightgray);
+}
+
+.review-like-btn-checked {
+  color: var(--topic1);
+}
+
+.review-dislike-btn {
+  color: var(--lightgray);
+}
+
+.review-dislike-btn-checked {
+  color: var(--topic1)
+}
+
+.movie-banner {
+  object-fit: cover;
+  width: 100%;
+  max-height: 120px;
+  margin-bottom: 16px;
+  box-shadow: 0px 0px 5px #aaa;
+
+}
+
+.movie-poster {
+  object-fit: cover;
+  width: 100%;
+  box-shadow: 0px 0px 5px #aaa;
+}
+
+.movie-card-description {
+  color: #333;
+  line-height: 1.5rem;
+}
+
+p.genre {
+  margin-bottom: 0.5rem;
+}
+
+p.director,
+p.actor {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+.movie-summary {
+  margin-top: 10px;
+  padding: 8px;
+  line-height: 1.5rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.movie-summary>:nth-child(1)::before {
+  content: "● 故事大綱";
+  color: var(--topic3);
+  margin-right: 10px;
+}
+
+.movie-summary p {
+  margin-bottom: 0;
+  margin-top: 0.5rem;
+}
+
+.stockpot-icon {
+  color: var(--topic1)
+}
+
+.comment-text {
+  color: var(--midgray);
+  font-size: 0.85rem;
+}
+
+.review-rate input {
+  display: none;
+}
+
+.review-rate label .outlined-icon {
+  font-size: 30px;
+  color: var(--lightgray);
+  cursor: pointer;
+}
+
+.review-rate input:checked+label .outlined-icon {
+  color: var(--topic1);
+}
+
+.rate-text {
+  color: var(--topic1);
+  font-weight: 700;
+}
+
+.review-ddd-btn .dropdown-toggle {
+  background: none;
+  border: none;
+  color: var(--midgray)
+}
+
+.review-ddd-btn:hover .dropdown-toggle {
+  background-color: #eee;
+  color: var(--midgray)
+}
+
+.review-ddd-btn .dropdown-toggle::after {
+  display: none;
+}
+
+.review-ddd-btn .dropdown-item:focus {
+  background-color: var(--lightgray);
+}
+
+.filled-icon.bookmark-icon {
+  color: var(--topic2);
+  cursor: pointer;
+}
+
+.outlined-icon.bookmark-icon {
+  color: var(--lightgray);
+  cursor: pointer;
+}
+
+.sort-btn {
+  background: var(--lightgray);
+}
+
+button.search-btn {
+  background-color: var(--topic2);
+  border: none;
+}
+
+button.btn-primary {
+  background-color: var(--topic2);
+  border: none;
+}
+
+h2.ranking-title {
+  text-align: center;
+}
+
+.ranking-number {
+  color: #666;
+  font-size: 20px;
+}
+
+.ranking-img {
+  border-radius: 50%;
+}
+
+.ranking-main {
+  width: 50%;
+}
+
+.ranking-main a {
+  text-decoration: none;
+  color: black;
+}
+
+.ranking-main a:hover {
+  text-decoration: none;
+  color: var(--topic2);
+}
+
+.ranking-bar {
+  margin-top: 2px;
+  height: 14px;
+  /* background: var(--topic3); */
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+button.login-or-register-btn {
+  border: 2px solid var(--lightgray);
+  border-radius: 10px;
+  background: none;
+  color: #666;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+button.login-or-register-btn.select {
+  border: 2px solid var(--topic2);
+  background: var(--topic2);
+  color: white;
+}
