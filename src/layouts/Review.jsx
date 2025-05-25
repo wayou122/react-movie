@@ -49,18 +49,16 @@ function Review(props) {
   return (
     <>
       <div style={{ maxWidth: "660px" }} className="overflow-hidden review-movie-card">
-        <Col className="ps-1">
           <div>
             <div className='d-flex justify-content-between align-items-center'>
-              <h5 className='pt-2'>{title}</h5>
+                <div className='pt-2 mb-2'>
+                  <span className="me-2">{account}</span>
+                  <span className="stars">{'★'.repeat(score)}</span>
+                </div>
               <ThreeDotBtn />
             </div>
 
-            <div className="d-flex justify-content-start gap-1">
-              <p className='mb-2'>{account}</p>
-              <div className="stars">{'★'.repeat(score)}</div>
-            </div>
-            <p >
+            <p className="me-3">
               {showMore ? content : content.slice(0, 100)}
               {contentLess ? '' :
                 <button
@@ -94,9 +92,7 @@ function Review(props) {
                 </div>
               </button>
             </div>
-
           </div>
-        </Col>
       </div>
     </>
   )

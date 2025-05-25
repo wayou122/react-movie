@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Form, Col, Row, Image, Button, FloatingLabel } from 'react-bootstrap'
+import { Form, Col, Row, Image, Button } from 'react-bootstrap'
 import Menu from '../layouts/Menu';
-import { validateNameFormat, validateEmailFormat, validatePasswordFormat } from '../utils/validate_function';
-
-const API = 'http://localhost:8085/tiann'
+import { validateNameUnique, validateNameFormat, validateEmailFormat, validatePasswordFormat } from '../utils/validate_function';
+import { authcodeAPI, loginAPI, registerAPI } from '../api/api';
 
 function Login() {
 
-  const [isLogin, setIsLogin] = useState(true);
-  const [nameValid, setNameValid] = useState(true);
-  const [emailValid, setEmailValid] = useState(true);
-  const [passwordValid, setPasswordValid] = useState(true);
+  const [isLogin, setIsLogin] = useState(true)
+  const [nameValid, setNameValid] = useState(true)
+  const [nameUnique, setNameUnique] = useState(true)
+  const [emailValid, setEmailValid] = useState(true)
+  const [passwordValid, setPasswordValid] = useState(true)
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -18,60 +18,74 @@ function Login() {
     authcode: ''
   })
   const [authcodeURL, setAuthcoceURL] = useState('')
+  //const debounceTimer = useRef(null); // 儲存 debounce timer
 
   function fetchAuthcode() {
-    setAuthcoceURL(`${API}/authcode?time=${new Date()}`)
+    setAuthcoceURL(authcodeAPI(new Date().getTime()))
   }
 
   function handleChange(e) {
     setFormData(p => ({
-      ...p,
-      [e.target.name]: e.target.value
+      ...p, [e.target.name]: e.target.value
     }))
+
+    // if(e.target.name != 'username') return
+    // if (debounceTimer.current) {
+    //   clearTimeout(debounceTimer.current);
+    // }
+
+    // // 設定新的 debounce timer
+    // debounceTimer.current = setTimeout(() => {
+    //   validateName(e.target.value);
+    // }, 500); // 500ms debounce
   }
 
-  function validateName(name) {
-    const isNameOK = validateNameFormat(name)
-    setNameValid(isNameOK)
-    return isNameOK
+  async function validateName(name) {
+    const isNameFormatOK = validateNameFormat(name)
+    if (!isNameFormatOK){
+      setNameValid(false)
+      return
+    } 
+    setNameValid(true)
+    const isNameUniqueOK = await validateNameUnique(name)
+    setNameUnique(isNameUniqueOK)
+    console.log(isNameUniqueOK)
   }
 
   function validateEmail(email) {
     const isEmailOK = validateEmailFormat(email)
     setEmailValid(isEmailOK)
-    return isEmailOK
   }
 
   function validatePassword(password) {
     const isPasswordOK = validatePasswordFormat(password)
     setPasswordValid(isPasswordOK)
-    return isPasswordOK
   }
 
-  //emailValid && passwordValid
-  //nameValid && emailValid && passwordValid
   function handleSubmit(e) {
     e.preventDefault();
+    // 登入請求
     if (isLogin) {
       if (!emailValid || !passwordValid) {
         alert('請確認填寫資料')
       } else {
         loginSubmit()
       }
-    } else {
-      if (!nameValid || !emailValid || !passwordValid) {
+    } 
+    // 註冊請求
+    else {
+      if (!nameValid || !nameUnique || !emailValid || !passwordValid) {
         alert('請確認填寫資料')
       } else {
         registerSubmit()
       }
     }
-    window.location.reload();
+    //window.location.reload();
   };
 
   async function loginSubmit() {
-    console.log(`${API}/login`)
     try {
-      const res = await fetch(`${API}/login`, {
+      const res = await fetch(loginAPI, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-type': 'application/x-www-form-urlencoded' },
@@ -90,7 +104,7 @@ function Login() {
 
   async function registerSubmit() {
     try {
-      const res = await fetch(`${API}/register`, {
+      const res = await fetch(registerAPI, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-type': 'application/x-www-form-urlencoded' },
@@ -148,11 +162,15 @@ function Login() {
                 name='username'
                 placeholder="輸入帳號名稱"
                 value={formData.username}
-                onChange={(e) => { handleChange(e); validateName(e.target.value) }}
-                isInvalid={!nameValid}
+                onChange={(e)=>{handleChange(e)}}
+                onBlur={(e)=>{handleChange(e); validateName(e.target.value)}}
+                isInvalid={!nameValid || !nameUnique}
                 required />
               <Form.Control.Feedback type="invalid">
-                名稱長度須為5~20字，請用英數字.-_
+                {
+                  !nameValid ? '名稱長度須為5~20字，請用英數字-_或台語羅馬字' : 
+                  '帳號名稱已被使用'
+                }
               </Form.Control.Feedback>
             </Form.Group>
           )}
@@ -163,7 +181,7 @@ function Login() {
               name='email'
               placeholder="輸入email"
               value={formData.email}
-              onChange={(e) => { handleChange(e); validateEmail(e.target.value) }}
+              onChange={(e)=>{handleChange(e); validateEmail(e.target.value)}}
               isInvalid={!emailValid}
               required />
             <Form.Control.Feedback type="invalid">
@@ -178,7 +196,7 @@ function Login() {
               name='password'
               placeholder="輸入密碼"
               value={formData.password}
-              onChange={(e) => { handleChange(e); validatePassword(e.target.value) }}
+              onChange={(e)=>{handleChange(e); validatePassword(e.target.value)}}
               isInvalid={!passwordValid}
               required />
             <Form.Control.Feedback type="invalid">
@@ -193,7 +211,7 @@ function Login() {
                 <Form.Control type="text"
                   name='authcode'
                   value={formData.authcode}
-                  onChange={(e) => handleChange(e)}
+                  onChange={handleChange}
                   placeholder="輸入驗證碼" required />
               </Col>
               <Col xs={4} className="d-flex align-items-center px-0">
@@ -203,7 +221,8 @@ function Login() {
             </Row>
           </Form.Group>
 
-          <Button variant="primary" type="submit" >
+          <Button variant="primary" type="submit"
+           disabled={!nameValid || !nameUnique || !passwordValid || !emailValid} >
             {isLogin ? '登入帳號' : '註冊帳號'}
           </Button>
         </Form>

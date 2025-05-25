@@ -1,22 +1,39 @@
-import { useState } from 'react'
-import { Row, Col, Form, Button } from 'react-bootstrap'
+import { useState, useEffect } from 'react'
+import { Form, Button } from 'react-bootstrap'
 import Menu from '../layouts/Menu'
-import { validateEmailFormat, validatePasswordFormat, validateNameFormat } from '../utils/validate_function';
+import { validateNameUnique, validateEmailFormat, validatePasswordFormat, validateNameFormat } from '../utils/validate_function';
+import { accountAPI, updateUsernameAPI } from '../api/api';
 
 function Account() {
-
-  const email = 'jjj@gmail.com'
-  const name = 'mary_113'
-
-  const [nameValid, setNameValid] = useState(true);
+  let usernameNow = ''
+  const [nameValid, setNameValid] = useState(true)
+  const [nameUnique, setNameUnique] = useState(true)
   const [emailValid, setEmailValid] = useState(true);
   const [passwordValid, setPasswordValid] = useState(true);
   const [newPasswordValid, setNewPasswordValid] = useState(true);
   const [formData, setFormData] = useState({
-    name: '',
-    password: '',
-    newPassword: ''
+    email:'', username: ''
   })
+
+  useEffect(()=>{
+    fetchUserInfo()
+  },[])
+
+async function fetchUserInfo(){
+  try{
+    const res = await fetch(accountAPI,{credentials:'include'})
+    const resData = await res.json()
+    if (res.ok && resData.code==200){
+      setFormData(resData.data)
+      usernameNow = resData.data.username
+    }else{
+      alert('載入失敗: ' + resData.message)
+    }
+  }catch(err){
+    console.log('載入錯誤: '+err.message)
+  }
+
+}
 
   function handleChange(e) {
     setFormData(p => ({
@@ -25,11 +42,17 @@ function Account() {
     }))
   }
 
-  function validateName(name) {
-    const isNameOK = validateNameFormat(name);
-    setNameValid(isNameOK);
-    return isNameOK;
-  }
+    async function validateName(name) {
+      const isNameFormatOK = validateNameFormat(name)
+      if (!isNameFormatOK){
+        setNameValid(false)
+        return
+      } 
+      setNameValid(true)
+      const isNameUniqueOK = await validateNameUnique(name)
+      setNameUnique(isNameUniqueOK)
+      console.log(isNameUniqueOK)
+    }
 
   function validateEmail(email) {
     const isEmailOK = validateEmailFormat(email);
@@ -51,11 +74,32 @@ function Account() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (nameValid && passwordValid && newPasswordValid) {
-      alert('修改成功！' + JSON.stringify(formData));
-      // 提交資料處理（例如呼叫 API）
+    if (!nameValid || !nameUnique) {
+      alert('請確認填寫資料');
+    } else{
+      updateAccountSubmit()
     }
   };
+
+async function updateAccountSubmit(){
+  try{
+    const res = await fetch(updateUsernameAPI,{
+      method: 'POST',
+      credentials : 'include',
+      headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ 'username': formData.username })
+    })
+    const resData = await res.json()
+    if (res.ok && resData.code==200){
+      alert('修改成功')
+    }else{
+      alert('修改失敗: '+ resData.message)
+    }
+  }catch(err){
+    alert('修改錯誤: '+ err.message)
+  }
+}
+
   return (
     <>
       <Menu></Menu>
@@ -69,7 +113,7 @@ function Account() {
             <Form.Label>帳號信箱</Form.Label>
             <Form.Control type="email"
               name='email'
-              defaultValue={email}
+              defaultValue={formData.email}
               placeholder="輸入email"
               onChange={(e) => validateEmail(e.target.value)}
               isInvalid={!emailValid}
@@ -82,18 +126,22 @@ function Account() {
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>帳號名稱</Form.Label>
             <Form.Control type="text"
-              name='name'
-              defaultValue={name}
+              username='username'
+              defaultValue={formData.username}
               placeholder="輸入帳號名稱"
-              onChange={(e) => { handleChange(e); validateName(e.target.value) }}
-              isInvalid={!nameValid}
+              onChange={(e)=>{handleChange(e)}}
+              onBlur={(e)=>{handleChange(e); validateName(e.target.value)}}
+              isInvalid={!nameValid || !nameUnique}
             />
             <Form.Control.Feedback type="invalid">
-              名稱長度須為5~20字，請用英數字.-_
+              {
+                  !nameValid ? '名稱長度須為5~20字，請用英數字-_或台語羅馬字' : 
+                  '帳號名稱已被使用'
+                }
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          {/* <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>目前密碼</Form.Label>
             <Form.Control type="password"
               name='password'
@@ -117,9 +165,10 @@ function Account() {
             <Form.Control.Feedback type="invalid">
               密碼長度8~20位，需包含數字與英文字
             </Form.Control.Feedback>
-          </Form.Group>
+          </Form.Group> */}
 
-          <Button variant="primary" type="submit" >
+          <Button variant="primary" type="submit" 
+          disabled={!nameValid || !nameUnique || formData.username == usernameNow}>
             修改資料
           </Button>
         </Form>

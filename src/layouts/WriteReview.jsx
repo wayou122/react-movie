@@ -1,19 +1,15 @@
 import { useState, useRef } from 'react'
 import { Form, Row, Col, Button } from 'react-bootstrap'
+import { ratingOptions } from '../utils/ratingOptions'
 
-function MyReview() {
+function WriteReview() {
+  const API = `http://${window.location.host}`
   const title = '海角七號'
   const [displayText, setDisplayText] = useState('')
   const [selectedValue, setSelectedValue] = useState('');
-  const isLogin = true;
+  const isLogin = false;
 
-  const rateOptions = [
-    { value: '5', label: 'sentiment_excited', text: '超讚', emoji: '😊' },
-    { value: '4', label: 'sentiment_satisfied', text: '好看', emoji: '🙂' },
-    { value: '3', label: 'sentiment_neutral', text: '普普', emoji: '😐' },
-    { value: '2', label: 'sentiment_dissatisfied', text: '難看', emoji: '☹️' },
-    { value: '1', label: 'sentiment_frustrated', text: '爛透', emoji: '😠' },
-  ];
+  const rateOptions = ratingOptions;
 
   const handleRateChange = (e) => {
     const newValue = e.target.value
@@ -41,7 +37,7 @@ function MyReview() {
       <div>
 
         <div className="d-flex justify-content-center">
-          <p className="mb-2">我覺得{title}...<span className='rate-text'>{displayText}</span></p>
+          <p className="mb-2">我覺得「{title}」 <span className='rate-text'>{displayText}</span></p>
         </div>
         <div className="d-flex justify-content-start gap-3 mb-1">
 
@@ -56,28 +52,40 @@ function MyReview() {
                     onChange={handleRateChange}
                   />
                   <label for={option.value}>
-                    <span className="outlined-icon me-2">{option.label}</span>
+                    <span className="me-2">{option.emoji}</span>
                   </label>
+                  {/* <label for={option.value}>
+                    <span className="outlined-icon me-2"
+                    style={{filter: "grayscale(80%)"}}>{option.emoji}</span>
+                  </label> */}
                 </div>
               ))}
             </div>
 
             {isLogin ? (
               <div>
-                <Form.Control as="textarea" placeholder='我的評論...'
-                  rows={3} size="sm"
-                  value={textareaValue}
-                  ref={textareaRef}
-                  onChange={autoGrow} />
-              </div>) : ''
-            }
-            <Row>
-              <Col className='mx-auto'>
-                <Button variant="secondary" type='submit' className='d-flex mx-auto mt-2'>
-                  送出評論
+                <div>
+                  <Form.Control as="textarea" placeholder='我的評論...'
+                    rows={3} size="sm"
+                    value={textareaValue}
+                    ref={textareaRef}
+                    onChange={autoGrow} />
+                </div>
+                <div className='mx-auto'>
+                  <Button variant="secondary" type='submit' className='d-flex mx-auto mt-2'>
+                    送出評論
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className='mx-auto'>
+                <Button variant="secondary" className='d-flex mx-auto mt-2'
+                  onClick={() => { location.href = `${API}/login` }}>
+                  請先登入再送出評論
                 </Button>
-              </Col>
-            </Row>
+              </div>
+
+            )}
           </Form>
 
         </div>
@@ -86,4 +94,4 @@ function MyReview() {
   )
 
 }
-export default MyReview
+export default WriteReview

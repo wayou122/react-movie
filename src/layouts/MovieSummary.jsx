@@ -14,7 +14,6 @@ function MovieSummary() {
       </div> */}
 
       <div className='movie-summary'>
-        {console.log(content.length)}
         {showMore ? content : content.filter((c, i) => i < 1)}
         {contentLess ? '' :
           <span><button

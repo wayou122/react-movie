@@ -1,6 +1,6 @@
 :root {
   --topic1: #d45;
-  --topic2: #27d;
+  --topic2: #26c;
   --topic3: #c72;
   --midgray: #666;
   --lightgray: #aaa;
@@ -54,6 +54,7 @@
 
 
 .like-dislike-btn>button {
+  font-size: 0.9rem;
   border: none;
   background: none;
 }
@@ -136,12 +137,22 @@ p.actor {
   display: none;
 }
 
+.review-rate label{
+  font-size: 20px;
+  filter: opacity(40%) grayscale(100%);
+  cursor: pointer;
+}
+
+.review-rate input:checked+label{
+  filter: none;
+}
+/* 停用 */
 .review-rate label .outlined-icon {
   font-size: 30px;
   color: var(--lightgray);
   cursor: pointer;
 }
-
+/* 停用 */
 .review-rate input:checked+label .outlined-icon {
   color: var(--topic1);
 }
@@ -233,7 +244,7 @@ button.login-or-register-btn {
   border: 2px solid var(--lightgray);
   border-radius: 10px;
   background: none;
-  color: #666;
+  color: var(--lightgray);
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 4px;
