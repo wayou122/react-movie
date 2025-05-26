@@ -4,7 +4,8 @@ export const API = 'http://localhost:8085/tiann'
 export const loginAPI = `${API}/login`
 export const registerAPI = `${API}/register`
 export const logoutAPI = `${API}/logout`
-export const checkUsernameAPI = (name) => `${API}/check-username?username=${name}`
+export const checkLoginAPI = `${API}/check-login`
+export const checkUsernameAPI = (name) => `${API}/user/check-username?newUsername=${name}`
 export const authcodeAPI = (time) => `${API}/authcode?time=${time}`
 
 export const accountAPI = `${API}/user/account`

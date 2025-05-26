@@ -1,10 +1,12 @@
 import Container from 'react-bootstrap/Container';
 import { Form, Nav, Navbar, Offcanvas, Button } from 'react-bootstrap'
 import { useState, useEffect } from 'react'
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { checkLoginAPI, logoutAPI } from '../api/api';
 
-const API = 'http://localhost:8085/tiann'
+
 function Menu() {
+  const navigate = useNavigate()
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
@@ -13,7 +15,7 @@ function Menu() {
 
   async function checkLogin() {
     try {
-      const res = await fetch(`${API}/check-login`, {
+      const res = await fetch(checkLoginAPI, {
         method: 'GET',
         credentials: 'include'
       })
@@ -25,13 +27,15 @@ function Menu() {
   }
 
   async function handleLogout() {
-    const res = await fetch(`${API}/logout`, {
+    const res = await fetch(logoutAPI, {
       method: 'GET',
       credentials: 'include'
     })
     const resData = await res.json()
     setIsLogin(false)
     alert(resData.message)
+    navigate("/")
+
   }
 
   return (

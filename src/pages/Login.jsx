@@ -3,8 +3,11 @@ import { Form, Col, Row, Image, Button } from 'react-bootstrap'
 import Menu from '../layouts/Menu';
 import { validateNameUnique, validateNameFormat, validateEmailFormat, validatePasswordFormat } from '../utils/validate_function';
 import { authcodeAPI, loginAPI, registerAPI } from '../api/api';
+import { useNavigate } from 'react-router-dom';
+
 
 function Login() {
+  const navigate = useNavigate()
 
   const [isLogin, setIsLogin] = useState(true)
   const [nameValid, setNameValid] = useState(true)
@@ -42,10 +45,10 @@ function Login() {
 
   async function validateName(name) {
     const isNameFormatOK = validateNameFormat(name)
-    if (!isNameFormatOK){
+    if (!isNameFormatOK) {
       setNameValid(false)
       return
-    } 
+    }
     setNameValid(true)
     const isNameUniqueOK = await validateNameUnique(name)
     setNameUnique(isNameUniqueOK)
@@ -71,7 +74,7 @@ function Login() {
       } else {
         loginSubmit()
       }
-    } 
+    }
     // 註冊請求
     else {
       if (!nameValid || !nameUnique || !emailValid || !passwordValid) {
@@ -80,7 +83,6 @@ function Login() {
         registerSubmit()
       }
     }
-    //window.location.reload();
   };
 
   async function loginSubmit() {
@@ -94,8 +96,11 @@ function Login() {
       const resData = await res.json()
       if (res.ok && resData.code === 200) {
         alert(resData.message)
+        navigate("/")
+        window.location.reload()
       } else {
         alert('登入失敗:' + resData.message)
+        window.location.reload()
       }
     } catch (err) {
       alert('登入錯誤: ' + err.message)
@@ -113,8 +118,10 @@ function Login() {
       const resData = await res.json()
       if (res.ok && resData.code == 200) {
         alert(resData.message)
+        window.location.reload()
       } else {
         alert('註冊失敗: ' + resData.message)
+        window.location.reload()
       }
     } catch (err) {
       alert('註冊錯誤: ' + err.message)
@@ -162,14 +169,14 @@ function Login() {
                 name='username'
                 placeholder="輸入帳號名稱"
                 value={formData.username}
-                onChange={(e)=>{handleChange(e)}}
-                onBlur={(e)=>{handleChange(e); validateName(e.target.value)}}
+                onChange={(e) => { handleChange(e) }}
+                onBlur={(e) => { handleChange(e); validateName(e.target.value) }}
                 isInvalid={!nameValid || !nameUnique}
                 required />
               <Form.Control.Feedback type="invalid">
                 {
-                  !nameValid ? '名稱長度須為5~20字，請用英數字-_或台語羅馬字' : 
-                  '帳號名稱已被使用'
+                  !nameValid ? '名稱長度須為5~20字，請用英數字-_或台語羅馬字' :
+                    '帳號名稱已被使用'
                 }
               </Form.Control.Feedback>
             </Form.Group>
@@ -181,7 +188,7 @@ function Login() {
               name='email'
               placeholder="輸入email"
               value={formData.email}
-              onChange={(e)=>{handleChange(e); validateEmail(e.target.value)}}
+              onChange={(e) => { handleChange(e); validateEmail(e.target.value) }}
               isInvalid={!emailValid}
               required />
             <Form.Control.Feedback type="invalid">
@@ -196,7 +203,7 @@ function Login() {
               name='password'
               placeholder="輸入密碼"
               value={formData.password}
-              onChange={(e)=>{handleChange(e); validatePassword(e.target.value)}}
+              onChange={(e) => { handleChange(e); validatePassword(e.target.value) }}
               isInvalid={!passwordValid}
               required />
             <Form.Control.Feedback type="invalid">
@@ -215,14 +222,14 @@ function Login() {
                   placeholder="輸入驗證碼" required />
               </Col>
               <Col xs={4} className="d-flex align-items-center px-0">
-                <Image src={authcodeURL} />
+                <Image src={authcodeURL || null} />
                 <button onClick={fetchAuthcode} style={{ 'border': 'none' }}>⟳</button>
               </Col>
             </Row>
           </Form.Group>
 
           <Button variant="primary" type="submit"
-           disabled={!nameValid || !nameUnique || !passwordValid || !emailValid} >
+            disabled={!nameValid || !nameUnique || !passwordValid || !emailValid} >
             {isLogin ? '登入帳號' : '註冊帳號'}
           </Button>
         </Form>

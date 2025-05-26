@@ -26,24 +26,27 @@ export function validateNameFormat(name) {
     return graphemeCount >= 5 && graphemeCount <= 10;
   }
   return isValidTaiLoInput(name)
-  
+
   //簡單版英數字
   //const regex = /^[a-zA-Z0-9-_]{5,20}$/
   //return regex.test(name)
 };
 
 
-export async function validateNameUnique(name){
-   try{
-    const res = await fetch(checkUsernameAPI(name))
+export async function validateNameUnique(name) {
+  try {
+    const res = await fetch(checkUsernameAPI(name), {
+      method: 'GET',
+      credentials: 'include'
+    })
     const resData = await res.json()
-    if (res.ok &&  resData.data){
+    if (res.ok && resData.data) {
       return true
-    }else{
+    } else {
       return false
     }
-   }catch(err){
-    alert('驗證錯誤: '+ err.message)
+  } catch (err) {
+    alert('驗證錯誤: ' + err.message)
     return false
-   }
+  }
 }
