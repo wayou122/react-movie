@@ -1,16 +1,25 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import ScoreSection from "../components/ScoreSection";
 import MovieTitleSection from "../components/MovieTtileSection";
 
 function MovieCard() {
-  const title = '一家子兒咕咕叫'
-  const director = '魏德聖'
-  const actor = '李安平, 游採安, 朱裕鈞, 王彩英, 陳淑貞, 張志華, 黃芳宜'
-  const releaseDate = '2025/02/19'
-  const genere = '劇情片'
-  const length = '120 分鐘'
-  const imgUrl = 'https://taiwancinema.bamid.gov.tw/ImageData/60/2025/93359/t_93359.jpg?v=202505051034265221354'
+  const movieData = useContext(MovieContext)
+  const title = movieData.title
+  const director = movieData.director
+  const actor = movieData.actor
+  const releaseDate = movieData.releaseDate.slice(0, 4)
+  const genere = movieData.genre
+  const length = movieData.length
+  const imgUrl = movieData.posterUrl
+
+  // const title = '一家子兒咕咕叫'
+  // const director = '魏德聖'
+  // const actor = '李安平, 游採安, 朱裕鈞, 王彩英, 陳淑貞, 張志華, 黃芳宜'
+  // const releaseDate = '2025/02/19'
+  // const genere = '劇情片'
+  // const length = '120 分鐘'
+  // const imgUrl = 'https://taiwancinema.bamid.gov.tw/ImageData/60/2025/93359/t_93359.jpg?v=202505051034265221354'
 
   const score = '85%'
   const reviewCount = 27
@@ -30,7 +39,7 @@ function MovieCard() {
               <MovieTitleSection bookmark={true} title={title}></MovieTitleSection>
               <div className="movie-card-description mb-1 gap-0">
                 <p className='genre'>
-                  <span>{releaseDate.slice(0, 4)}．</span>
+                  <span>{releaseDate}．</span>
                   <span>{genere}．</span>
                   <span>{length}</span>
                 </p>
