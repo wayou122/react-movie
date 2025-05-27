@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react'
-import { Form, Row, Col, Button } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import { ratingOptions } from '../utils/ratingOptions'
+import { loginAPI } from '../api/api'
 
 function WriteReview() {
-  const API = `http://${window.location.host}`
   const title = '海角七號'
   const [displayText, setDisplayText] = useState('')
   const [selectedValue, setSelectedValue] = useState('');
@@ -80,7 +80,7 @@ function WriteReview() {
             ) : (
               <div className='mx-auto'>
                 <Button variant="secondary" className='d-flex mx-auto mt-2'
-                  onClick={() => { location.href = `${API}/login` }}>
+                  onClick={() => { location.href = loginAPI }}>
                   請先登入再送出評論
                 </Button>
               </div>

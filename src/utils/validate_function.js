@@ -33,9 +33,9 @@ export function validateNameFormat(name) {
 };
 
 
-export async function validateNameUnique(name) {
+export async function validateNameUnique(newName, oldName) {
   try {
-    const res = await fetch(checkUsernameAPI(name), {
+    const res = await fetch(checkUsernameAPI(newName, oldName), {
       method: 'GET',
       credentials: 'include'
     })

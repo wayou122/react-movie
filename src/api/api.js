@@ -5,7 +5,7 @@ export const loginAPI = `${API}/login`
 export const registerAPI = `${API}/register`
 export const logoutAPI = `${API}/logout`
 export const checkLoginAPI = `${API}/check-login`
-export const checkUsernameAPI = (name) => `${API}/user/check-username?newUsername=${name}`
+export const checkUsernameAPI = (newName, oldName) => `${API}/user/check-username?newUsername=${newName}&oldUsername=${oldName}`
 export const authcodeAPI = (time) => `${API}/authcode?time=${time}`
 
 export const accountAPI = `${API}/user/account`

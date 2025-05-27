@@ -33,9 +33,7 @@ function Menu() {
     })
     const resData = await res.json()
     setIsLogin(false)
-    alert(resData.message)
     navigate("/")
-
   }
 
   return (

@@ -3,9 +3,9 @@ import { Form, Button } from 'react-bootstrap'
 import Menu from '../layouts/Menu'
 import { validateNameUnique, validateEmailFormat, validatePasswordFormat, validateNameFormat } from '../utils/validate_function';
 import { accountAPI, updateUsernameAPI } from '../api/api';
+let oldUsername = ''
 
 function Account() {
-  let usernameNow = ''
   const [nameValid, setNameValid] = useState(true)
   const [nameUnique, setNameUnique] = useState(true)
   const [emailValid, setEmailValid] = useState(true);
@@ -25,8 +25,7 @@ function Account() {
       const resData = await res.json()
       if (res.ok && resData.code == 200) {
         setFormData(resData.data)
-        usernameNow = resData.data.username
-        console.log(usernameNow)
+        oldUsername = resData.data.username
       } else {
         alert('載入失敗: ' + resData.message)
       }
@@ -50,27 +49,13 @@ function Account() {
       return
     }
     setNameValid(true)
-    const isNameUniqueOK = await validateNameUnique(name)
+    const isNameUniqueOK = await validateNameUnique(name, oldUsername)
     setNameUnique(isNameUniqueOK)
-    console.log(formData.username)
   }
 
   function validateEmail(email) {
     const isEmailOK = validateEmailFormat(email);
     setEmailValid(isEmailOK);
-    return isEmailOK;
-  };
-
-  function validatePassword(pwd) {
-    const isPasswordOK = validatePasswordFormat(pwd);
-    setPasswordValid(isPasswordOK);
-    return isPasswordOK;
-  };
-
-  function validateNewPassword(pwd) {
-    const isPasswordOK = validatePasswordFormat(pwd);
-    setNewPasswordValid(isPasswordOK);
-    return isPasswordOK;
   };
 
   const handleSubmit = (e) => {
@@ -85,7 +70,7 @@ function Account() {
   async function updateAccountSubmit() {
     try {
       const res = await fetch(updateUsernameAPI, {
-        method: 'POST',
+        method: 'PUT',
         credentials: 'include',
         headers: { 'Content-type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ 'username': formData.username })
@@ -99,6 +84,7 @@ function Account() {
     } catch (err) {
       alert('修改錯誤: ' + err.message)
     }
+    window.location.reload()
   }
 
   return (
@@ -169,7 +155,7 @@ function Account() {
           </Form.Group> */}
 
           <Button variant="primary" type="submit"
-            disabled={!nameValid || !nameUnique || formData.username == usernameNow}>
+            disabled={!nameValid || !nameUnique || formData.username == oldUsername}>
             修改資料
           </Button>
         </Form>

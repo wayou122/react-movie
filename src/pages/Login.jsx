@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Form, Col, Row, Image, Button } from 'react-bootstrap'
+import { Form, Col, Row, Image, Button, Alert } from 'react-bootstrap'
 import Menu from '../layouts/Menu';
 import { validateNameUnique, validateNameFormat, validateEmailFormat, validatePasswordFormat } from '../utils/validate_function';
 import { authcodeAPI, loginAPI, registerAPI } from '../api/api';
@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const navigate = useNavigate()
-
   const [isLogin, setIsLogin] = useState(true)
   const [nameValid, setNameValid] = useState(true)
   const [nameUnique, setNameUnique] = useState(true)
@@ -21,6 +20,7 @@ function Login() {
     authcode: ''
   })
   const [authcodeURL, setAuthcoceURL] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
   //const debounceTimer = useRef(null); // 儲存 debounce timer
 
   function fetchAuthcode() {
@@ -52,7 +52,6 @@ function Login() {
     setNameValid(true)
     const isNameUniqueOK = await validateNameUnique(name)
     setNameUnique(isNameUniqueOK)
-    console.log(isNameUniqueOK)
   }
 
   function validateEmail(email) {
@@ -70,6 +69,7 @@ function Login() {
     // 登入請求
     if (isLogin) {
       if (!emailValid || !passwordValid) {
+        setErrorMessage('請確認填寫資料')
         alert('請確認填寫資料')
       } else {
         loginSubmit()
@@ -78,6 +78,7 @@ function Login() {
     // 註冊請求
     else {
       if (!nameValid || !nameUnique || !emailValid || !passwordValid) {
+        setErrorMessage('請確認填寫資料')
         alert('請確認填寫資料')
       } else {
         registerSubmit()
@@ -95,12 +96,10 @@ function Login() {
       })
       const resData = await res.json()
       if (res.ok && resData.code === 200) {
-        alert(resData.message)
         navigate("/")
-        window.location.reload()
+        //window.location.reload()
       } else {
-        alert('登入失敗:' + resData.message)
-        window.location.reload()
+        setErrorMessage('登入失敗: ' + resData.message)
       }
     } catch (err) {
       alert('登入錯誤: ' + err.message)
@@ -117,11 +116,9 @@ function Login() {
       })
       const resData = await res.json()
       if (res.ok && resData.code == 200) {
-        alert(resData.message)
-        window.location.reload()
+        navigate("/")
       } else {
-        alert('註冊失敗: ' + resData.message)
-        window.location.reload()
+        setErrorMessage('註冊失敗: ' + resData.message)
       }
     } catch (err) {
       alert('註冊錯誤: ' + err.message)
@@ -130,8 +127,10 @@ function Login() {
 
   useEffect(() => {
     setNameValid(true)
+    setNameUnique(true)
     setEmailValid(true)
     setPasswordValid(true)
+    setErrorMessage('')
     setFormData({
       username: '',
       email: '',
@@ -159,9 +158,15 @@ function Login() {
             {isLogin ? '前往註冊' : '前往登入'}
           </button>
         </p> */}
+        {
+          errorMessage ?
+            <Alert variant='danger'>
+              {errorMessage}
+            </Alert>
+            : ''
+        }
 
         <Form onSubmit={handleSubmit}>
-
           {isLogin ? '' : (
             <Form.Group className="mb-3" controlId="formBasicName">
               <Form.Label>帳號名稱</Form.Label>
