@@ -1,3 +1,5 @@
+import { useContext } from "react"
+import MovieContext from '../pages/Movie'
 
 function MovieBanner() {
   const movieData = useContext(MovieContext)

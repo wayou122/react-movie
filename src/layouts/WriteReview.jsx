@@ -2,9 +2,12 @@ import { useState, useRef } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { ratingOptions } from '../utils/ratingOptions'
 import { loginAPI } from '../api/api'
+import MovieContext from '../pages/Movie'
 
 function WriteReview() {
-  const title = '海角七號'
+  const movieData = useContext(MovieContext)
+  const title = movieData.title
+  //const title = '海角七號'
   const [displayText, setDisplayText] = useState('')
   const [selectedValue, setSelectedValue] = useState('');
   const isLogin = false;

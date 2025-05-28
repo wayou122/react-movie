@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import ScoreSection from "../components/ScoreSection";
 import MovieTitleSection from "../components/MovieTtileSection";
+import MovieContext from '../pages/Movie'
 
 function MovieCard() {
   const movieData = useContext(MovieContext)

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import { Row, Col, Card, Container } from 'react-bootstrap'
 import Menu from "../layouts/Menu"
 import MovieCard from "../layouts/MovieCard"

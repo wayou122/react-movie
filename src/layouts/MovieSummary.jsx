@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import MovieContext from '../pages/Movie'
 
 function MovieSummary() {
   const movieData = useContext(MovieContext)
