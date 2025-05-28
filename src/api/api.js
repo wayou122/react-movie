@@ -1,4 +1,3 @@
-
 export const API = 'http://localhost:8085/tiann'
 
 export const loginAPI = `${API}/login`

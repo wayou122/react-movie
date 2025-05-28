@@ -1,89 +1,87 @@
 import { useState, useMemo } from 'react'
+import { MovieContext } from '../contexts/MovieContext'
 import { Row, Col, Card } from 'react-bootstrap'
 import Review from "./Review"
 import Filter from '../components/Filter'
 
+
 // const reviews = [
-//   { popular: 1, user: 'Alice', score: 5, createDate: '2024-05-01', hasImage: true, content: 'Great product!' },
-//   { popular: 2, user: 'Bob', score: 3, createDate: '2024-04-25', hasImage: false, content: 'It’s okay.' },
-//   { popular: 3, user: 'Charlie', score: 4, createDate: '2024-05-03', hasImage: true, content: 'Pretty good!' },
-//   { popular: 4, user: 'Dana', score: 4, createDate: '2024-05-02', hasImage: false, content: 'Nice.' },
+//   {
+//     title: '夢裡有顆星',
+//     account: 'moonlight998',
+//     score: 4,
+//     likes: 23,
+//     content: "有些事情其實也沒有解釋，只是走著走著就懂了。人們總說成長是孤獨的，卻也因此更能看清方向。",
+//     isLike: 'like',
+//     date: '2023-11-03'
+//   },
+//   {
+//     title: '貓咪的午茶時間',
+//     account: 'kittylover12',
+//     score: 2,
+//     likes: 8,
+//     content: "沙發邊的小被子還沒收，陽光剛好灑進來的午後，是我最喜歡的平靜時光。",
+//     isLike: 'dislike',
+//     date: '2025-01-19'
+//   },
+//   {
+//     title: '走走停停才是旅行',
+//     account: 'wanderer_07',
+//     score: 5,
+//     likes: 34,
+//     content: "每一個轉角都有新的驚喜，停下來看看其實比趕路更重要，這次在山裡看見了第一場雪。",
+//     isLike: 'like',
+//     date: '2025-02-03'
+//   },
+//   {
+//     title: '星空下的告白',
+//     account: 'stardust_xx',
+//     score: 1,
+//     likes: 4,
+//     content: "話說到一半就卡住了，因為那雙眼睛看著我，什麼都說不出口。",
+//     isLike: 'dislike',
+//     date: '2025-03-03'
+//   },
+//   {
+//     title: '早餐店的老闆娘',
+//     account: 'eggtoast404',
+//     score: 3,
+//     likes: 15,
+//     content: "每天早上那杯豆漿就像安定劑一樣，熟悉的味道讓我感到安心，她總記得我要加一點糖。",
+//     isLike: 'like',
+//     date: '2024-12-03'
+//   },
+//   {
+//     title: '雨天書店',
+//     account: 'reader_june',
+//     score: 5,
+//     likes: 40,
+//     content: "店裡放著老爵士樂，雨滴敲打著玻璃窗，我坐在角落翻著那本已經看過兩遍的小說。",
+//     isLike: 'like',
+//     date: '2024-01-03'
+//   },
+//   {
+//     title: '巷口的紅燈',
+//     account: 'cityfeet009',
+//     score: 2,
+//     likes: 7,
+//     content: "每次等紅燈時，總會看到對街那個站牌下的她，好像從來沒注意過我。",
+//     isLike: 'dislike',
+//     date: '2025-01-01'
+//   },
+//   {
+//     title: '記得呼吸',
+//     account: 'mindfulme22',
+//     score: 4,
+//     likes: 19,
+//     content: "在混亂中靜下來，閉上眼，深呼吸，其實只是提醒自己還活著。",
+//     isLike: 'like',
+//     date: '2025-01-03'
+//   }
 // ];
 
-const reviews = [
-  {
-    title: '夢裡有顆星',
-    account: 'moonlight998',
-    score: 4,
-    likes: 23,
-    content: "有些事情其實也沒有解釋，只是走著走著就懂了。人們總說成長是孤獨的，卻也因此更能看清方向。",
-    isLike: 'like',
-    date: '2023-11-03'
-  },
-  {
-    title: '貓咪的午茶時間',
-    account: 'kittylover12',
-    score: 2,
-    likes: 8,
-    content: "沙發邊的小被子還沒收，陽光剛好灑進來的午後，是我最喜歡的平靜時光。",
-    isLike: 'dislike',
-    date: '2025-01-19'
-  },
-  {
-    title: '走走停停才是旅行',
-    account: 'wanderer_07',
-    score: 5,
-    likes: 34,
-    content: "每一個轉角都有新的驚喜，停下來看看其實比趕路更重要，這次在山裡看見了第一場雪。",
-    isLike: 'like',
-    date: '2025-02-03'
-  },
-  {
-    title: '星空下的告白',
-    account: 'stardust_xx',
-    score: 1,
-    likes: 4,
-    content: "話說到一半就卡住了，因為那雙眼睛看著我，什麼都說不出口。",
-    isLike: 'dislike',
-    date: '2025-03-03'
-  },
-  {
-    title: '早餐店的老闆娘',
-    account: 'eggtoast404',
-    score: 3,
-    likes: 15,
-    content: "每天早上那杯豆漿就像安定劑一樣，熟悉的味道讓我感到安心，她總記得我要加一點糖。",
-    isLike: 'like',
-    date: '2024-12-03'
-  },
-  {
-    title: '雨天書店',
-    account: 'reader_june',
-    score: 5,
-    likes: 40,
-    content: "店裡放著老爵士樂，雨滴敲打著玻璃窗，我坐在角落翻著那本已經看過兩遍的小說。",
-    isLike: 'like',
-    date: '2024-01-03'
-  },
-  {
-    title: '巷口的紅燈',
-    account: 'cityfeet009',
-    score: 2,
-    likes: 7,
-    content: "每次等紅燈時，總會看到對街那個站牌下的她，好像從來沒注意過我。",
-    isLike: 'dislike',
-    date: '2025-01-01'
-  },
-  {
-    title: '記得呼吸',
-    account: 'mindfulme22',
-    score: 4,
-    likes: 19,
-    content: "在混亂中靜下來，閉上眼，深呼吸，其實只是提醒自己還活著。",
-    isLike: 'like',
-    date: '2025-01-03'
-  }
-];
+const movieData = useContext(MovieContext)
+const reviews = movieData.reviews
 
 function ReviewSection() {
   const scoreMap = { '超讚': 5, '好看': 4, '普普': 3, '難看': 2, '爛透': 1 }

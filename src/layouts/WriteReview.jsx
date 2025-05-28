@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { Form, Button } from 'react-bootstrap'
-import { ratingOptions } from '../utils/ratingOptions'
+import { scoreOptions } from '../utils/scoreOptions'
 import { loginAPI } from '../api/api'
 import MovieContext from '../pages/Movie'
 
@@ -12,12 +12,10 @@ function WriteReview() {
   const [selectedValue, setSelectedValue] = useState('');
   const isLogin = false;
 
-  const rateOptions = ratingOptions;
-
-  const handleRateChange = (e) => {
+  const handleScoreChange = (e) => {
     const newValue = e.target.value
     setSelectedValue(newValue)
-    const selectedOption = rateOptions.find(option => option.value === newValue);
+    const selectedOption = scoreOptions.find(option => option.value === newValue);
     if (selectedOption) {
       setDisplayText(selectedOption.text);
     } else {
@@ -40,19 +38,19 @@ function WriteReview() {
       <div>
 
         <div className="d-flex justify-content-center">
-          <p className="mb-2">我覺得「{title}」 <span className='rate-text'>{displayText}</span></p>
+          <p className="mb-2">我覺得「{title}」 <span className='score-text'>{displayText}</span></p>
         </div>
         <div className="d-flex justify-content-start gap-3 mb-1">
 
           <Form className='w-100 mx-0'>
 
-            <div className="review-rate d-flex justify-content-center gap-1">
-              {rateOptions.map((option) => (
+            <div className="review-score d-flex justify-content-center gap-1">
+              {scoreOptions.map((option) => (
                 <div key={option.value}>
-                  <input type="radio" name="rate"
+                  <input type="radio" name="score"
                     value={option.value} id={option.value}
                     checked={selectedValue === option.value}
-                    onChange={handleRateChange}
+                    onChange={handleScoreChange}
                   />
                   <label for={option.value}>
                     <span className="me-2">{option.emoji}</span>

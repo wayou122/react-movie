@@ -1,5 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react"
-import { Row, Col, Card, Container } from 'react-bootstrap'
+import { useEffect, useState } from "react"
+import { MovieContext } from "../contexts/MovieContext"
+import { useParams } from "react-router-dom"
+import { Row, Col, Container } from 'react-bootstrap'
 import Menu from "../layouts/Menu"
 import MovieCard from "../layouts/MovieCard"
 import WriteReview from "../layouts/WriteReview"
@@ -9,14 +11,15 @@ import MovieBanner from "../layouts/MovieBanner"
 import { movieIdAPI } from "../api/api"
 
 function Movie() {
-  const MovieContext = createContext(null)
-  const [movieData, setMovieData] = useState();
+  const { id } = useParams()
+  const [movieData, setMovieData] = useState()
+  //const [error, setError] = useState()
 
   useEffect(() => {
-    fetchMovieData()
-  }, [])
+    fetchMovieData(id)
+  }, [id])
 
-  async function fetchMovieData() {
+  async function fetchMovieData(id) {
     try {
       const res = await fetch(movieIdAPI(id), {
         method: 'GET',
@@ -25,11 +28,14 @@ function Movie() {
       const resData = await res.json()
       if (res.ok && resData.code == 200) {
         setMovieData(resData.data)
+        //setError(null)
       } else {
-        alert('載入失敗: ' + resData.message)
+        console.log('載入失敗: ' + resData.message)
+        //setError('載入失敗: ' + resData.message)
       }
     } catch (err) {
       console.log('載入錯誤: ' + err.message)
+      //setError('載入錯誤: ' + err.message)
     }
   }
 

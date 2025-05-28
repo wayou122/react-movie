@@ -1,18 +1,17 @@
 import { useContext, useState } from "react";
-import { Card, Row, Col, Button } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import ScoreSection from "../components/ScoreSection";
 import MovieTitleSection from "../components/MovieTtileSection";
-import MovieContext from '../pages/Movie'
+import MovieContext from '../contexts/MovieContext'
 
 function MovieCard() {
   const movieData = useContext(MovieContext)
-  const title = movieData.title
   const director = movieData.director
   const actor = movieData.actor
   const releaseDate = movieData.releaseDate.slice(0, 4)
-  const genere = movieData.genre
+  const genre = movieData.genre
   const length = movieData.length
-  const imgUrl = movieData.posterUrl
+  const posterUrl = movieData.posterUrl
 
   // const title = '一家子兒咕咕叫'
   // const director = '魏德聖'
@@ -25,29 +24,28 @@ function MovieCard() {
   const score = '85%'
   const reviewCount = 27
   const actorShow = actor.length >= 25 ? actor.slice(0, actor.indexOf(',', 22)) : actor;
-  const bookmark = false
 
   return (
     <>
       <div className="overflow-hidden">
         <Row>
           <Col xs={4} sm={3} className="p-0 ">
-            <img src={imgUrl} className="movie-poster" />
+            <img src={posterUrl} className="movie-poster" />
           </Col>
 
           <Col xs={8} sm={9} className="ps-1">
             <div className="ps-2 py-2 me-1">
-              <MovieTitleSection bookmark={true} title={title}></MovieTitleSection>
+              <MovieTitleSection />
               <div className="movie-card-description mb-1 gap-0">
                 <p className='genre'>
                   <span>{releaseDate}．</span>
-                  <span>{genere}．</span>
+                  <span>{genre}．</span>
                   <span>{length}</span>
                 </p>
                 <p className='director'>導演 / {director}</p>
                 <p className='actor'>演員 / {actorShow}</p>
               </div>
-              <ScoreSection score={score} reviewCount={reviewCount}></ScoreSection>
+              <ScoreSection score={score} reviewCount={reviewCount} />
             </div>
           </Col>
         </Row>
