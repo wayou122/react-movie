@@ -8,7 +8,7 @@ import RankingReviewer from './pages/RankingReviewer.jsx'
 import Account from './pages/Account.jsx'
 import Login from './pages/Login.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
-import { UserProvider } from './contexts/UserContext.js';
+import { UserProvider } from './contexts/UserContext.jsx';
 
 function App() {
   const router = createBrowserRouter([

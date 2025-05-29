@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useContext } from 'react'
 import { MovieContext } from '../contexts/MovieContext'
 import { Row, Col, Card } from 'react-bootstrap'
 import Review from "./Review"
@@ -80,10 +80,10 @@ import Filter from '../components/Filter'
 //   }
 // ];
 
-const movieData = useContext(MovieContext)
-const reviews = movieData.reviews
 
 function ReviewSection() {
+  const movieData = useContext(MovieContext)
+  const reviews = movieData.reviews
   const scoreMap = { '超讚': 5, '好看': 4, '普普': 3, '難看': 2, '爛透': 1 }
   const [myFilter, setMyFilter] = useState({
     '排序': '最新影評',

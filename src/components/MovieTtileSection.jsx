@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MovieContext } from "../contexts/MovieContext";
+import { MovieContext } from "../contexts/MovieContext.jsx";
 
 function MovieTitleSection(props) {
   const movieData = useContext(MovieContext)

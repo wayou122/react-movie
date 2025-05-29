@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { accountAPI } from '../api/api'
 
 export const UserContext = createContext(null)
 
@@ -11,7 +12,7 @@ export function UserProvider({ children }) {
 
   async function fetchUserInfo() {
     try {
-      const res = await fetch('', {
+      const res = await fetch(accountAPI, {
         method: 'GET',
         credentials: 'include'
       })

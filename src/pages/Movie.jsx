@@ -21,6 +21,7 @@ function Movie() {
 
   async function fetchMovieData(id) {
     try {
+      console.log(movieIdAPI(id))
       const res = await fetch(movieIdAPI(id), {
         method: 'GET',
         credentials: 'include'
