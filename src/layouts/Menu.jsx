@@ -1,39 +1,44 @@
 import Container from 'react-bootstrap/Container';
 import { Nav, Navbar } from 'react-bootstrap'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { checkLoginAPI, logoutAPI } from '../api/api';
-
+import { UserContext } from '../contexts/UserContext';
 
 function Menu() {
   const navigate = useNavigate()
-  const [isLogin, setIsLogin] = useState(false);
+  //const [isLogin, setIsLogin] = useState(false)
+  const { user, setUser } = useContext(UserContext)
 
-  useEffect(() => {
-    checkLogin()
-  }, [])
+  // useEffect(() => {
+  //   checkLogin()
+  // }, [])
 
-  async function checkLogin() {
+  // async function checkLogin() {
+  //   try {
+  //     const res = await fetch(checkLoginAPI, {
+  //       method: 'GET',
+  //       credentials: 'include'
+  //     })
+  //     const resData = await res.json()
+  //     setIsLogin(resData.data)
+  //   } catch (err) {
+  //     setIsLogin(false)
+  //   }
+  // }
+
+  async function handleLogout() {
     try {
-      const res = await fetch(checkLoginAPI, {
+      await fetch(logoutAPI, {
         method: 'GET',
         credentials: 'include'
       })
-      const resData = await res.json()
-      setIsLogin(resData.data)
     } catch (err) {
-      setIsLogin(false)
+      console.error('登出錯誤: ' + err.message)
+    } finally {
+      setUser(null)
+      navigate("/")
     }
-  }
-
-  async function handleLogout() {
-    const res = await fetch(logoutAPI, {
-      method: 'GET',
-      credentials: 'include'
-    })
-    const resData = await res.json()
-    setIsLogin(false)
-    navigate("/")
   }
 
   return (
@@ -50,7 +55,7 @@ function Menu() {
               <Nav.Link as={Link} to='/review'>影評</Nav.Link>
               <Nav.Link as={Link} to='/reviewer'>影評人</Nav.Link>
             </Nav>
-            {isLogin ? (
+            {user ? (
               <Nav>
                 <Nav.Link as={Link} to='/user/watchlist' >
                   <div className="d-flex align-items-center">

@@ -4,31 +4,81 @@ import Searchbar from "../components/Searchbar"
 import MoviesFilter from '../components/MoviesFilter'
 import MovieCard from "../layouts/MovieCard"
 import { Container, Row, Col, Card } from 'react-bootstrap'
-import { movieAPI } from "../api/api"
+import { movieAPI, watchlistAPI } from "../api/api"
+import { MovieContext } from "../contexts/MovieContext"
+import { useLocation } from "react-router"
 
+export const MoviesFilterContext = createContext()
 
 function Movies() {
-  const MovieContext = createContext(null)
   const [moviesData, setMoviesData] = useState([]);
+  const [loading, setLoading] = useState(true)
+  const [moviesFilter, setMoviesFilter]
+    = useState({ sort: '最新上映', type: '全部類型', watchlist: false })
+  const location = useLocation();
 
   useEffect(() => {
-    fetchMovieData()
+    if (location.pathname.includes('watchlist'))
+      setMoviesFilter(prev => ({ ...prev, watchlist: true }))
   }, [])
 
+  useEffect(() => {
+    //fetchMovieData()
+    setMoviesData(testMovieData)
+    setLoading(false)
+  }, [moviesFilter])
+
+  function testMovieData() {
+    const movieData = [{
+      movieId: 5,
+      title: '一家子兒咕咕叫',
+      director: '魏德聖'
+      , actor: '李安平、游採安、朱裕鈞、王彩英、陳淑貞、張志華、黃芳宜'
+      , releaseDate: '2022/02/19'
+      , genre: '劇情片'
+      , length: 120
+      , posterUrl: 'https://taiwancinema.bamid.gov.tw/ImageData/60/2025/93359/t_93359.jpg?v=202505051034265221354'
+      , bannerUrl: 'https://taiwancinema.bamid.gov.tw/ImageData/60/2025/93359/11663.jpg?202505051419035691034'
+      , score: 4
+      , reviewCount: 3
+      , bookmark: true
+    }, {
+      movieId: 10,
+      title: '海角七號',
+      director: '王小棣'
+      , actor: '王彩英、陳淑貞、張志華、黃芳宜'
+      , releaseDate: '2023/06/31'
+      , genre: '紀錄片'
+      , length: 98
+      , posterUrl: 'https://taiwancinema.bamid.gov.tw/ImageData/60/2025/93359/t_93359.jpg?v=202505051034265221354'
+      , bannerUrl: 'https://taiwancinema.bamid.gov.tw/ImageData/60/2025/93359/11663.jpg?202505051419035691034'
+      , score: 5
+      , reviewCount: 3
+      , bookmark: false
+    }]
+    return movieData.sort((a, b) => moviesFilter.sort == '評價最高' ? b.score - a.score : a.score - b.score)
+      .filter(a => a.genre == moviesFilter.type)
+  }
+
   async function fetchMovieData() {
+    const API = moviesFilter.watchlist ? watchlistAPI : movieAPI
     try {
-      const res = await fetch(movieAPI, {
-        method: 'GET',
-        credentials: 'include'
+      const res = await fetch(API, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(moviesFilter)
       })
       const resData = await res.json()
       if (res.ok && resData.code == 200) {
         setMoviesData(resData.data)
       } else {
-        alert('載入失敗: ' + resData.message)
+        console.error('載入失敗: ' + resData.message)
       }
     } catch (err) {
-      console.log('載入錯誤: ' + err.message)
+      console.error('載入錯誤: ' + err.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -40,23 +90,27 @@ function Movies() {
         <h2 className="h2-title">電影列表</h2>
         <Row className='justify-content-center'>
           <Col xs={12} sm={9} lg={6}>
-            <MoviesFilter />
+            <MoviesFilterContext.Provider value={[moviesFilter, setMoviesFilter]}>
+              <MoviesFilter />
+            </MoviesFilterContext.Provider >
           </Col>
         </Row>
         {
-          moviesData.map((movieData) => (
-            <MovieContext.Provider value={movieData}>
+          moviesData ? moviesData.map((movieData) => (
+            <MovieContext.Provider
+              key={movieData.movieId}
+              value={{ movieData, loading }}>
               <Row className='justify-content-center'>
                 <Col xs={12} sm={9} lg={6}>
-                  <Card>
+                  <Card className="mb-1" >
                     <MovieCard />
                   </Card>
                 </Col>
               </Row>
             </MovieContext.Provider>
-          ))
-        }
-
+          )) : (
+            <div>無符合電影</div>
+          )}
       </Container>
     </>
   )

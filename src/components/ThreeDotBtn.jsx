@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Dropdown, DropdownButton, ButtonGroup, Modal, Button } from "react-bootstrap";
-import MyReview from '../layouts/WriteReview'
+import WriteReview from '../layouts/WriteReview'
 
 function ThreeDotBtn() {
   const [showEdit, setShowEdit] = useState(false);
@@ -30,7 +30,7 @@ function ThreeDotBtn() {
           <Modal.Title>編輯影評</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <MyReview></MyReview>
+          <WriteReview />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="light" onClick={handleCloseEdit}>

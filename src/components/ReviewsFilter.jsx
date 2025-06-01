@@ -1,7 +1,21 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Row, Col, Form } from 'react-bootstrap'
+import { ReviewsFilterContext } from '../pages/Reviews'
 
-function ReviewsFilter({ filterGroups, handleFilterChange }) {
+function ReviewsFilter() {
+  const [myFilter, setMyFilter] = useContext(ReviewsFilterContext)
+  const filterGroups = {
+    '排序': ['最新影評', '熱門影評'],
+    '類型': ['所有類型', '劇情片', '紀錄片', '動畫片'],
+    '評分': ['所有評分', '從高到低', '從低到高']
+  }
+  function handleFilterChange(e) {
+    setMyFilter(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
+  }
+
   return (
     <>
       <Row>

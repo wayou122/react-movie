@@ -1,13 +1,14 @@
-import { createContext, useEffect, useState } from "react";
+import { useState, useEffect, createContext } from "react";
 import { accountAPI } from '../api/api'
 
 export const UserContext = createContext(null)
 
 export function UserProvider({ children }) {
-  const [user, setUser] = useState()
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
-    fetchUserInfo()
+    //fetchUserInfo()
+    setUser({ username: 'happy', email: 'abc@gg.com' })
   }, [])
 
   async function fetchUserInfo() {
@@ -23,12 +24,12 @@ export function UserProvider({ children }) {
         setUser(null)
       }
     } catch (err) {
-      console.log('載入失敗: ' + err.message)
+      console.error('載入失敗: ' + err.message)
       setUser(null)
     }
   }
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user }}>
       {children}
     </UserContext.Provider>
   );

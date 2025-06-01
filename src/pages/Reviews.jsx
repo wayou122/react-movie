@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { createContext, useState } from 'react'
 import Menu from '../layouts/Menu'
-import Filter from '../components/Filter'
+import ReviewsFilter from '../components/ReviewsFilter'
 import ReviewMovieCard from '../layouts/ReviewMovieCard'
 import Searchbar from '../components/Searchbar'
 import { Container, Row, Col } from 'react-bootstrap'
+import { reviewAPI } from '../api/api'
+
+export const ReviewsFilterContext = createContext()
 
 function Reviews() {
   const [myFilter, setMyFilter] = useState({
@@ -12,18 +15,25 @@ function Reviews() {
     '評分': '所有評分'
   });
 
-  const filterGroups = {
-    '排序': ['最新影評', '熱門影評'],
-    '類型': ['所有類型', '劇情片', '紀錄片', '動畫片'],
-    '評分': ['所有評分', '從高到低', '從低到高']
-  }
-
-  function handleFilterChange(e) {
-    setMyFilter(f => ({
-      ...f,
-      [e.target.name]: e.target.value
-    }))
-    console.log(myFilter)
+  async function fetchReviewsData() {
+    try {
+      const res = await fetch(reviewAPI, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(moviesFilter)
+      })
+      const resData = await res.json()
+      if (res.ok && resData.code == 200) {
+        setMoviesData(resData.data)
+      } else {
+        console.error('載入失敗: ' + resData.message)
+      }
+    } catch (err) {
+      console.error('載入錯誤: ' + err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -34,10 +44,9 @@ function Reviews() {
         <h2 className='h2-title'>評論列表</h2>
         <Row className='justify-content-center'>
           <Col xs={12} sm={9} lg={6}>
-            <Filter filterGroups={filterGroups}
-              myFilter={myFilter}
-              handleFilterChange={handleFilterChange}
-            />
+            <ReviewsFilterContext.Provider value={[myFilter, setMyFilter]} >
+              <ReviewsFilter />
+            </ReviewsFilterContext.Provider>
           </Col>
         </Row>
 

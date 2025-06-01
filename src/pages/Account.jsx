@@ -1,39 +1,49 @@
-import { useState, useEffect } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { useState, useEffect, useContext } from 'react'
+import { Form, Button, Spinner } from 'react-bootstrap'
 import Menu from '../layouts/Menu'
 import { validateNameUnique, validateEmailFormat, validatePasswordFormat, validateNameFormat } from '../utils/validate_function';
 import { accountAPI, updateUsernameAPI } from '../api/api';
+import { UserContext } from '../contexts/UserContext';
+
 let oldUsername = ''
 
 function Account() {
+  const { user } = useContext(UserContext)
   const [nameValid, setNameValid] = useState(true)
   const [nameUnique, setNameUnique] = useState(true)
   const [emailValid, setEmailValid] = useState(true);
-  const [passwordValid, setPasswordValid] = useState(true);
-  const [newPasswordValid, setNewPasswordValid] = useState(true);
   const [formData, setFormData] = useState({
     email: '', username: ''
   })
 
   useEffect(() => {
-    fetchUserInfo()
-  }, [])
-
-  async function fetchUserInfo() {
-    try {
-      const res = await fetch(accountAPI, { credentials: 'include' })
-      const resData = await res.json()
-      if (res.ok && resData.code == 200) {
-        setFormData(resData.data)
-        oldUsername = resData.data.username
-      } else {
-        alert('載入失敗: ' + resData.message)
-      }
-    } catch (err) {
-      console.log('載入錯誤: ' + err.message)
+    if (user) {
+      setFormData({
+        username: user.username,
+        email: user.email,
+      })
+      oldUsername = user.username
     }
+  }, [user])
 
+  if (!user) {
+    return <Spinner animation="grow" variant="secondary" />
   }
+
+  // async function fetchUserInfo() {
+  //   try {
+  //     const res = await fetch(accountAPI, { credentials: 'include' })
+  //     const resData = await res.json()
+  //     if (res.ok && resData.code == 200) {
+  //       setFormData(resData.data)
+  //       oldUsername = resData.data.username
+  //     } else {
+  //       alert('載入失敗: ' + resData.message)
+  //     }
+  //   } catch (err) {
+  //     console.log('載入錯誤: ' + err.message)
+  //   }
+  // }
 
   function handleChange(e) {
     setFormData(p => ({

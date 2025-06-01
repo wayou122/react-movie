@@ -1,20 +1,58 @@
-import { useState, useRef } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { useState, useRef, useContext } from 'react'
+import { Form, Button, Alert } from 'react-bootstrap'
 import { scoreOptions } from '../utils/scoreOptions'
-import { loginAPI } from '../api/api'
-import MovieContext from '../pages/Movie'
+import { addReviewAPI, loginAPI } from '../api/api'
+import { UserContext } from '../contexts/UserContext'
+import { MovieContext } from '../contexts/MovieContext'
+import LoadingSpinner from '../components/LoadingSpinner'
+import { Link } from 'react-router-dom';
+
 
 function WriteReview() {
-  const movieData = useContext(MovieContext)
-  const title = movieData.title
-  //const title = '海角七號'
+  const { user } = useContext(UserContext)
+  const { movieData, loading } = useContext(MovieContext)
   const [displayText, setDisplayText] = useState('')
   const [selectedValue, setSelectedValue] = useState('');
-  const isLogin = false;
+  const [textareaValue, setTextareaValue] = useState('');
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const handleScoreChange = (e) => {
+  const textareaRef = useRef(null);
+  if (loading) return <LoadingSpinner />
+
+  const isLogin = user ? true : false;
+  const title = movieData.title
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!selectedValue) {
+      setErrorMessage('請點擊表情給予評價')
+      return
+    } else if (!textareaValue) {
+      setErrorMessage('請填寫評論')
+    } else {
+      try {
+        const res = await fetch(addReviewAPI, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ score: selectedValue, content: textareaValue })
+        })
+        const resData = await res.json()
+        if (res.ok && resData.code === 200) {
+          window.location.reload()
+        } else {
+          setErrorMessage('新增失敗: ' + resData.message)
+        }
+      } catch (err) {
+        setErrorMessage('新增錯誤: ' + err.message)
+      }
+    }
+  }
+
+  function handleScoreChange(e) {
     const newValue = e.target.value
     setSelectedValue(newValue)
+    setErrorMessage('')
     const selectedOption = scoreOptions.find(option => option.value === newValue);
     if (selectedOption) {
       setDisplayText(selectedOption.text);
@@ -23,10 +61,8 @@ function WriteReview() {
     }
   }
 
-  const [textareaValue, setTextareaValue] = useState('');
-  const textareaRef = useRef(null);
-
-  const autoGrow = (e) => {
+  function autoGrow(e) {
+    setErrorMessage('')
     setTextareaValue(e.target.value);
     const textarea = textareaRef.current
     textarea.style.height = 'auto'; // 重設高度
@@ -38,21 +74,23 @@ function WriteReview() {
       <div>
 
         <div className="d-flex justify-content-center">
-          <p className="mb-2">我覺得「{title}」 <span className='score-text'>{displayText}</span></p>
+          <p className="mb-2">我覺得「{title}」
+            <span className='score-text'>{displayText}</span>
+          </p>
         </div>
+
         <div className="d-flex justify-content-start gap-3 mb-1">
 
-          <Form className='w-100 mx-0'>
-
+          <Form onSubmit={handleSubmit} className='w-100 mx-0'>
             <div className="review-score d-flex justify-content-center gap-1">
-              {scoreOptions.map((option) => (
+              {scoreOptions.map((option, i) => (
                 <div key={option.value}>
                   <input type="radio" name="score"
                     value={option.value} id={option.value}
                     checked={selectedValue === option.value}
                     onChange={handleScoreChange}
                   />
-                  <label for={option.value}>
+                  <label htmlFor={option.value}>
                     <span className="me-2">{option.emoji}</span>
                   </label>
                   {/* <label for={option.value}>
@@ -62,33 +100,42 @@ function WriteReview() {
                 </div>
               ))}
             </div>
-
+            {
+              errorMessage ?
+                <Alert variant='danger' className='mt-2 p-2 text-center'>
+                  {errorMessage}
+                </Alert>
+                : ''
+            }
             {isLogin ? (
               <div>
                 <div>
                   <Form.Control as="textarea" placeholder='我的評論...'
-                    rows={3} size="sm"
+                    className='mt-3'
+                    rows={3}
                     value={textareaValue}
                     ref={textareaRef}
-                    onChange={autoGrow} />
+                    onChange={autoGrow}
+                    required />
                 </div>
                 <div className='mx-auto'>
-                  <Button variant="secondary" type='submit' className='d-flex mx-auto mt-2'>
+                  <Button variant="primary" type='submit'
+                    className='d-flex mx-auto mt-2'>
                     送出評論
                   </Button>
                 </div>
               </div>
             ) : (
               <div className='mx-auto'>
-                <Button variant="secondary" className='d-flex mx-auto mt-2'
-                  onClick={() => { location.href = loginAPI }}>
+                <Button variant="secondary"
+                  className='d-flex mx-auto mt-2 justify-content-center'
+                  as={Link} to='/login'>
                   請先登入再送出評論
                 </Button>
               </div>
 
             )}
           </Form>
-
         </div>
       </div>
     </>

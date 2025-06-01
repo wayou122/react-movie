@@ -31,16 +31,6 @@ function Login() {
     setFormData(p => ({
       ...p, [e.target.name]: e.target.value
     }))
-
-    // if(e.target.name != 'username') return
-    // if (debounceTimer.current) {
-    //   clearTimeout(debounceTimer.current);
-    // }
-
-    // // 設定新的 debounce timer
-    // debounceTimer.current = setTimeout(() => {
-    //   validateName(e.target.value);
-    // }, 500); // 500ms debounce
   }
 
   async function validateName(name) {
@@ -102,7 +92,7 @@ function Login() {
         setErrorMessage('登入失敗: ' + resData.message)
       }
     } catch (err) {
-      alert('登入錯誤: ' + err.message)
+      setErrorMessage('登入錯誤: ' + err.message)
     }
   }
 
@@ -112,16 +102,21 @@ function Login() {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ 'username': formData.username, 'email': formData.email, 'password': formData.password, 'authcode': formData.authcode })
+        body: new URLSearchParams({
+          'username': formData.username,
+          'email': formData.email,
+          'password': formData.password,
+          'authcode': formData.authcode
+        })
       })
       const resData = await res.json()
       if (res.ok && resData.code == 200) {
-        navigate("/")
+        navigate("/login")
       } else {
         setErrorMessage('註冊失敗: ' + resData.message)
       }
     } catch (err) {
-      alert('註冊錯誤: ' + err.message)
+      setErrorMessage('註冊錯誤: ' + err.message)
     }
   }
 
@@ -152,12 +147,6 @@ function Login() {
           <button onClick={() => setIsLogin(false)} className={`login-or-register-btn ms-1 ${isLogin ? '' : 'select'}`}> 註冊 </button>
         </h2>
 
-        {/* <p style={{ marginTop: 10 }}>
-          {isLogin ? '還沒有帳號？' : '已經有帳號？'}{' '}
-          <button onClick={() => setIsLogin(!isLogin)} style={{ border: 'none', background: 'none', color: 'blue', cursor: 'pointer' }}>
-            {isLogin ? '前往註冊' : '前往登入'}
-          </button>
-        </p> */}
         {
           errorMessage ?
             <Alert variant='danger'>
@@ -167,6 +156,21 @@ function Login() {
         }
 
         <Form onSubmit={handleSubmit}>
+
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>帳號信箱</Form.Label>
+            <Form.Control type="email"
+              name='email'
+              placeholder="輸入email"
+              value={formData.email}
+              onChange={(e) => { handleChange(e); validateEmail(e.target.value) }}
+              isInvalid={!emailValid}
+              required />
+            <Form.Control.Feedback type="invalid">
+              請輸入正確email
+            </Form.Control.Feedback>
+          </Form.Group>
+
           {isLogin ? '' : (
             <Form.Group className="mb-3" controlId="formBasicName">
               <Form.Label>帳號名稱</Form.Label>
@@ -186,21 +190,6 @@ function Login() {
               </Form.Control.Feedback>
             </Form.Group>
           )}
-
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>帳號信箱</Form.Label>
-            <Form.Control type="email"
-              name='email'
-              placeholder="輸入email"
-              value={formData.email}
-              onChange={(e) => { handleChange(e); validateEmail(e.target.value) }}
-              isInvalid={!emailValid}
-              required />
-            <Form.Control.Feedback type="invalid">
-              請輸入正確email
-            </Form.Control.Feedback>
-          </Form.Group>
-
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>密碼</Form.Label>

@@ -10,6 +10,12 @@ export const accountAPI = `${API}/user/account`
 export const checkUsernameAPI = (newName, oldName) => `${API}/user/check-username?newUsername=${newName}&oldUsername=${oldName}`
 export const updateUsernameAPI = `${API}/user/update-username`
 
+export const addReviewAPI = `${API}/user/add-review`
+export const updateReviewLikeAPI = (id, sentiment) => `${API}/user/update-review-like/${id}/${sentiment}`
+
+export const watchlistAPI = `${API}/user/watchlist`
+export const addToWatchlistAPI = (id) => `${API}/user/watchlist/${id}`
+
 export const movieAPI = `${API}/movie`
 export const movieIdAPI = (id) => `${API}/movie/${id}`
 export const movieSearchAPI = `${API}/movie/search`

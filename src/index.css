@@ -78,7 +78,7 @@
 .movie-banner {
   object-fit: cover;
   width: 100%;
-  max-height: 120px;
+  max-height: 150px;
   margin-bottom: 16px;
   box-shadow: 0px 0px 5px #aaa;
 
@@ -133,31 +133,33 @@ p.actor {
   font-size: 0.85rem;
 }
 
-.review-rate input {
+.review-score input {
   display: none;
 }
 
-.review-rate label{
+.review-score label {
   font-size: 20px;
-  filter: opacity(40%) grayscale(100%);
+  filter: opacity(30%) grayscale(100%);
   cursor: pointer;
 }
 
-.review-rate input:checked+label{
+.review-score input:checked+label {
   filter: none;
 }
+
 /* 停用 */
-.review-rate label .outlined-icon {
+.review-score label .outlined-icon {
   font-size: 30px;
   color: var(--lightgray);
   cursor: pointer;
 }
+
 /* 停用 */
-.review-rate input:checked+label .outlined-icon {
+.review-score input:checked+label .outlined-icon {
   color: var(--topic1);
 }
 
-.rate-text {
+.score-text {
   color: var(--topic1);
   font-weight: 700;
 }
@@ -255,4 +257,8 @@ button.login-or-register-btn.select {
   border: 2px solid var(--topic2);
   background: var(--topic2);
   color: white;
+}
+
+.navigate-link {
+  cursor: pointer
 }

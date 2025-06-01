@@ -46,7 +46,7 @@ export async function validateNameUnique(newName, oldName) {
       return false
     }
   } catch (err) {
-    alert('驗證錯誤: ' + err.message)
+    console.error('驗證錯誤: ' + err.message)
     return false
   }
 }
