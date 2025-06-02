@@ -5,7 +5,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 function ScoreSection() {
   const { movieData, loading } = useContext(MovieContext)
   if (loading) return <LoadingSpinner />
-  const score = movieData.score
+  const score = movieData.scoreAvg || 0
   const reviewCount = movieData.reviewCount
 
   return (

@@ -2,7 +2,7 @@ import { useState, useMemo, useContext } from 'react'
 import { MovieContext } from '../contexts/MovieContext'
 import { Row, Col, Card } from 'react-bootstrap'
 import Review from "./Review"
-import Filter from '../components/Filter'
+import ReviewsFilter from '../components/ReviewsFilter'
 
 const reviews = [
   {
@@ -154,7 +154,7 @@ function ReviewSection() {
     <>
       <Row className='justify-content-center'>
         <Col xs={12} sm={9} lg={6}>
-          <Filter filterGroups={filterGroups}
+          <ReviewsFilter filterGroups={filterGroups}
             myFilter={myFilter}
             handleFilterChange={handleFilterChange} />
         </Col>

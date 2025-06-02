@@ -87,7 +87,7 @@ function Login() {
       const resData = await res.json()
       if (res.ok && resData.code === 200) {
         navigate("/")
-        //window.location.reload()
+        window.location.reload()
       } else {
         setErrorMessage('登入失敗: ' + resData.message)
       }
@@ -112,6 +112,7 @@ function Login() {
       const resData = await res.json()
       if (res.ok && resData.code == 200) {
         navigate("/login")
+        window.location.reload()
       } else {
         setErrorMessage('註冊失敗: ' + resData.message)
       }

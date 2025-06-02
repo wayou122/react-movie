@@ -1,24 +1,27 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { MovieContext } from "../contexts/MovieContext.jsx";
-import LoadingSpinner from "../components/LoadingSpinner";
-import { useNavigate } from "react-router";
+import LoadingSpinner from "./LoadingSpinner.jsx";
+import { useNavigate } from "react-router-dom";
 import { addToWatchlistAPI } from "../api/api.js";
 
 
 function MovieTitleSection() {
   const { movieData, loading } = useContext(MovieContext)
+  const [mark, setMark] = useState(false);
   const navigate = useNavigate()
   if (loading) return <LoadingSpinner />
 
   const id = movieData.movieId
   const title = movieData.title
-  const bookmark = movieData.bookmark
-  const [mark, setMark] = useState(bookmark);
+  const bookmark = movieData.collected
 
+  useEffect(() => {
+    setMark(bookmark)
+  }, [])
   async function handleMarkClick() {
     try {
       const res = await fetch(addToWatchlistAPI(id), {
-        method: 'GET',
+        method: 'PUT',
         credentials: 'include',
       })
       const resData = await res.json()

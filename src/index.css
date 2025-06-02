@@ -75,6 +75,8 @@
   color: var(--topic1)
 }
 
+.movie-card {}
+
 .movie-banner {
   object-fit: cover;
   width: 100%;
@@ -87,7 +89,8 @@
 .movie-poster {
   object-fit: cover;
   width: 100%;
-  box-shadow: 0px 0px 5px #aaa;
+  height: 100%;
+  box-shadow: 0px 0px 5px #ccc;
 }
 
 .movie-card-description {

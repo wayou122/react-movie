@@ -4,7 +4,7 @@ import { MoviesFilterContext } from "../pages/Movies"
 
 function MoviesFilter() {
   const sortOptions = ['最新上映', '評價最高', '評價最低', '最多評論']
-  const typeOptions = ['全部類型', '劇情片', '紀錄片', '動畫片', '短片', '其他']
+  const typeOptions = ['全部類型', '劇情片', '紀錄片', '動畫', '短片', '其他']
   const [moviesFilter, setMoviesFilter] = useContext(MoviesFilterContext)
 
   function handleChange(e) {

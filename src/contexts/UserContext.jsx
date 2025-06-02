@@ -7,8 +7,8 @@ export function UserProvider({ children }) {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    //fetchUserInfo()
-    setUser({ username: 'happy', email: 'abc@gg.com' })
+    fetchUserInfo()
+    //setUser({ username: 'happy', email: 'abc@gg.com' })
   }, [])
 
   async function fetchUserInfo() {
@@ -19,7 +19,7 @@ export function UserProvider({ children }) {
       })
       if (res.ok) {
         const resData = await res.json()
-        setUser(resData)
+        setUser(resData.data)
       } else {
         setUser(null)
       }
@@ -29,7 +29,7 @@ export function UserProvider({ children }) {
     }
   }
   return (
-    <UserContext.Provider value={{ user }}>
+    <UserContext.Provider value={{ user, setUser }}>
       {children}
     </UserContext.Provider>
   );

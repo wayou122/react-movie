@@ -6,27 +6,25 @@ import MovieCard from "../layouts/MovieCard"
 import { Container, Row, Col, Card } from 'react-bootstrap'
 import { movieAPI, watchlistAPI } from "../api/api"
 import { MovieContext } from "../contexts/MovieContext"
-import { useLocation } from "react-router"
+import { useLocation } from "react-router-dom"
+import LoadingSpinner from "../components/LoadingSpinner"
 
 export const MoviesFilterContext = createContext()
 
 function Movies() {
-  const [moviesData, setMoviesData] = useState([]);
+  const [moviesData, setMoviesData] = useState([])
   const [loading, setLoading] = useState(true)
   const [moviesFilter, setMoviesFilter]
     = useState({ sort: '最新上映', type: '全部類型', watchlist: false })
-  const location = useLocation();
+
+  const location = useLocation()
+  const isWatchlist = location.pathname.includes('watchlist')
 
   useEffect(() => {
-    if (location.pathname.includes('watchlist'))
-      setMoviesFilter(prev => ({ ...prev, watchlist: true }))
-  }, [])
-
-  useEffect(() => {
-    //fetchMovieData()
-    setMoviesData(testMovieData)
-    setLoading(false)
-  }, [moviesFilter])
+    setLoading(true)
+    fetchMovieData()
+    //setMoviesData(testMovieData)
+  }, [moviesFilter, isWatchlist])
 
   function testMovieData() {
     const movieData = [{
@@ -61,7 +59,7 @@ function Movies() {
   }
 
   async function fetchMovieData() {
-    const API = moviesFilter.watchlist ? watchlistAPI : movieAPI
+    const API = isWatchlist ? watchlistAPI : movieAPI
     try {
       const res = await fetch(API, {
         method: 'POST',
@@ -69,6 +67,7 @@ function Movies() {
         headers: { 'Content-type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(moviesFilter)
       })
+      //const res = await fetch(API, { method: 'GET' })
       const resData = await res.json()
       if (res.ok && resData.code == 200) {
         setMoviesData(resData.data)
@@ -84,6 +83,7 @@ function Movies() {
 
   return (
     <>
+      {loading && <LoadingSpinner />}
       <Menu />
       <Container>
         <Searchbar />
@@ -95,22 +95,21 @@ function Movies() {
             </MoviesFilterContext.Provider >
           </Col>
         </Row>
-        {
-          moviesData ? moviesData.map((movieData) => (
-            <MovieContext.Provider
-              key={movieData.movieId}
-              value={{ movieData, loading }}>
-              <Row className='justify-content-center'>
-                <Col xs={12} sm={9} lg={6}>
-                  <Card className="mb-1" >
-                    <MovieCard />
-                  </Card>
-                </Col>
-              </Row>
-            </MovieContext.Provider>
-          )) : (
-            <div>無符合電影</div>
-          )}
+        {moviesData ? moviesData.map((movieData) => (
+          <MovieContext.Provider
+            key={movieData.movieId}
+            value={{ movieData, loading }}>
+            <Row className='justify-content-center'>
+              <Col xs={12} sm={9} lg={6}>
+                <Card className="mb-1" >
+                  <MovieCard />
+                </Card>
+              </Col>
+            </Row>
+          </MovieContext.Provider>
+        )) : (
+          <div>無符合電影</div>
+        )}
       </Container>
     </>
   )

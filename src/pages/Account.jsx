@@ -15,6 +15,7 @@ function Account() {
   const [formData, setFormData] = useState({
     email: '', username: ''
   })
+  //console.log(user.username)
 
   useEffect(() => {
     if (user) {
