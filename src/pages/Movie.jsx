@@ -7,10 +7,12 @@ import WriteReview from "../layouts/WriteReview"
 import ReviewSection from "../layouts/ReviewSection"
 import MovieSummary from "../layouts/MovieSummary"
 import MovieBanner from "../layouts/MovieBanner"
+import { useMovieData } from "../hooks/useMovieData"
 
 function Movie() {
   const { id } = useParams()
-  //const { movieData } = useContext(MovieContext)
+  const { movieData, loading } = useMovieData(id)
+
   //const [movieData, setMovieData] = useState()
   //const [error, setError] = useState()
 
@@ -42,7 +44,7 @@ function Movie() {
   return (
     <>
       <Menu />
-      <MovieProvider id={id}>
+      <MovieProvider value={{ movieData, loading }}>
         <Container>
           <Row className='justify-content-center'>
             <Col xs={12} sm={9} lg={6}>
@@ -59,7 +61,7 @@ function Movie() {
               <hr />
             </Col>
           </Row>
-          <ReviewSection />
+          {/* <ReviewSection /> */}
         </Container>
       </MovieProvider>
     </>
