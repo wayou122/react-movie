@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import ThreeDotBtn from "../components/ThreeDotBtn";
 import { UserContext } from "../contexts/UserContext";
-import { updateReviewLikeAPI } from "../api/api";
+import { toggleReviewReactionAPI } from "../api/api";
 import { scoreOptions } from "../utils/scoreOptions";
 import { ReviewContext } from "../contexts/ReviewContext"
 
@@ -9,12 +9,15 @@ function Review() {
   const { user } = useContext(UserContext)
   const { review } = useContext(ReviewContext)
 
-  const account = review.username || 'tom'
+  const userId = 3
+  const reviewerId = review.userId
+  const reviewerName = review.username || 'tom'
   const score = review.score
-  const likes = review.good
+  const likes = review.likeCount
   const content = review.content
-  const isLike = review.isLike || false
+  const isLike = review.reaction || 0
   const id = review.reviewId
+  const createdDate = review.createdDate
 
   const [showMore, setShowMore] = useState(false);
   function toggleShowMore() { setShowMore(!showMore) };
@@ -22,18 +25,19 @@ function Review() {
 
   const [likeCount, setLikeCount] = useState(likes);
   const [sentiment, setSentiment] = useState(isLike);
+
   async function handleLikeClick() {
     if (!user) {
       alert('請先登入')
       return
     }
     if (sentiment === 'like') {
-      if (await fetchReviewLike('no')) {
+      if (await fetchReviewLike(0)) {
         setSentiment(null)
         setLikeCount(likeCount - 1)
       }
     } else {
-      if (await fetchReviewLike('like')) {
+      if (await fetchReviewLike(1)) {
         setSentiment('like')
         setLikeCount(likeCount + 1)
       }
@@ -46,22 +50,22 @@ function Review() {
       return
     }
     if (sentiment === 'dislike') {
-      if (await fetchReviewLike('no'))
+      if (await fetchReviewLike(0))
         setSentiment(null)
     } else if (sentiment === 'like') {
-      if (await fetchReviewLike('dislike')) {
+      if (await fetchReviewLike(-1)) {
         setSentiment('dislike')
         setLikeCount(likeCount - 1)
       }
     } else {
-      if (await fetchReviewLike('dislike'))
+      if (await fetchReviewLike(-1))
         setSentiment('dislike')
     }
   }
 
-  async function fetchReviewLike(sentiment) {
+  async function fetchReviewLike(reaction) {
     try {
-      const res = await fetch(updateReviewLikeAPI(id, sentiment), {
+      const res = await fetch(toggleReviewReactionAPI(id, reaction), {
         method: 'GET',
         credentials: 'include',
       })
@@ -85,11 +89,14 @@ function Review() {
         <div>
           <div className='d-flex justify-content-between align-items-center'>
             <div className='pt-2 mb-2'>
-              <span className="me-2">{account}</span>
-              <span>{scoreOptions[score].emoji}</span>
+              <span className="me-2">{reviewerName}</span>
+              <span className="me-2">{scoreOptions[score].emoji}</span>
+              <span className="small text-muted">{createdDate}</span>
               {/* <span className="stars">{'★'.repeat(score)}</span> */}
             </div>
-            <ThreeDotBtn />
+            {reviewerId == userId ?
+              <ThreeDotBtn /> : ''
+            }
           </div>
 
           <p className="me-3 pb-0">

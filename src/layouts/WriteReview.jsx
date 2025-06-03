@@ -1,4 +1,4 @@
-import { useState, useRef, useContext } from 'react'
+import { useState, useRef, useContext, useEffect } from 'react'
 import { Form, Button, Alert } from 'react-bootstrap'
 import { scoreOptions } from '../utils/scoreOptions'
 import { addReviewAPI, loginAPI } from '../api/api'
@@ -6,22 +6,31 @@ import { UserContext } from '../contexts/UserContext'
 import { MovieContext } from '../contexts/MovieContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { Link } from 'react-router-dom';
+import { ReviewContext } from '../contexts/ReviewContext'
 
 
-function WriteReview() {
+function WriteReview(props) {
   const { user } = useContext(UserContext)
   const { movieData, loading } = useContext(MovieContext)
   const [displayText, setDisplayText] = useState('')
   const [selectedValue, setSelectedValue] = useState('');
   const [textareaValue, setTextareaValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('')
-
   const textareaRef = useRef(null);
+
+  useEffect(() => {
+    setTextareaValue(props.content)
+    setSelectedValue(props.score)
+  }, [])
+
   if (loading) return <LoadingSpinner />
 
   const isLogin = user ? true : false;
+  const isUpdating = props.isUpdating
+
   const title = movieData.title
   const id = movieData.movieId
+
 
   async function handleSubmit(e) {
     e.preventDefault();

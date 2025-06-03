@@ -1,9 +1,9 @@
 :root {
-  --topic1: #d45;
-  --topic2: #26c;
+  --topic1: #e56;
+  --topic2: #18d;
   --topic3: #c72;
   --midgray: #666;
-  --lightgray: #aaa;
+  --lightgray: #999;
   --background-color: Teal;
 }
 
@@ -42,7 +42,11 @@
 }
 
 [data-bs-theme="dark"] .navbar .nav-link {
-  color: var(--bs-light) !important;
+  color: #bbb !important;
+}
+
+[data-bs-theme="dark"] .navbar .nav-link:hover {
+  color: #ddd !important;
 }
 
 [data-bs-theme="dark"] .navbar .navbar-brand {
@@ -187,12 +191,11 @@ p.actor {
 .review-ddd-btn .dropdown-toggle {
   background: none;
   border: none;
-  /* color: var(--midgray) */
+  color: var(--lightgray)
 }
 
 .review-ddd-btn:hover .dropdown-toggle {
   background-color: #eee;
-  /* color: var(--midgray) */
 }
 
 .review-ddd-btn .dropdown-toggle::after {

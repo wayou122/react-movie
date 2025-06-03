@@ -33,7 +33,10 @@ function Movie() {
               <hr />
             </Col>
           </Row>
-          <ReviewSection />
+          <Row className='justify-content-center'>
+            <Col xs={12} sm={9} lg={6}>
+              <ReviewSection />
+            </Col></Row>
         </Container>
       </MovieProvider>
     </>

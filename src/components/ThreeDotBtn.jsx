@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Dropdown, DropdownButton, ButtonGroup, Modal, Button } from "react-bootstrap";
 import WriteReview from '../layouts/WriteReview'
+import { ReviewContext } from "../contexts/ReviewContext";
 
 function ThreeDotBtn() {
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const { review } = useContext(ReviewContext)
 
   const handleCloseEdit = () => setShowEdit(false);
   const handleShowEdit = () => setShowEdit(true);
@@ -30,7 +32,7 @@ function ThreeDotBtn() {
           <Modal.Title>編輯影評</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <WriteReview />
+          <WriteReview value={{ updating: true, content: review.content, score: review.score }} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="light" onClick={handleCloseEdit}>

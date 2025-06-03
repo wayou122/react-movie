@@ -44,7 +44,11 @@ function Movies() {
             </Row>
           </MovieProvider>
         )) : (
-          <div>無符合電影</div>
+          <Row className='justify-content-center'>
+            <Col xs={12} sm={9} lg={6}>
+              <div className="text-center">查無電影 😔</div>
+            </Col>
+          </Row>
         )}
       </Container>
     </>

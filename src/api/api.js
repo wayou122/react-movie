@@ -13,7 +13,7 @@ export const checkUsernameAPI = (newName, oldName) => `${API}/register/check-use
 export const addReviewAPI = (movieId) => `${API}/user/review/${movieId}`
 export const deleteReviewAPI = (reviewId) => `${API}/user/review/${reviewId}`
 export const updateReviewAPI = `${API}/user/review`
-export const updateReviewLikeAPI = (id, sentiment) => `${API}/user/review/sentiment/${id}/${sentiment}`
+export const toggleReviewReactionAPI = (id, reaction) => `${API}/user/review/sentiment/${id}/${reaction}`
 
 export const addToWatchlistAPI = (movieId) => `${API}/user/toggle-watchlist/movie/${movieId}`
 
