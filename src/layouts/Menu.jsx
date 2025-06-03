@@ -4,11 +4,13 @@ import { useState, useEffect, useContext } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { checkLoginAPI, logoutAPI } from '../api/api';
 import { UserContext } from '../contexts/UserContext';
+import { ThemeContext } from '../contexts/ThemeContext';
 
 function Menu() {
   const navigate = useNavigate()
   //const [isLogin, setIsLogin] = useState(false)
   const { user, setUser } = useContext(UserContext)
+  const { isDarkMode, toggleColorMode } = useContext(ThemeContext)
 
   // useEffect(() => {
   //   checkLogin()
@@ -85,6 +87,13 @@ function Menu() {
               </Nav.Link>
             </Nav>
             )}
+            <Nav>
+              <Nav.Link onClick={toggleColorMode} as={Link}>
+                <div className="d-flex align-items-center">
+                  <span className="material-symbols-outlined me-1">{isDarkMode ? 'dark_mode' : 'light_mode'}</span>
+                </div>
+              </Nav.Link>
+            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>

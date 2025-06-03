@@ -7,8 +7,13 @@ export function useMovieData(id) {
 
   useEffect(() => {
     setLoading(true)
-    //fetchMovieData(id)
-    setMovieData({
+    fetchMovieData(id)
+    //setMovieData(testmovieData)
+  }, [id])
+
+  function testmovieData() {
+    setLoading(false)
+    return {
       movieId: 1049,
       title: '一家子兒咕咕叫',
       director: '魏德聖'
@@ -21,13 +26,10 @@ export function useMovieData(id) {
       , bannerUrl: '/ImageData/60/2025/93359/11663.jpg?202505051419035691034'
       , scoreAvg: 5
       , reviewCount: 3
-    })
-    setLoading(false)
-  }, [id])
-
+    }
+  }
   async function fetchMovieData(id) {
     try {
-      console.log(movieIdAPI(id))
       const res = await fetch(movieIdAPI(id), {
         method: 'GET',
         credentials: 'include'

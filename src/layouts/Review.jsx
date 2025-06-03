@@ -3,20 +3,22 @@ import ThreeDotBtn from "../components/ThreeDotBtn";
 import { UserContext } from "../contexts/UserContext";
 import { updateReviewLikeAPI } from "../api/api";
 import { scoreOptions } from "../utils/scoreOptions";
+import { ReviewContext } from "../contexts/ReviewContext"
 
-
-function Review(props) {
+function Review() {
   const { user } = useContext(UserContext)
-  const account = props.account
-  const score = props.score
-  const likes = props.likes
-  const content = props.content
-  const isLike = props.isLike
-  const id = props.reviewId
+  const { review } = useContext(ReviewContext)
+
+  const account = review.username || 'tom'
+  const score = review.score
+  const likes = review.good
+  const content = review.content
+  const isLike = review.isLike || false
+  const id = review.reviewId
 
   const [showMore, setShowMore] = useState(false);
   function toggleShowMore() { setShowMore(!showMore) };
-  const contentLess = content.length > 80 ? false : true;
+  const contentLess = content && content.length > 80 ? false : true;
 
   const [likeCount, setLikeCount] = useState(likes);
   const [sentiment, setSentiment] = useState(isLike);
@@ -79,7 +81,7 @@ function Review(props) {
 
   return (
     <>
-      <div style={{ maxWidth: "660px" }} className="overflow-hidden review-movie-card">
+      <div style={{ maxWidth: "660px" }} className="overflow-hidden">
         <div>
           <div className='d-flex justify-content-between align-items-center'>
             <div className='pt-2 mb-2'>
@@ -90,7 +92,7 @@ function Review(props) {
             <ThreeDotBtn />
           </div>
 
-          <p className="me-3">
+          <p className="me-3 pb-0">
             {showMore ? content : content.slice(0, 100)}
             {contentLess ? '' :
               <button

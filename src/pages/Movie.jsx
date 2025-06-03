@@ -13,38 +13,10 @@ function Movie() {
   const { id } = useParams()
   const { movieData, loading } = useMovieData(id)
 
-  //const [movieData, setMovieData] = useState()
-  //const [error, setError] = useState()
-
-  // useEffect(() => {
-  //   fetchMovieData(id)
-  // }, [id])
-
-  // async function fetchMovieData(id) {
-  //   try {
-  //     console.log(movieIdAPI(id))
-  //     const res = await fetch(movieIdAPI(id), {
-  //       method: 'GET',
-  //       credentials: 'include'
-  //     })
-  //     const resData = await res.json()
-  //     if (res.ok && resData.code == 200) {
-  //       setMovieData(resData.data)
-  //       //setError(null)
-  //     } else {
-  //       console.log('載入失敗: ' + resData.message)
-  //       //setError('載入失敗: ' + resData.message)
-  //     }
-  //   } catch (err) {
-  //     console.log('載入錯誤: ' + err.message)
-  //     //setError('載入錯誤: ' + err.message)
-  //   }
-  // }
-
   return (
     <>
       <Menu />
-      <MovieProvider value={{ movieData, loading }}>
+      <MovieProvider value={{ movieData, loading, link: false }}>
         <Container>
           <Row className='justify-content-center'>
             <Col xs={12} sm={9} lg={6}>
@@ -61,7 +33,7 @@ function Movie() {
               <hr />
             </Col>
           </Row>
-          {/* <ReviewSection /> */}
+          <ReviewSection />
         </Container>
       </MovieProvider>
     </>

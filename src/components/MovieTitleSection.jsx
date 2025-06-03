@@ -6,7 +6,7 @@ import { addToWatchlistAPI } from "../api/api.js";
 
 
 function MovieTitleSection() {
-  const { movieData, loading } = useContext(MovieContext)
+  const { movieData, loading, link } = useContext(MovieContext)
   const [mark, setMark] = useState(false);
   const navigate = useNavigate()
   if (loading) return <LoadingSpinner />
@@ -38,8 +38,9 @@ function MovieTitleSection() {
 
   return (
     <div className='d-flex justify-content-between align-items-center mb-2'>
-      <h4 className='movie-card-title mb-1 mt-1 navigate-link'
-        onClick={() => navigate(`/movie/${id}`)}
+      <h4
+        className={`movie-card-title mb-1 mt-1 ${link ? 'navigate-link' : ''}`}
+        onClick={link ? () => navigate(`/movie/${id}`) : undefined}
       >{title}</h4>
       <div onClick={handleMarkClick} className='me-2 mb-0'>{mark ?
         (<span className="filled-icon bookmark-icon">bookmark</span>) :

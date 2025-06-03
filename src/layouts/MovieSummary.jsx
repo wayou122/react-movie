@@ -7,14 +7,14 @@ function MovieSummary() {
   const [showMore, setShowMore] = useState(false);
   if (loading) return <LoadingSpinner />
 
-  const content = movieData.content
+  const content = movieData.summary
   const splitContent = content.split('\n').map((str, k) => <p key={k}>{str}</p>)
   const contentLess = splitContent.length > 2 ? false : true;
 
   return (
     <>
       <div className='movie-summary'>
-        {showMore ? splitContent : splitContent.filter((_, i) => i < 1)}
+        {showMore ? splitContent : splitContent.filter((_, i) => i < 2)}
         {contentLess ? '' :
           <span><button
             className="p-0 ms-0 show-more-btn"

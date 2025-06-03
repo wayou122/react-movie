@@ -1,26 +1,29 @@
 import { useEffect, useState } from "react"
-import { watchlistAPI, movieAPI } from "../api/api"
+import { movieAPI } from "../api/api"
+import { useLocation } from "react-router-dom"
 
 export function useMoviesData(moviesFilter) {
   const [moviesData, setMoviesData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const isWatchlist = useLocation().pathname.includes('watchlist')
+
+  const fullMoviesFilter = { ...moviesFilter, watchlist: isWatchlist }
 
   useEffect(() => {
     setLoading(true)
-    //fetchMovieData()
-    setMoviesData(testMovieData)
-  }, [moviesFilter])
+    fetchMovieData()
+    //setMoviesData(testMovieData)
+  }, [JSON.stringify(fullMoviesFilter)])
+  //重新redner會形成新的物件會不斷重跑，文化字化比較實質內容
 
   async function fetchMovieData() {
-    const API = moviesFilter.watchlist ? watchlistAPI : movieAPI
     try {
-      const res = await fetch(API, {
+      const res = await fetch(movieAPI, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(moviesFilter)
+        body: new URLSearchParams(fullMoviesFilter)
       })
-      //const res = await fetch(API, { method: 'GET' })
       const resData = await res.json()
       if (res.ok && resData.code == 200) {
         setMoviesData(resData.data)

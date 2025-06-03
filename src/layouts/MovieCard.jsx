@@ -7,7 +7,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 
 function MovieCard() {
-  const { movieData, loading } = useContext(MovieContext)
+  const { movieData, loading, link } = useContext(MovieContext)
   const navigate = useNavigate()
   if (loading) return <LoadingSpinner />
 
@@ -35,14 +35,15 @@ function MovieCard() {
     <>
       <div className="overflow-hidden movie-card">
         <Row>
-          <Col xs={4} xl={3} className="p-0 navigate-link"
-            onClick={() => navigate(`/movie/${id}`)}>
+          <Col xs={4} xl={3}
+            className={`p-0 ${link ? 'navigate-link' : ''}`}
+            onClick={link ? () => navigate(`/movie/${id}`) : undefined}>
             <img src={posterUrl} className="movie-poster" />
           </Col>
 
           <Col xs={8} xl={9} className="p-3">
             <MovieTitleSection />
-            <div className="movie-card-description mb-1 gap-0">
+            <div className="movie-card-description mb-1 pe-3 gap-0">
               <p className='genre'>
                 <span>{releaseDate}．</span>
                 <span>{type}．</span>

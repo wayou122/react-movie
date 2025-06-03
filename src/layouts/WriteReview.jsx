@@ -21,6 +21,7 @@ function WriteReview() {
 
   const isLogin = user ? true : false;
   const title = movieData.title
+  const id = movieData.movieId
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -31,7 +32,7 @@ function WriteReview() {
       setErrorMessage('請填寫評論')
     } else {
       try {
-        const res = await fetch(addReviewAPI, {
+        const res = await fetch(addReviewAPI(id), {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-type': 'application/x-www-form-urlencoded' },
@@ -39,7 +40,7 @@ function WriteReview() {
         })
         const resData = await res.json()
         if (res.ok && resData.code === 200) {
-          window.location.reload()
+          console.log('新增成功')
         } else {
           setErrorMessage('新增失敗: ' + resData.message)
         }
@@ -83,7 +84,7 @@ function WriteReview() {
 
           <Form onSubmit={handleSubmit} className='w-100 mx-0'>
             <div className="review-score d-flex justify-content-center gap-1">
-              {scoreOptions.map((option, i) => (
+              {scoreOptions.map((option) => (
                 <div key={option.value}>
                   <input type="radio" name="score"
                     value={option.value} id={option.value}

@@ -35,6 +35,21 @@
   line-height: 2.2rem;
 }
 
+/* styles.css 或 App.css */
+[data-bs-theme="dark"] .navbar {
+  background-color: #333 !important;
+  color: var(--bs-light);
+}
+
+[data-bs-theme="dark"] .navbar .nav-link {
+  color: var(--bs-light) !important;
+}
+
+[data-bs-theme="dark"] .navbar .navbar-brand {
+  color: var(--bs-light) !important;
+}
+
+
 .h2-title {
   text-align: center;
   margin-bottom: 20px;
@@ -82,8 +97,6 @@
   width: 100%;
   max-height: 150px;
   margin-bottom: 16px;
-  box-shadow: 0px 0px 5px #aaa;
-
 }
 
 .movie-poster {
@@ -93,8 +106,12 @@
   box-shadow: 0px 0px 5px #ccc;
 }
 
+.movie-card-title {
+  font-weight: 600;
+}
+
 .movie-card-description {
-  color: #333;
+  /* color: #333; */
   line-height: 1.5rem;
 }
 
@@ -113,7 +130,7 @@ p.actor {
   padding: 8px;
   line-height: 1.5rem;
   font-size: 0.9rem;
-  color: #333;
+  /* color: #333; */
 }
 
 .movie-summary>:nth-child(1)::before {
@@ -132,7 +149,7 @@ p.actor {
 }
 
 .comment-text {
-  color: var(--midgray);
+  /* color: var(--midgray); */
   font-size: 0.85rem;
 }
 
@@ -170,12 +187,12 @@ p.actor {
 .review-ddd-btn .dropdown-toggle {
   background: none;
   border: none;
-  color: var(--midgray)
+  /* color: var(--midgray) */
 }
 
 .review-ddd-btn:hover .dropdown-toggle {
   background-color: #eee;
-  color: var(--midgray)
+  /* color: var(--midgray) */
 }
 
 .review-ddd-btn .dropdown-toggle::after {

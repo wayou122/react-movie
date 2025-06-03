@@ -9,6 +9,7 @@ import Account from './pages/Account.jsx'
 import Login from './pages/Login.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 import { UserProvider } from './contexts/UserContext.jsx';
+import { ThemeProvider } from './contexts/ThemeContext.jsx';
 
 function App() {
   const router = createBrowserRouter([
@@ -52,9 +53,11 @@ function App() {
   ])
 
   return (
-    <UserProvider>
-      <RouterProvider router={router} />
-    </UserProvider>
+    <ThemeProvider>
+      <UserProvider>
+        <RouterProvider router={router} />
+      </UserProvider>
+    </ThemeProvider>
   )
 }
 
