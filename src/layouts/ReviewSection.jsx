@@ -2,9 +2,10 @@ import { useState, useMemo, useContext, useEffect } from 'react'
 import { MovieContext } from '../contexts/MovieContext'
 import { Row, Col, Card, Form } from 'react-bootstrap'
 import Review from "./Review"
-import ReviewsFilter from '../components/ReviewsFilter'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { ReviewProvider } from "../contexts/ReviewContext"
+import { UserContext } from '../contexts/UserContext'
+import WriteReview from './WriteReview'
 
 const testReviews = () => [
   {
@@ -30,16 +31,19 @@ const testReviews = () => [
 ];
 
 function ReviewSection() {
+  const { user } = useContext(UserContext)
   const { movieData, loading } = useContext(MovieContext)
   const [filteredReviews, setFilteredReviews] = useState([])
   const [myFilter, setMyFilter] = useState({
     sort: '最新影評', score: '全部評價'
   });
-  const reviews = useMemo(() => {
-    return testReviews()
-    //return movieData.reviews
-  }, [movieData])
 
+  const reviews = useMemo(() => {
+    //return testReviews()
+    if (!movieData) return
+    return movieData.reviews
+  }, [movieData])
+  const userId = user ? user.userId : null
   const sortOptions = ['最新影評', '熱門影評']
   const scoreOptions = ['全部評價', '超讚', '好看', '普普', '難看', '爛透']
   const scoreMap = { '超讚': 5, '好看': 4, '普普': 3, '難看': 2, '爛透': 1 }
@@ -84,6 +88,13 @@ function ReviewSection() {
 
   return (
     <>
+      {filteredReviews.map(r => r.authorId).includes(userId) ? '' :
+        (<>
+          <WriteReview />
+          <hr />
+        </>)
+      }
+
       <Row>
         <Col>
           <Form.Select name='sort' className='mb-3'

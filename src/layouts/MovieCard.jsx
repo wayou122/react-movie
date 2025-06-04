@@ -21,16 +21,6 @@ function MovieCard() {
   const posterUrl = 'https://taiwancinema.bamid.gov.tw' + movieData.posterUrl || `https://dummyimage.com/140x210/234/fff&text=${title}`
   const actorShow = actor && actor.length >= 28 ? actor.slice(0, actor.indexOf('、', 24)) : actor || '';
 
-  // const title = '一家子兒咕咕叫'
-  // const director = '魏德聖'
-  // const actor = '李安平, 游採安, 朱裕鈞, 王彩英, 陳淑貞, 張志華, 黃芳宜'
-  // const releaseDate = '2025/02/19'
-  // const type = '劇情片'
-  // const length = '120 分鐘'
-  // const posterUrl = 'https://taiwancinema.bamid.gov.tw/ImageData/60/2025/93359/t_93359.jpg?v=202505051034265221354'
-  //const score = '85%'
-  //const reviewCount = 27
-
   return (
     <>
       <div className="overflow-hidden movie-card">

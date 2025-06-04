@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Dropdown, DropdownButton, ButtonGroup, Modal, Button } from "react-bootstrap";
 import WriteReview from '../layouts/WriteReview'
 import { ReviewContext } from "../contexts/ReviewContext";
+import { deleteReviewAPI } from "../api/api";
 
 function ThreeDotBtn() {
   const [showEdit, setShowEdit] = useState(false);
@@ -13,6 +14,25 @@ function ThreeDotBtn() {
 
   const handleCloseDelete = () => setShowDelete(false);
   const handleShowDelete = () => setShowDelete(true);
+
+  async function handleDelete() {
+    try {
+      const res = await fetch(deleteReviewAPI(review.reviewId), {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+      const resData = await res.json()
+      if (res.ok && resData.code === 200) {
+        window.location.reload()
+      } else {
+        setErrorMessage('刪除失敗: ' + resData.message)
+      }
+    } catch (err) {
+      setErrorMessage('刪除錯誤: ' + err.message)
+    }
+  }
+
+
   return (
     <div>
       <DropdownButton
@@ -32,16 +52,16 @@ function ThreeDotBtn() {
           <Modal.Title>編輯影評</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <WriteReview value={{ updating: true, content: review.content, score: review.score }} />
+          <WriteReview updating content={review.content} score={review.score} reviewId={review.reviewId} />
         </Modal.Body>
-        <Modal.Footer>
+        {/* <Modal.Footer>
           <Button variant="light" onClick={handleCloseEdit}>
             關閉
           </Button>
           <Button variant="primary" onClick={handleCloseEdit}>
             儲存
           </Button>
-        </Modal.Footer>
+        </Modal.Footer> */}
       </Modal>
 
       {/* 刪除跳窗 */}
@@ -56,7 +76,7 @@ function ThreeDotBtn() {
           <Button variant="light" onClick={handleCloseDelete}>
             關閉
           </Button>
-          <Button variant="primary" onClick={handleCloseDelete}>
+          <Button variant="primary" onClick={() => { handleDelete(); handleCloseDelete() }}>
             確定刪除
           </Button>
         </Modal.Footer>

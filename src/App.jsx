@@ -10,6 +10,7 @@ import Login from './pages/Login.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 import { UserProvider } from './contexts/UserContext.jsx';
 import { ThemeProvider } from './contexts/ThemeContext.jsx';
+import Search from './pages/Search.jsx';
 
 function App() {
   const router = createBrowserRouter([
@@ -21,6 +22,10 @@ function App() {
     {
       path: '/movie',
       element: <Movies />
+    },
+    {
+      path: '/search-movie',
+      element: <Search />
     },
     {
       path: '/movie/:id',

@@ -54,6 +54,7 @@ function Menu() {
           <Navbar.Collapse id="responsive-navbar-nav" className='p-2'>
             <Nav className="me-auto">
               <Nav.Link as={Link} to='/movie'>電影</Nav.Link>
+              <Nav.Link as={Link} to='/search-movie'>搜尋電影</Nav.Link>
               <Nav.Link as={Link} to='/review'>影評</Nav.Link>
               <Nav.Link as={Link} to='/reviewer'>影評人</Nav.Link>
             </Nav>
@@ -90,7 +91,7 @@ function Menu() {
             <Nav>
               <Nav.Link onClick={toggleColorMode} as={Link}>
                 <div className="d-flex align-items-center">
-                  <span className="material-symbols-outlined me-1">{isDarkMode ? 'dark_mode' : 'light_mode'}</span>
+                  <span className="material-symbols-outlined me-1 fs-5">{isDarkMode ? 'dark_mode' : 'light_mode'}</span>
                 </div>
               </Nav.Link>
             </Nav>

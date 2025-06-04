@@ -3,9 +3,11 @@ import { MovieContext } from "../contexts/MovieContext.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 import { useNavigate } from "react-router-dom";
 import { addToWatchlistAPI } from "../api/api.js";
+import { UserContext } from "../contexts/UserContext.jsx";
 
 
 function MovieTitleSection() {
+  const { user } = useContext(UserContext)
   const { movieData, loading, link } = useContext(MovieContext)
   const [mark, setMark] = useState(false);
   const navigate = useNavigate()
@@ -18,7 +20,12 @@ function MovieTitleSection() {
   useEffect(() => {
     setMark(bookmark)
   }, [])
+
   async function handleMarkClick() {
+    if (!user) {
+      alert('請先登入')
+      return
+    }
     try {
       const res = await fetch(addToWatchlistAPI(id), {
         method: 'PUT',

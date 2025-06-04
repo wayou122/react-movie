@@ -15,7 +15,6 @@ function Account() {
   const [formData, setFormData] = useState({
     email: '', username: ''
   })
-  //console.log(user.username)
 
   useEffect(() => {
     if (user) {
@@ -30,21 +29,6 @@ function Account() {
   if (!user) {
     return <Spinner animation="grow" variant="secondary" />
   }
-
-  // async function fetchUserInfo() {
-  //   try {
-  //     const res = await fetch(accountAPI, { credentials: 'include' })
-  //     const resData = await res.json()
-  //     if (res.ok && resData.code == 200) {
-  //       setFormData(resData.data)
-  //       oldUsername = resData.data.username
-  //     } else {
-  //       alert('載入失敗: ' + resData.message)
-  //     }
-  //   } catch (err) {
-  //     console.log('載入錯誤: ' + err.message)
-  //   }
-  // }
 
   function handleChange(e) {
     setFormData(p => ({

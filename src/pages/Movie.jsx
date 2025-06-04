@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom"
 import { Row, Col, Container } from 'react-bootstrap'
 import Menu from "../layouts/Menu"
 import MovieCard from "../layouts/MovieCard"
-import WriteReview from "../layouts/WriteReview"
 import ReviewSection from "../layouts/ReviewSection"
 import MovieSummary from "../layouts/MovieSummary"
 import MovieBanner from "../layouts/MovieBanner"
@@ -24,19 +23,9 @@ function Movie() {
               <MovieCard />
               <MovieSummary />
               <hr />
-            </Col>
-          </Row>
-
-          <Row className='justify-content-center'>
-            <Col xs={12} sm={9} lg={6}>
-              <WriteReview></WriteReview>
-              <hr />
-            </Col>
-          </Row>
-          <Row className='justify-content-center'>
-            <Col xs={12} sm={9} lg={6}>
               <ReviewSection />
-            </Col></Row>
+            </Col>
+          </Row>
         </Container>
       </MovieProvider>
     </>

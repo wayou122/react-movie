@@ -122,6 +122,10 @@ function Login() {
   }
 
   useEffect(() => {
+    fetchAuthcode()
+  }, [])
+
+  useEffect(() => {
     setNameValid(true)
     setNameUnique(true)
     setEmailValid(true)
@@ -134,10 +138,6 @@ function Login() {
       authcode: ''
     })
   }, [isLogin])
-
-  useEffect(() => {
-    fetchAuthcode()
-  }, [])
 
   return (
     <div>

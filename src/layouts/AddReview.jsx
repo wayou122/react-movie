@@ -1,18 +1,19 @@
 import { useState, useRef, useContext, useEffect } from 'react'
 import { Form, Button, Alert } from 'react-bootstrap'
 import { scoreOptions } from '../utils/scoreOptions'
-import { addReviewAPI, updateReviewAPI } from '../api/api'
+import { addReviewAPI, loginAPI } from '../api/api'
 import { UserContext } from '../contexts/UserContext'
 import { MovieContext } from '../contexts/MovieContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { Link } from 'react-router-dom';
+import { ReviewContext } from '../contexts/ReviewContext'
 
 
-function WriteReview(props) {
+function AddReview() {
   const { user } = useContext(UserContext)
   const { movieData, loading } = useContext(MovieContext)
   const [displayText, setDisplayText] = useState('')
-  const [selectedValue, setSelectedValue] = useState();
+  const [selectedValue, setSelectedValue] = useState('');
   const [textareaValue, setTextareaValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('')
   const textareaRef = useRef(null);
@@ -25,11 +26,11 @@ function WriteReview(props) {
   if (loading) return <LoadingSpinner />
 
   const isLogin = user ? true : false;
-  const isUpdating = props.updating
-  const reviewId = props.reviewId
+  const isUpdating = props.isUpdating
 
   const title = movieData.title
-  const movieId = movieData.movieId
+  const id = movieData.movieId
+
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -39,58 +40,30 @@ function WriteReview(props) {
     } else if (!textareaValue) {
       setErrorMessage('請填寫評論')
     } else {
-      if (isUpdating) {
-        fetchUpdateReview()
-      } else {
-        fetchAddReview()
+      try {
+        const res = await fetch(addReviewAPI(id), {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ score: selectedValue, content: textareaValue })
+        })
+        const resData = await res.json()
+        if (res.ok && resData.code === 200) {
+          console.log('新增成功')
+        } else {
+          setErrorMessage('新增失敗: ' + resData.message)
+        }
+      } catch (err) {
+        setErrorMessage('新增錯誤: ' + err.message)
       }
     }
   }
-
-  async function fetchAddReview() {
-    try {
-      const res = await fetch(addReviewAPI(movieId), {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ score: selectedValue, content: textareaValue })
-      })
-      const resData = await res.json()
-      if (res.ok && resData.code === 200) {
-        window.location.reload()
-      } else {
-        setErrorMessage('新增失敗: ' + resData.message)
-      }
-    } catch (err) {
-      setErrorMessage('新增錯誤: ' + err.message)
-    }
-  }
-
-  async function fetchUpdateReview() {
-    try {
-      const res = await fetch(updateReviewAPI(reviewId), {
-        method: 'PUT',
-        credentials: 'include',
-        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ score: selectedValue, content: textareaValue })
-      })
-      const resData = await res.json()
-      if (res.ok && resData.code === 200) {
-        window.location.reload()
-      } else {
-        setErrorMessage('修改失敗: ' + resData.message)
-      }
-    } catch (err) {
-      setErrorMessage('修改錯誤: ' + err.message)
-    }
-  }
-
 
   function handleScoreChange(e) {
     const newValue = e.target.value
     setSelectedValue(newValue)
     setErrorMessage('')
-    const selectedOption = scoreOptions[newValue];
+    const selectedOption = scoreOptions.find(option => option.value === newValue);
     if (selectedOption) {
       setDisplayText(selectedOption.text);
     } else {
@@ -120,16 +93,20 @@ function WriteReview(props) {
 
           <Form onSubmit={handleSubmit} className='w-100 mx-0'>
             <div className="review-score d-flex justify-content-center gap-1">
-              {Object.values(scoreOptions).map((option) => (
+              {scoreOptions.map((option) => (
                 <div key={option.value}>
                   <input type="radio" name="score"
                     value={option.value} id={option.value}
-                    checked={selectedValue == option.value}
+                    checked={selectedValue === option.value}
                     onChange={handleScoreChange}
                   />
                   <label htmlFor={option.value}>
                     <span className="me-2">{option.emoji}</span>
                   </label>
+                  {/* <label for={option.value}>
+                    <span className="outlined-icon me-2"
+                    style={{filter: "grayscale(80%)"}}>{option.emoji}</span>
+                  </label> */}
                 </div>
               ))}
             </div>
@@ -154,7 +131,7 @@ function WriteReview(props) {
                 <div className='mx-auto'>
                   <Button variant="primary" type='submit'
                     className='d-flex mx-auto mt-2'>
-                    {isUpdating ? '修改評論' : '送出評論'}
+                    送出評論
                   </Button>
                 </div>
               </div>
@@ -175,4 +152,4 @@ function WriteReview(props) {
   )
 
 }
-export default WriteReview
+export default AddReview
