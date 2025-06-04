@@ -7,6 +7,7 @@ import ReviewSection from "../layouts/ReviewSection"
 import MovieSummary from "../layouts/MovieSummary"
 import MovieBanner from "../layouts/MovieBanner"
 import { useMovieData } from "../hooks/useMovieData"
+import { Footer } from "../layouts/Footer"
 
 function Movie() {
   const { id } = useParams()
@@ -28,6 +29,7 @@ function Movie() {
           </Row>
         </Container>
       </MovieProvider>
+      <Footer />
     </>
   )
 }

@@ -7,8 +7,8 @@ export function useMovieData(id) {
 
   useEffect(() => {
     setLoading(true)
-    fetchMovieData(id)
-    //setMovieData(testmovieData)
+    //fetchMovieData(id)
+    setMovieData(testmovieData)
   }, [id])
 
   function testmovieData() {

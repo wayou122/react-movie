@@ -54,7 +54,6 @@ function Menu() {
           <Navbar.Collapse id="responsive-navbar-nav" className='p-2'>
             <Nav className="me-auto">
               <Nav.Link as={Link} to='/movie'>電影</Nav.Link>
-              <Nav.Link as={Link} to='/search-movie'>搜尋電影</Nav.Link>
               <Nav.Link as={Link} to='/review'>影評</Nav.Link>
               <Nav.Link as={Link} to='/reviewer'>影評人</Nav.Link>
             </Nav>

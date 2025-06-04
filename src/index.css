@@ -11,6 +11,10 @@
   font-family: 'Noto Sans';
 }
 
+body {
+  margin-bottom: 200px;
+}
+
 /* 實心圖示 */
 .filled-icon {
   font-family: 'Material Symbols Outlined';

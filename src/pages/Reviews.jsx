@@ -5,6 +5,7 @@ import ReviewMovieCard from '../layouts/ReviewMovieCard'
 import Searchbar from '../components/Searchbar'
 import { Container, Row, Col } from 'react-bootstrap'
 import { reviewAPI } from '../api/api'
+import { Footer } from '../layouts/Footer'
 
 export const ReviewsFilterContext = createContext()
 
@@ -56,6 +57,7 @@ function Reviews() {
           </Col>
         </Row>
       </Container>
+      <Footer />
     </>
   )
 }

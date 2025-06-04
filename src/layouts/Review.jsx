@@ -15,7 +15,7 @@ function Review() {
   const score = review.score
   const likes = review.likeCount
   const content = review.content
-  const reaction = review.reaction || 0
+  const reaction = review.reaction
   const id = review.reviewId
   const createdDate = review.createdDate
 

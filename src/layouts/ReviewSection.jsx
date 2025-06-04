@@ -39,10 +39,11 @@ function ReviewSection() {
   });
 
   const reviews = useMemo(() => {
-    //return testReviews()
+    return testReviews()
     if (!movieData) return
     return movieData.reviews
   }, [movieData])
+
   const userId = user ? user.userId : null
   const sortOptions = ['最新影評', '熱門影評']
   const scoreOptions = ['全部評價', '超讚', '好看', '普普', '難看', '爛透']
@@ -76,19 +77,9 @@ function ReviewSection() {
     return sorted.filter(r => r.score == myScore)
   }
 
-  // const filteredReviews = useMemo(() => {
-  //   const sorted = sortReviews(reviews);
-  //   if (myFilter['評分'] == '所有評分') {
-  //     return sorted;
-  //   }
-  //   const myScore = scoreMap[myFilter['評分']]
-  //   return sorted.filter(r => r.score == myScore)
-  // }, [myFilter])
-
-
   return (
     <>
-      {filteredReviews.map(r => r.authorId).includes(userId) ? '' :
+      {filteredReviews.some(r => r.authorId == userId) ? '' :
         (<>
           <WriteReview />
           <hr />

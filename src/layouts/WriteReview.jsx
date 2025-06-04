@@ -15,11 +15,15 @@ function WriteReview(props) {
   const [selectedValue, setSelectedValue] = useState();
   const [textareaValue, setTextareaValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('')
-  const textareaRef = useRef(null);
+  const textareaRef = useRef(null); //綁定底下 ref={textareaRef}
 
   useEffect(() => {
     setTextareaValue(props.content)
     setSelectedValue(props.score)
+    //狀態更新後執行
+    setTimeout(() => {
+      autoGrow()
+    }, 0);
   }, [])
 
   if (loading) return <LoadingSpinner />
@@ -100,7 +104,7 @@ function WriteReview(props) {
 
   function autoGrow(e) {
     setErrorMessage('')
-    setTextareaValue(e.target.value);
+    if (e) setTextareaValue(e.target.value);
     const textarea = textareaRef.current
     textarea.style.height = 'auto'; // 重設高度
     textarea.style.height = textarea.scrollHeight + 5 + 'px'; // 設為內容高度
@@ -143,7 +147,8 @@ function WriteReview(props) {
             {isLogin ? (
               <div>
                 <div>
-                  <Form.Control as="textarea" placeholder='我的評論...'
+                  <Form.Control as="textarea"
+                    placeholder='我的評論...'
                     className='mt-3'
                     rows={3}
                     value={textareaValue}

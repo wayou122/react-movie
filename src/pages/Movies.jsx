@@ -7,6 +7,7 @@ import { Container, Row, Col, Card } from 'react-bootstrap'
 import LoadingSpinner from "../components/LoadingSpinner"
 import { useMoviesData } from "../hooks/useMoviesData"
 import { MovieProvider } from "../contexts/MovieContext"
+import { Footer } from "../layouts/Footer"
 
 export const MoviesFilterContext = createContext()
 
@@ -51,6 +52,7 @@ function Movies() {
           </Row>
         )}
       </Container>
+      <Footer />
     </>
   )
 }
