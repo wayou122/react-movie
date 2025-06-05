@@ -13,7 +13,11 @@ function MovieSummary() {
 
   return (
     <>
-      <div className='movie-summary'>
+      <button className="btn btn-sm btn-outline-danger mt-4"
+        onClick={() => window.open(`https://www.youtube.com/results?search_query=${movieData.title}`)}>
+        YouTube 搜尋
+      </button>
+      <div className='movie-summary mt-1 p-2'>
         {showMore ? splitContent : splitContent.filter((_, i) => i < 2)}
         {contentLess ? '' :
           <span><button

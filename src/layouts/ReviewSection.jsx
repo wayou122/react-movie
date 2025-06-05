@@ -39,7 +39,7 @@ function ReviewSection() {
   });
 
   const reviews = useMemo(() => {
-    return testReviews()
+    //return testReviews()
     if (!movieData) return
     return movieData.reviews
   }, [movieData])
@@ -79,7 +79,7 @@ function ReviewSection() {
 
   return (
     <>
-      {filteredReviews.some(r => r.authorId == userId) ? '' :
+      {reviews.some(r => r.authorId == userId) ? '' :
         (<>
           <WriteReview />
           <hr />

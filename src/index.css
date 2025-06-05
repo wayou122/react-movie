@@ -64,8 +64,11 @@ body {
   margin-top: 20px;
 }
 
-.stars {
-  color: #ffbb00;
+nav.menu {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 5;
 }
 
 
@@ -111,7 +114,7 @@ body {
   object-fit: cover;
   width: 100%;
   height: 100%;
-  box-shadow: 0px 0px 5px #ccc;
+  /* box-shadow: 0px 0px 5px #ccc; */
 }
 
 .movie-card-title {
@@ -134,8 +137,6 @@ p.actor {
 }
 
 .movie-summary {
-  margin-top: 10px;
-  padding: 8px;
   line-height: 1.5rem;
   font-size: 0.9rem;
   /* color: #333; */
@@ -169,6 +170,11 @@ p.actor {
   font-size: 20px;
   filter: opacity(30%) grayscale(100%);
   cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.bounce {
+  transform: scale(1.15)
 }
 
 .review-score input:checked+label {
@@ -210,15 +216,26 @@ p.actor {
   background-color: var(--lightgray);
 }
 
+.bookmark-icon {
+  display: inline-block;
+  transition: transform 0.15s ease;
+  cursor: pointer;
+}
+
 .filled-icon.bookmark-icon {
   color: var(--topic2);
-  cursor: pointer;
+
 }
 
 .outlined-icon.bookmark-icon {
   color: var(--lightgray);
-  cursor: pointer;
 }
+
+.bounce .bookmark-icon {
+  transform: scale(1.2);
+}
+
+
 
 .sort-btn {
   background: var(--lightgray);
@@ -288,4 +305,8 @@ button.login-or-register-btn.select {
 
 .navigate-link {
   cursor: pointer
+}
+
+.page-button {
+  cursor: pointer;
 }

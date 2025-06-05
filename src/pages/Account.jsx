@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext } from 'react'
-import { Form, Button, Spinner } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import Menu from '../layouts/Menu'
 import { validateNameUnique, validateEmailFormat, validatePasswordFormat, validateNameFormat } from '../utils/validate_function';
 import { accountAPI, updateUsernameAPI } from '../api/api';
 import { UserContext } from '../contexts/UserContext';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 let oldUsername = ''
 
@@ -27,7 +28,7 @@ function Account() {
   }, [user])
 
   if (!user) {
-    return <Spinner animation="grow" variant="secondary" />
+    return <LoadingSpinner />
   }
 
   function handleChange(e) {

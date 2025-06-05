@@ -6,7 +6,7 @@ import BoxOfficeChart from './pages/BoxOfficeChart.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BoxOfficeChart />
-    {/* <App /> */}
+    {/* <BoxOfficeChart /> */}
+    <App />
   </StrictMode>,
 )

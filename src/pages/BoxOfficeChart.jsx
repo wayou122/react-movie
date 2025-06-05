@@ -27,7 +27,8 @@ export default function BoxOfficeChart() {
         const proxyUrl = "https://cors-anywhere.herokuapp.com/";
         const apiUrl = "https://boxoffice.tfi.org.tw/api/export?start=2025/03/17&end=2025/03/23";
 
-        const res = await fetch('https://boxoffice.tfi.org.tw/api/export?start=2020/06/01&end=2020/06/07');
+        const res = await fetch("https://cors-anywhere.herokuapp.com/https://boxoffice.tfi.org.tw/api/export?start=2025/03/17&end=2025/03/23")
+          ;
         if (!res.ok) {
           throw new Error(`HTTP error: ${res.status}`);
         }
@@ -41,13 +42,19 @@ export default function BoxOfficeChart() {
 
     loadData();
   }, []);
+  if (!chartData || !chartData.list) {
+    return <p>載入中...</p>; // 或 spinner
+  }
+
+  const n = chartData.list.toSorted((a, b) => b.tickets - a.tickets).slice(0, 10).map(i => i)
+  setChartData(n)
 
   const data = {
-    labels: chartData.map(item => item.MovieName), // 電影名稱
+    labels: chartData.map(item => item.name), // 電影名稱
     datasets: [
       {
         label: '票房收入',
-        data: chartData.map(item => Number(item.BoxOffice.replace(/,/g, ''))), // 去掉逗號
+        data: chartData.map(item => item.tickets), // 去掉逗號
         backgroundColor: 'rgba(75,192,192,0.6)',
         borderRadius: 5
       }

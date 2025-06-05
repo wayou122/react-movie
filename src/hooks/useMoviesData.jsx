@@ -6,7 +6,6 @@ export function useMoviesData(moviesFilter) {
   const [moviesData, setMoviesData] = useState(null)
   const [loading, setLoading] = useState(true)
   const isWatchlist = useLocation().pathname.includes('watchlist')
-
   const fullMoviesFilter = { ...moviesFilter, watchlist: isWatchlist }
 
   useEffect(() => {
@@ -18,6 +17,7 @@ export function useMoviesData(moviesFilter) {
 
   async function fetchMovieData() {
     try {
+      console.log(fullMoviesFilter)
       const res = await fetch(movieAPI, {
         method: 'POST',
         credentials: 'include',

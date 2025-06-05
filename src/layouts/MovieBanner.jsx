@@ -6,7 +6,9 @@ function MovieBanner() {
   const { movieData, loading } = useContext(MovieContext)
   if (loading) return <LoadingSpinner />
 
-  const bannerUrl = 'https://taiwancinema.bamid.gov.tw' + movieData.bannerUrl || ''
+  const bannerUrl = movieData.bannerUrl
+
+  if (!bannerUrl) return
 
   return (
     <div >

@@ -10,6 +10,8 @@ function MovieTitleSection() {
   const { user } = useContext(UserContext)
   const { movieData, loading, link } = useContext(MovieContext)
   const [mark, setMark] = useState(false);
+  const [isBouncing, setIsBouncing] = useState(false);
+
   const navigate = useNavigate()
   if (loading) return <LoadingSpinner />
 
@@ -35,6 +37,12 @@ function MovieTitleSection() {
       if (res.ok && resData.code === 200) {
         console.log('修改成功')
         setMark(!mark)
+
+        // 動畫效果
+        setIsBouncing(true);
+        setTimeout(() => {
+          setIsBouncing(false);
+        }, 150);
       } else {
         console.error('修改失敗: ' + resData.message)
       }
@@ -49,7 +57,7 @@ function MovieTitleSection() {
         className={`movie-card-title mb-1 mt-1 ${link ? 'navigate-link' : ''}`}
         onClick={link ? () => navigate(`/movie/${id}`) : undefined}
       >{title}</h4>
-      <div onClick={handleMarkClick} className='me-2 mb-0'>{mark ?
+      <div onClick={handleMarkClick} className={`me-2 mb-0 ${isBouncing ? 'bounce' : ''}`}>{mark ?
         (<span className="filled-icon bookmark-icon">bookmark</span>) :
         (<span className="outlined-icon bookmark-icon">bookmark</span>)
       }</div>

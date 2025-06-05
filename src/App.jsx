@@ -8,9 +8,9 @@ import RankingReviewer from './pages/RankingReviewer.jsx'
 import Account from './pages/Account.jsx'
 import Login from './pages/Login.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
+import TestPage from './pages/TestPage.jsx'
 import { UserProvider } from './contexts/UserContext.jsx';
 import { ThemeProvider } from './contexts/ThemeContext.jsx';
-import Search from './pages/Search.jsx';
 
 function App() {
   const router = createBrowserRouter([
@@ -20,12 +20,12 @@ function App() {
       errorElement: <NotFoundPage />,
     },
     {
-      path: '/movie',
-      element: <Movies />
+      path: '/test',
+      element: <TestPage />
     },
     {
-      path: '/search-movie',
-      element: <Search />
+      path: '/movie',
+      element: <Movies />
     },
     {
       path: '/movie/:id',

@@ -18,7 +18,9 @@ function MovieCard() {
   const releaseDate = movieData.releaseDate && movieData.releaseDate.slice(0, 4) || ''
   const type = movieData.type
   const length = movieData.length ? movieData.length + '分' : ''
-  const posterUrl = 'https://taiwancinema.bamid.gov.tw' + movieData.posterUrl || `https://dummyimage.com/140x210/234/fff&text=${title}`
+  let posterUrl = movieData.posterUrl
+  if (posterUrl == 'https://taiwancinema.bamid.gov.tw/Images/film/film_1.jpg?v=202505281353288331007')
+    posterUrl = movieData.posterUrl = `https://dummyimage.com/140x210/234/fff&text=${title}`
   const actorShow = actor && actor.length >= 28 ? actor.slice(0, actor.indexOf('、', 24)) : actor || '';
 
   return (

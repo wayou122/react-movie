@@ -16,6 +16,7 @@ function WriteReview(props) {
   const [textareaValue, setTextareaValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('')
   const textareaRef = useRef(null); //綁定底下 ref={textareaRef}
+  const [isBouncing, setIsBouncing] = useState(false);
 
   useEffect(() => {
     setTextareaValue(props.content)
@@ -94,6 +95,10 @@ function WriteReview(props) {
     const newValue = e.target.value
     setSelectedValue(newValue)
     setErrorMessage('')
+    setIsBouncing(true);
+    setTimeout(() => {
+      setIsBouncing(false);
+    }, 150);
     const selectedOption = scoreOptions[newValue];
     if (selectedOption) {
       setDisplayText(selectedOption.text);
@@ -131,7 +136,7 @@ function WriteReview(props) {
                     checked={selectedValue == option.value}
                     onChange={handleScoreChange}
                   />
-                  <label htmlFor={option.value}>
+                  <label htmlFor={option.value} className={`${selectedValue == option.value && isBouncing ? 'bounce' : ''}`}>
                     <span className="me-2">{option.emoji}</span>
                   </label>
                 </div>
