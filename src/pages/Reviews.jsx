@@ -1,61 +1,86 @@
-import { createContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import Menu from '../layouts/Menu'
 import ReviewsFilter from '../components/ReviewsFilter'
 import ReviewMovieCard from '../layouts/ReviewMovieCard'
-import Searchbar from '../components/Searchbar'
 import { Container, Row, Col } from 'react-bootstrap'
-import { reviewAPI } from '../api/api'
 import { Footer } from '../layouts/Footer'
+import { UserContext } from '../contexts/UserContext'
+import { useReviewsData } from '../hooks/useReviewsData'
+import LoadingSpinner from '../components/LoadingSpinner'
+import { ReviewProvider } from '../contexts/ReviewContext'
+import { useSearchParams } from 'react-router-dom'
 
 export const ReviewsFilterContext = createContext()
 
 function Reviews() {
-  const [myFilter, setMyFilter] = useState({
-    '排序': '最新影評',
-    '類型': '所有類型',
-    '評分': '所有評分'
+  const { user } = useContext(UserContext)
+  const [requestParams, setRequestParams] = useState('page=1&sort=new&score=all')
+  const { reviewsData, totalPage, loading } = useReviewsData()
+  const [reviewsFilter, setReviewsFilter] = useState({
+    page: '1', sort: 'new', score: 'all'
   });
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = parseInt(searchParams.get("page") || "1");
+  const sort = searchParams.get('sort') || 'new'
+  const score = searchParams.get('score') || 'all'
 
-  async function fetchReviewsData() {
-    try {
-      const res = await fetch(reviewAPI, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(moviesFilter)
-      })
-      const resData = await res.json()
-      if (res.ok && resData.code == 200) {
-        setMoviesData(resData.data)
-      } else {
-        console.error('載入失敗: ' + resData.message)
-      }
-    } catch (err) {
-      console.error('載入錯誤: ' + err.message)
-    } finally {
-      setLoading(false)
-    }
+  useEffect(() => {
+    setSearchParams({ page: 1, sort: reviewsFilter.sort, score: reviewsFilter.score })
+  }, [reviewsFilter])
+
+  useEffect(() => {
+    setRequestParams(`page=${page}&sort=${sort}&score=${score}`)
+  }, [page, sort, score])
+
+  if (!reviewsData) return <LoadingSpinner />
+
+  function handlePageClick(newPage) {
+    if (newPage < 1 || newPage > totalPage) return
+    setSearchParams({ page: newPage, sort, score })
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   return (
     <>
       <Menu />
+      {loading && <LoadingSpinner />}
       <Container>
-        <Searchbar />
         <h2 className='h2-title'>評論列表</h2>
         <Row className='justify-content-center'>
           <Col xs={12} sm={9} lg={6}>
-            <ReviewsFilterContext.Provider value={[myFilter, setMyFilter]} >
+            <ReviewsFilterContext.Provider value={[reviewsFilter, setReviewsFilter]} >
               <ReviewsFilter />
             </ReviewsFilterContext.Provider>
           </Col>
         </Row>
-
-        <Row className='justify-content-center'>
-          <Col xs={12} sm={9} lg={6}>
-            <ReviewMovieCard />
-          </Col>
-        </Row>
+        {reviewsData.map((review) => (
+          <Row className='justify-content-center'
+            key={review.reviewId}>
+            <Col xs={12} sm={9} lg={6}>
+              <ReviewProvider
+                value={{ review, loading }}>
+                <ReviewMovieCard />
+              </ReviewProvider>
+            </Col>
+          </Row>
+        ))}
+        <nav aria-label="Page navigation">
+          <ul className="pagination justify-content-center mt-2">
+            <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}
+              onClick={() => handlePageClick(page - 1)}>
+              <a className="page-link page-button" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li className="page-item"><a className="page-link">{page}</a></li>
+            <li className={`page-item ${page >= totalPage ? 'disabled' : ''}`}
+              onClick={() => handlePageClick(page + 1)}>
+              <a className="page-link page-button" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </Container>
       <Footer />
     </>

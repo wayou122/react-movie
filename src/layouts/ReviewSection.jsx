@@ -108,7 +108,7 @@ function ReviewSection() {
         filteredReviews.map((review) => (
           <Row className='justify-content-center' key={review.reviewId}>
             <Card className='ps-3 pe-3 pt-2 pb-2 mt-2'>
-              <ReviewProvider value={{ review }}>
+              <ReviewProvider value={{ review, loading }}>
                 <Review />
               </ReviewProvider>
             </Card>

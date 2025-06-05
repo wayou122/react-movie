@@ -19,20 +19,19 @@ function Movies() {
     { type: '全部類型', sort: '評價最高', keyword: '' })
   const { moviesData, loading } = useMoviesData(moviesFilter)
   const [currentPage, setCurrentPage] = useState(1)
-  //const [totalPages, setTotalPages] = useState()
+
   useEffect(() => {
     setCurrentPage(1)
   }, [moviesData])
 
   const isWatchlist = useLocation().pathname.includes('watchlist')
 
-  if (loading || !moviesData) return <LoadingSpinner />
+  if (!moviesData) return <LoadingSpinner />
 
   const itemsPerPage = 10
   const totalPages = Math.ceil(moviesData.length / itemsPerPage)
   const currentMoviesData = moviesData.slice((currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage)
-  console.log(totalPages)
 
   function handlePageClick(page) {
     if (page < 1 || page > totalPages) return
@@ -62,17 +61,17 @@ function Movies() {
         </Row>
         {currentMoviesData ? currentMoviesData.map((movieData) => (
           <>
-            <MovieProvider
-              key={movieData.movieId}
-              value={{ movieData, loading, link: true }}>
-              <Row className='justify-content-center'>
-                <Col xs={12} sm={9} lg={6}>
+            <Row className='justify-content-center'>
+              <Col xs={12} sm={9} lg={6}>
+                <MovieProvider
+                  key={movieData.movieId}
+                  value={{ movieData, loading, link: true }}>
                   <Card className="mb-1" >
                     <MovieCard />
                   </Card>
-                </Col>
-              </Row>
-            </MovieProvider>
+                </MovieProvider>
+              </Col>
+            </Row>
           </>
         )) : (
           <Row className='justify-content-center'>

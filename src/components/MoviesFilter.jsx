@@ -3,9 +3,9 @@ import { Row, Col, Form } from 'react-bootstrap'
 import { MoviesFilterContext } from "../pages/Movies"
 
 function MoviesFilter() {
+  const [moviesFilter, setMoviesFilter] = useContext(MoviesFilterContext)
   const sortOptions = ['評價最高', '評價最低', '最多評論', '最新上映']
   const typeOptions = ['全部類型', '劇情片', '紀錄片', '動畫', '短片', '其他']
-  const [moviesFilter, setMoviesFilter] = useContext(MoviesFilterContext)
 
   function handleChange(e) {
     const { name, value } = e.target
