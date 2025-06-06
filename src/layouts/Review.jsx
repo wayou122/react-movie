@@ -18,6 +18,7 @@ function Review() {
   const reaction = review.reaction
   const id = review.reviewId
   const createdDate = review.createdDate
+  const title = review.title
 
   const [showMore, setShowMore] = useState(false);
   function toggleShowMore() { setShowMore(!showMore) };
@@ -89,6 +90,7 @@ function Review() {
 
         <div className='d-flex justify-content-between align-items-center'>
           <div className='pt-2 mb-2'>
+            <span className="small">{title}．</span>
             <span className="me-2">{reviewerName}</span>
             <span className="me-2">{scoreOptions[score].emoji}</span>
             <span className="small text-muted">{createdDate}</span>

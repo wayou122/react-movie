@@ -18,11 +18,12 @@ export const toggleReviewReactionAPI = (id, reaction) => `${API}/user/review/rea
 export const addToWatchlistAPI = (movieId) => `${API}/user/toggle-watchlist/movie/${movieId}`
 
 export const movieAPI = `${API}/movie`
+export const movieParamsAPI = (params) => `${API}/movie${params}`
 export const movieIdAPI = (id) => `${API}/movie/${id}`
 export const movieSearchAPI = `${API}/movie/search`
 export const movieFilterAPI = `${API}/movie/filter`
 
-export const reviewAPI = `${API}/review`
+export const reviewAPI = (params) => `${API}/review${params}`
 
 export const reviewerAPI = `${API}/reviewer`
 export const reviewerNameAPI = (name) => `${API}/reviewer/${name}`

@@ -2,29 +2,24 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { reviewAPI } from "../api/api";
 
-export function useReviewsData(reviewsFilter) {
+export function useReviewsData(requestParams) {
   const [reviewsData, setReviewsData] = useState(null)
-  const [totalPage, setTotalPage] = useState(null)
   const [loading, setLoading] = useState(true)
   //const personal = useLocation().pathname.includes()
   const personal = false
-  const fullReviewsFilter = { ...reviewsFilter, personal: personal }
 
   useEffect(() => {
     setLoading(true)
-    //fetchReviewsData()
-    setReviewsData(testReviewsData())
-    setTotalPage(3)
-    setLoading(false)
-  }, [JSON.stringify(fullReviewsFilter)])
+    fetchReviewsData()
+    //setReviewsData(testReviewsData())
+    //setLoading(false)
+  }, [requestParams])
 
   async function fetchReviewsData() {
     try {
-      const res = await fetch(reviewAPI, {
-        method: 'POST',
+      const res = await fetch(reviewAPI(requestParams), {
+        method: 'GET',
         credentials: 'include',
-        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-
       })
       const resData = await res.json()
       if (res.ok && resData.code == 200) {
@@ -67,5 +62,5 @@ export function useReviewsData(reviewsFilter) {
     }]
     return reviewsData
   }
-  return { reviewsData, totalPage, loading }
+  return { reviewsData, loading }
 }

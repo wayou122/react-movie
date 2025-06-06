@@ -1,29 +1,33 @@
 import { useEffect, useState } from "react"
-import { movieAPI } from "../api/api"
 import { useLocation } from "react-router-dom"
+import { movieAPI, movieParamsAPI } from "../api/api"
 
-export function useMoviesData(moviesFilter) {
+export function useMoviesData(params) {
   const [moviesData, setMoviesData] = useState(null)
   const [loading, setLoading] = useState(true)
   const isWatchlist = useLocation().pathname.includes('watchlist')
-  const fullMoviesFilter = { ...moviesFilter, watchlist: isWatchlist }
+  //const fullMoviesFilter = { ...moviesFilter, watchlist: isWatchlist }
 
   useEffect(() => {
     setLoading(true)
     fetchMovieData()
     //setMoviesData(testMovieData)
-  }, [JSON.stringify(fullMoviesFilter)])
+  }, [params])
   //重新redner會形成新的物件會不斷重跑，文化字化比較實質內容
 
   async function fetchMovieData() {
     try {
-      console.log(fullMoviesFilter)
-      const res = await fetch(movieAPI, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(fullMoviesFilter)
+      console.log(params)
+      const res = await fetch(movieParamsAPI(params), {
+        method: 'GET',
+        credentials: 'include'
       })
+      // const res = await fetch(movieAPI, {
+      //   method: 'POST',
+      //   credentials: 'include',
+      //   headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+      //   body: new URLSearchParams(fullMoviesFilter)
+      // })
       const resData = await res.json()
       if (res.ok && resData.code == 200) {
         setMoviesData(resData.data)

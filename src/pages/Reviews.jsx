@@ -14,8 +14,8 @@ export const ReviewsFilterContext = createContext()
 
 function Reviews() {
   const { user } = useContext(UserContext)
-  const [requestParams, setRequestParams] = useState('page=1&sort=new&score=all')
-  const { reviewsData, totalPage, loading } = useReviewsData()
+  const [requestParams, setRequestParams] = useState('?page=1&sort=new&score=all')
+  const { reviewsData, loading } = useReviewsData(requestParams)
   const [reviewsFilter, setReviewsFilter] = useState({
     page: '1', sort: 'new', score: 'all'
   });
@@ -29,13 +29,13 @@ function Reviews() {
   }, [reviewsFilter])
 
   useEffect(() => {
-    setRequestParams(`page=${page}&sort=${sort}&score=${score}`)
+    setRequestParams(`?page=${page}&sort=${sort}&score=${score}`)
   }, [page, sort, score])
 
   if (!reviewsData) return <LoadingSpinner />
 
   function handlePageClick(newPage) {
-    if (newPage < 1 || newPage > totalPage) return
+    if (newPage < 1 || newPage > reviewsData.totalPages) return
     setSearchParams({ page: newPage, sort, score })
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
@@ -43,7 +43,6 @@ function Reviews() {
   return (
     <>
       <Menu />
-      {loading && <LoadingSpinner />}
       <Container>
         <h2 className='h2-title'>評論列表</h2>
         <Row className='justify-content-center'>
@@ -53,7 +52,8 @@ function Reviews() {
             </ReviewsFilterContext.Provider>
           </Col>
         </Row>
-        {reviewsData.map((review) => (
+        {loading && <LoadingSpinner />}
+        {reviewsData.content.map((review) => (
           <Row className='justify-content-center'
             key={review.reviewId}>
             <Col xs={12} sm={9} lg={6}>
@@ -66,14 +66,14 @@ function Reviews() {
         ))}
         <nav aria-label="Page navigation">
           <ul className="pagination justify-content-center mt-2">
-            <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}
+            <li className={`page-item ${reviewsData.first ? 'disabled' : ''}`}
               onClick={() => handlePageClick(page - 1)}>
               <a className="page-link page-button" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
               </a>
             </li>
             <li className="page-item"><a className="page-link">{page}</a></li>
-            <li className={`page-item ${page >= totalPage ? 'disabled' : ''}`}
+            <li className={`page-item ${reviewsData.last ? 'disabled' : ''}`}
               onClick={() => handlePageClick(page + 1)}>
               <a className="page-link page-button" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>

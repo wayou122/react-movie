@@ -5,7 +5,7 @@ import { ReviewsFilterContext } from '../pages/Reviews'
 function ReviewsFilter() {
   const [reviewsFilter, setReviewsFilter] = useContext(ReviewsFilterContext)
   const sortOptions = { '最新影評': 'all', '熱門影評': 'popular' }
-  const scoreOptions = { '超讚': 5, '好看': 4, '普普': 3, '難看': 2, '爛透': 1 }
+  const scoreOptions = { '全部評價': 'all', '超讚': 5, '好看': 4, '普普': 3, '難看': 2, '爛透': 1 }
 
   function handleFilterChange(e) {
     setReviewsFilter(prev => ({
@@ -32,7 +32,7 @@ function ReviewsFilter() {
           <Form.Select className='mb-2'
             name='score'
             value={reviewsFilter.score}
-            onChange={handleFilterChange}        >
+            onChange={handleFilterChange} >
             {Object.entries(scoreOptions).map(([category, value]) => (
               <option key={value} value={value}>
                 {category}</option>

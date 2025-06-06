@@ -3,14 +3,14 @@ import { Form, Button, Alert } from 'react-bootstrap'
 import { scoreOptions } from '../utils/scoreOptions'
 import { addReviewAPI, updateReviewAPI } from '../api/api'
 import { UserContext } from '../contexts/UserContext'
-import { MovieContext } from '../contexts/MovieContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { Link } from 'react-router-dom';
+import { ReviewContext } from '../contexts/ReviewContext'
 
 
 function WriteReview(props) {
   const { user } = useContext(UserContext)
-  const { movieData, loading } = useContext(MovieContext)
+  const { review, loading } = useContext(ReviewContext)
   const [displayText, setDisplayText] = useState('')
   const [selectedValue, setSelectedValue] = useState();
   const [textareaValue, setTextareaValue] = useState('');
@@ -33,8 +33,8 @@ function WriteReview(props) {
   const isUpdating = props.updating
   const reviewId = props.reviewId
 
-  const title = movieData.title
-  const movieId = movieData.movieId
+  const title = review.title
+  const movieId = review.movieId
 
   async function handleSubmit(e) {
     e.preventDefault();
