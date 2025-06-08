@@ -8,8 +8,6 @@ function MovieBanner() {
 
   const bannerUrl = movieData.bannerUrl
 
-  if (!bannerUrl) return
-
   return (
     <div >
       <img src={bannerUrl} className='movie-banner' />

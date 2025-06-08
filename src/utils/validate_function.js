@@ -1,4 +1,4 @@
-import { checkUsernameAPI } from "../api/api";
+import { checkEmailAPI, checkUsernameAPI } from "../api/api";
 
 export function validateEmailFormat(email) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,13 +40,20 @@ export async function validateNameUnique(newName, oldName) {
       credentials: 'include'
     })
     const resData = await res.json()
-    if (res.ok && resData.data) {
-      return true
-    } else {
-      return false
-    }
+    return resData.data // true/false表示可用不可用
   } catch (err) {
-    console.error('驗證錯誤: ' + err.message)
-    return false
+    throw new Error('名稱驗證錯誤: ' + err.message)
+  }
+}
+
+export async function validateEmailUnique(email) {
+  try {
+    const res = await fetch(checkEmailAPI(email), {
+      method: 'GET', credentials: 'include'
+    })
+    const resData = await res.json()
+    return resData.data
+  } catch (err) {
+    throw new Error('信箱驗證錯誤' + err.message)
   }
 }

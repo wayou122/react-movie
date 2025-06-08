@@ -52,7 +52,12 @@ function ThreeDotBtn() {
           <Modal.Title>編輯影評</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <WriteReview updating content={review.content} score={review.score} reviewId={review.reviewId} />
+          <WriteReview
+            updating
+            content={review.content}
+            score={review.score}
+            reviewId={review.reviewId}
+            title={review.title} />
         </Modal.Body>
         {/* <Modal.Footer>
           <Button variant="light" onClick={handleCloseEdit}>

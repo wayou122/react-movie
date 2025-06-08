@@ -1,16 +1,15 @@
 import { useState, useRef, useContext, useEffect } from 'react'
 import { Form, Button, Alert } from 'react-bootstrap'
 import { scoreOptions } from '../utils/scoreOptions'
-import { addReviewAPI, updateReviewAPI } from '../api/api'
 import { UserContext } from '../contexts/UserContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { Link } from 'react-router-dom';
 import { ReviewContext } from '../contexts/ReviewContext'
-
+import { postAddReview, putUpdateReview } from '../services/ReviewService'
 
 function WriteReview(props) {
   const { user } = useContext(UserContext)
-  const { review, loading } = useContext(ReviewContext)
+  const { movie, loading } = useContext(MovieContext)
   const [displayText, setDisplayText] = useState('')
   const [selectedValue, setSelectedValue] = useState();
   const [textareaValue, setTextareaValue] = useState('');
@@ -33,8 +32,8 @@ function WriteReview(props) {
   const isUpdating = props.updating
   const reviewId = props.reviewId
 
-  const title = review.title
-  const movieId = review.movieId
+  const title = movie.title || props.title
+  const movieId = movie.movieId || ''
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -45,51 +44,30 @@ function WriteReview(props) {
       setErrorMessage('請填寫評論')
     } else {
       if (isUpdating) {
-        fetchUpdateReview()
+        updateReviewSubmit()
       } else {
-        fetchAddReview()
+        addReviewSubmit()
       }
     }
   }
 
-  async function fetchAddReview() {
+  async function addReviewSubmit() {
     try {
-      const res = await fetch(addReviewAPI(movieId), {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ score: selectedValue, content: textareaValue })
-      })
-      const resData = await res.json()
-      if (res.ok && resData.code === 200) {
-        window.location.reload()
-      } else {
-        setErrorMessage('新增失敗: ' + resData.message)
-      }
+      await postAddReview(movieId)
+      window.location.reload()
     } catch (err) {
-      setErrorMessage('新增錯誤: ' + err.message)
+      setErrorMessage(err.message)
     }
   }
 
-  async function fetchUpdateReview() {
+  async function updateReviewSubmit() {
     try {
-      const res = await fetch(updateReviewAPI(reviewId), {
-        method: 'PUT',
-        credentials: 'include',
-        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ score: selectedValue, content: textareaValue })
-      })
-      const resData = await res.json()
-      if (res.ok && resData.code === 200) {
-        window.location.reload()
-      } else {
-        setErrorMessage('修改失敗: ' + resData.message)
-      }
+      await putUpdateReview(reviewId)
+      window.location.reload()
     } catch (err) {
-      setErrorMessage('修改錯誤: ' + err.message)
+      setErrorMessage(err.message)
     }
   }
-
 
   function handleScoreChange(e) {
     const newValue = e.target.value

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Form, Col, Row, Image, Button, Alert } from 'react-bootstrap'
 import Menu from '../layouts/Menu';
-import { validateNameUnique, validateNameFormat, validateEmailFormat, validatePasswordFormat } from '../utils/validate_function';
-import { authcodeAPI, loginAPI, registerAPI } from '../api/api';
-import { useNavigate } from 'react-router-dom';
+import { validateNameUnique, validateNameFormat, validateEmailFormat, validatePasswordFormat, validateEmailUnique } from '../utils/validate_function';
+import { authcodeAPI } from '../api/api';
+import { Link, useNavigate } from 'react-router-dom';
+import { postLogin, postRegister } from '../services/LoginRegisterService';
 
 
 function Login() {
@@ -12,6 +13,7 @@ function Login() {
   const [nameValid, setNameValid] = useState(true)
   const [nameUnique, setNameUnique] = useState(true)
   const [emailValid, setEmailValid] = useState(true)
+  const [emailUnique, setEmailUnique] = useState(true)
   const [passwordValid, setPasswordValid] = useState(true)
   const [formData, setFormData] = useState({
     username: '',
@@ -21,8 +23,27 @@ function Login() {
   })
   const [authcodeURL, setAuthcoceURL] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  //const debounceTimer = useRef(null); // 儲存 debounce timer
 
+  useEffect(() => {
+    fetchAuthcode()
+  }, [])
+
+  useEffect(() => {
+    setNameValid(true)
+    setNameUnique(true)
+    setEmailValid(true)
+    setEmailUnique(true)
+    setPasswordValid(true)
+    setErrorMessage('')
+    setFormData({
+      username: '',
+      email: '',
+      password: '',
+      authcode: ''
+    })
+  }, [isLogin])
+
+  // 驗證碼圖片
   function fetchAuthcode() {
     setAuthcoceURL(authcodeAPI(new Date().getTime()))
   }
@@ -33,6 +54,7 @@ function Login() {
     }))
   }
 
+  // 驗證帳號名稱
   async function validateName(name) {
     const isNameFormatOK = validateNameFormat(name)
     if (!isNameFormatOK) {
@@ -40,15 +62,34 @@ function Login() {
       return
     }
     setNameValid(true)
-    const isNameUniqueOK = await validateNameUnique(name)
-    setNameUnique(isNameUniqueOK)
+    try {
+      const isNameUnique = await validateNameUnique(name)
+      setNameUnique(isNameUnique)
+    } catch (err) {
+      setErrorMessage(err.message)
+      setNameUnique(false)
+    }
   }
 
-  function validateEmail(email) {
+  // 驗證帳號信箱
+  async function validateEmail(email) {
     const isEmailOK = validateEmailFormat(email)
-    setEmailValid(isEmailOK)
+    if (!isEmailOK) {
+      setEmailValid(false)
+      return
+    }
+    setEmailValid(true)
+    if (isLogin) return //登入模式不必驗證信箱
+    try {
+      const isEmailUnique = await validateEmailUnique(email)
+      setEmailUnique(isEmailUnique)
+    } catch (err) {
+      setErrorMessage(err.message)
+      setEmailUnique(false)
+    }
   }
 
+  // 驗證密碼格式
   function validatePassword(password) {
     const isPasswordOK = validatePasswordFormat(password)
     setPasswordValid(isPasswordOK)
@@ -67,7 +108,7 @@ function Login() {
     }
     // 註冊請求
     else {
-      if (!nameValid || !nameUnique || !emailValid || !passwordValid) {
+      if (!nameValid || !nameUnique || !emailValid || !emailUnique || !passwordValid) {
         setErrorMessage('請確認填寫資料')
         alert('請確認填寫資料')
       } else {
@@ -76,76 +117,42 @@ function Login() {
     }
   };
 
+  // 登入請求
   async function loginSubmit() {
     try {
-      const res = await fetch(loginAPI, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ 'email': formData.email, 'password': formData.password, 'authcode': formData.authcode })
-      })
-      const resData = await res.json()
-      if (res.ok && resData.code === 200) {
-        navigate("/")
-        window.location.reload()
-      } else {
-        setErrorMessage('登入失敗: ' + resData.message)
-      }
+      await postLogin(formData)
+      navigate('/')
+      window.location.reload()
     } catch (err) {
-      setErrorMessage('登入錯誤: ' + err.message)
+      setErrorMessage(err.message)
     }
   }
 
+  // 註冊請求
   async function registerSubmit() {
     try {
-      const res = await fetch(registerAPI, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          'username': formData.username,
-          'email': formData.email,
-          'password': formData.password,
-          'authcode': formData.authcode
-        })
-      })
-      const resData = await res.json()
-      if (res.ok && resData.code == 200) {
-        navigate("/login")
-        window.location.reload()
-      } else {
-        setErrorMessage('註冊失敗: ' + resData.message)
-      }
+      await postRegister(formData)
+      alert('註冊成功，請登入帳號')
+      navigate('/login')
+      window.location.reload()
     } catch (err) {
-      setErrorMessage('註冊錯誤: ' + err.message)
+      setErrorMessage(err.message)
     }
   }
 
-  useEffect(() => {
-    fetchAuthcode()
-  }, [])
-
-  useEffect(() => {
-    setNameValid(true)
-    setNameUnique(true)
-    setEmailValid(true)
-    setPasswordValid(true)
-    setErrorMessage('')
-    setFormData({
-      username: '',
-      email: '',
-      password: '',
-      authcode: ''
-    })
-  }, [isLogin])
-
   return (
-    <div>
-      <Menu></Menu>
+    <>
+      <Menu />
       <div className="col-10 col-sm-6 col-lg-4 mx-auto mt-5">
         <h2 className='h2-title'>
-          <button onClick={() => setIsLogin(true)} className={`login-or-register-btn me-1 ${isLogin ? 'select' : ''}`}> 登入 </button>
-          <button onClick={() => setIsLogin(false)} className={`login-or-register-btn ms-1 ${isLogin ? '' : 'select'}`}> 註冊 </button>
+          <button onClick={() => setIsLogin(true)}
+            className={`login-or-register-btn me-1 ${isLogin ? 'select' : ''}`}>
+            登入
+          </button>
+          <button onClick={() => setIsLogin(false)}
+            className={`login-or-register-btn ms-1 ${isLogin ? '' : 'select'}`}>
+            註冊
+          </button>
         </h2>
 
         {
@@ -164,11 +171,14 @@ function Login() {
               name='email'
               placeholder="輸入email"
               value={formData.email}
-              onChange={(e) => { handleChange(e); validateEmail(e.target.value) }}
-              isInvalid={!emailValid}
+              onChange={(e) => { handleChange(e) }}
+              onBlur={(e) => { handleChange(e); validateEmail(e.target.value) }}
+              isInvalid={!emailValid || !emailUnique}
               required />
             <Form.Control.Feedback type="invalid">
-              請輸入正確email
+              {
+                !emailValid ? '請輸入正確email' : '此 email 已被註冊'
+              }
             </Form.Control.Feedback>
           </Form.Group>
 
@@ -181,6 +191,7 @@ function Login() {
                 value={formData.username}
                 onChange={(e) => { handleChange(e) }}
                 onBlur={(e) => { handleChange(e); validateName(e.target.value) }}
+                // 離開輸入框才啟動驗證
                 isInvalid={!nameValid || !nameUnique}
                 required />
               <Form.Control.Feedback type="invalid">
@@ -224,12 +235,19 @@ function Login() {
           </Form.Group>
 
           <Button variant="primary" type="submit"
-            disabled={!nameValid || !nameUnique || !passwordValid || !emailValid} >
+            disabled={!nameValid || !nameUnique || !passwordValid || !emailValid || !emailUnique} >
             {isLogin ? '登入帳號' : '註冊帳號'}
           </Button>
         </Form>
+
+        <div className='d-flex mt-3'>
+          <Link to='/forget-password'
+            className=" small link-offset-2 link-underline link-underline-opacity-50">
+            忘記密碼?</Link>
+        </div>
+
       </div>
-    </div>
+    </>
   )
 }
 export default Login

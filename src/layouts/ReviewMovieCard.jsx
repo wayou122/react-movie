@@ -13,6 +13,7 @@ function ReviewMovieCard() {
   const movieId = review.movieId
   const title = review.title
 
+  //若是預設圖則修改為含電影名稱的圖片
   let posterUrl = review.posterUrl
   if (posterUrl == 'https://taiwancinema.bamid.gov.tw/Images/film/film_1.jpg?v=202505281353288331007')
     posterUrl = review.posterUrl = `https://dummyimage.com/140x210/234/fff&text=${title}`

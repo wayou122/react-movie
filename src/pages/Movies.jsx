@@ -14,32 +14,30 @@ import { useLocation, useSearchParams } from "react-router-dom"
 export const MoviesFilterContext = createContext()
 
 function Movies() {
-  const { user } = useContext(UserContext)
-  const [requestParams, setRequestParams] = useState('?page=1&type=all')
-  const [moviesFilter, setMoviesFilter] = useState(
-    { type: 'all', sort: 'aaaa', keyword: '' })
-  //const { moviesData, loading } = useMoviesData(moviesFilter)
-  const { moviesData, loading } = useMoviesData(requestParams)
+  const [moviesFilter, setMoviesFilter] =
+    useState({ sort: 'score_desc', type: 'all', keyword: '' })
+  const [hasInteracted, setHasInteracted] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
   const page = parseInt(searchParams.get('page') || '1')
-  const type = searchParams.get('type')
-  //const [currentPage, setCurrentPage] = useState(1)
+  const sort = searchParams.get('sort') || 'score_desc'
+  const type = searchParams.get('type') || 'all'
+  const keyword = searchParams.get('keyword') || ''
+
+  const location = useLocation()
 
   useEffect(() => {
-    setSearchParams({ page: 1, type: moviesFilter.type })
+    setMoviesFilter({ sort, type, keyword })
+  }, [location.search])
+
+  useEffect(() => {
+    if (hasInteracted)
+      setSearchParams({ page: 1, sort: moviesFilter.sort, type: moviesFilter.type, keyword: moviesFilter.keyword })
   }, [moviesFilter])
 
-  useEffect(() => {
-    setRequestParams(`?page=${page}&type=${type}`)
-  }, [page, type])
+  const { moviesData, loading } =
+    useMoviesData(`?page=${page}&sort=${sort}&type=${type}&keyword=${keyword}`)
 
-  // useEffect(() => {
-  //   setCurrentPage(1)
-  // }, [moviesData])
-
-  const isWatchlist = useLocation().pathname.includes('watchlist')
-
-  if (!moviesData) return <LoadingSpinner />
+  if (loading) return <LoadingSpinner />
 
   // const itemsPerPage = 10
   // const totalPages = Math.ceil(moviesData.length / itemsPerPage)
@@ -53,28 +51,23 @@ function Movies() {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  if (isWatchlist && !user)
-    return (<>
-      <Menu />
-      <div className="text-center">請先登入再查看收藏清單</div>
-    </>
-    )
   return (
     <>
       <Menu />
-      {loading && <LoadingSpinner />}
       <Container>
         <h2 className="h2-title">電影列表</h2>
         <Row className='justify-content-center'>
           <Col xs={12} sm={9} lg={6}>
-            <MoviesFilterContext.Provider value={[moviesFilter, setMoviesFilter]}>
+            <MoviesFilterContext.Provider
+              value={[moviesFilter, setMoviesFilter, setHasInteracted]}>
               <Searchbar />
               <MoviesFilter />
             </MoviesFilterContext.Provider >
           </Col>
         </Row>
-        {moviesData ? moviesData.content.map((movieData) => (
-          <>
+        {loading && <LoadingSpinner />}
+        {moviesData.length > 0 ?
+          moviesData.content.map((movieData) => (
             <Row className='justify-content-center'>
               <Col xs={12} sm={9} lg={6}>
                 <MovieProvider
@@ -86,14 +79,13 @@ function Movies() {
                 </MovieProvider>
               </Col>
             </Row>
-          </>
-        )) : (
-          <Row className='justify-content-center'>
-            <Col xs={12} sm={9} lg={6}>
-              <div className="text-center">查無電影 😔</div>
-            </Col>
-          </Row>
-        )}
+          )) : (
+            <Row className='justify-content-center'>
+              <Col xs={12} sm={9} lg={6}>
+                <div className="text-center">沒有找到符合的電影 😔</div>
+              </Col>
+            </Row>
+          )}
 
         <nav aria-label="Page navigation">
           <ul className="pagination justify-content-center mt-2">

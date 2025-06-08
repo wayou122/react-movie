@@ -1,10 +1,10 @@
 import Container from 'react-bootstrap/Container';
 import { Nav, Navbar } from 'react-bootstrap'
 import { useState, useEffect, useContext } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { checkLoginAPI, logoutAPI } from '../api/api';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { ThemeContext } from '../contexts/ThemeContext';
+import { getLogout } from '../services/LoginRegisterService';
 
 function Menu() {
   const navigate = useNavigate()
@@ -31,12 +31,9 @@ function Menu() {
 
   async function handleLogout() {
     try {
-      await fetch(logoutAPI, {
-        method: 'GET',
-        credentials: 'include'
-      })
+      await getLogout()
     } catch (err) {
-      console.error('登出錯誤: ' + err.message)
+      console.error(err.message)
     } finally {
       setUser(null)
       navigate("/")

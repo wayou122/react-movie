@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Alert } from 'react-bootstrap'
 import Menu from '../layouts/Menu'
 import { validateNameUnique, validateEmailFormat, validatePasswordFormat, validateNameFormat } from '../utils/validate_function';
-import { accountAPI, updateUsernameAPI } from '../api/api';
 import { UserContext } from '../contexts/UserContext';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { putAccountInfo } from '../services/AccountService';
 
 let oldUsername = ''
 
@@ -16,14 +16,15 @@ function Account() {
   const [formData, setFormData] = useState({
     email: '', username: ''
   })
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     if (user) {
+      oldUsername = user.username
       setFormData({
         username: user.username,
         email: user.email,
       })
-      oldUsername = user.username
     }
   }, [user])
 
@@ -54,34 +55,19 @@ function Account() {
     setEmailValid(isEmailOK);
   };
 
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!nameValid || !nameUnique) {
       alert('請確認填寫資料');
     } else {
-      updateAccountSubmit()
+      try {
+        await putAccountInfo(formData)
+        window.location.reload()
+      } catch (error) {
+        setErrorMessage(error.message)
+      }
     }
   };
-
-  async function updateAccountSubmit() {
-    try {
-      const res = await fetch(updateUsernameAPI, {
-        method: 'PUT',
-        credentials: 'include',
-        headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ 'username': formData.username })
-      })
-      const resData = await res.json()
-      if (res.ok && resData.code == 200) {
-        alert('修改成功')
-      } else {
-        alert('修改失敗: ' + resData.message)
-      }
-    } catch (err) {
-      alert('修改錯誤: ' + err.message)
-    }
-    window.location.reload()
-  }
 
   return (
     <>
@@ -89,7 +75,13 @@ function Account() {
       <div className="col-10 col-sm-6 col-lg-4 mx-auto mt-5">
 
         <h2 className='h2-title'>帳號設定</h2>
-
+        {
+          errorMessage ?
+            <Alert variant='danger'>
+              {errorMessage}
+            </Alert>
+            : ''
+        }
         <Form onSubmit={handleSubmit}>
 
           <Form.Group className="mb-3" controlId="formBasicEmail">

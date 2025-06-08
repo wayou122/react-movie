@@ -8,14 +8,13 @@ import { UserContext } from '../contexts/UserContext'
 import { useReviewsData } from '../hooks/useReviewsData'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { ReviewProvider } from '../contexts/ReviewContext'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useLocation } from 'react-router-dom'
 
 export const ReviewsFilterContext = createContext()
 
 function Reviews() {
   const { user } = useContext(UserContext)
-  const [requestParams, setRequestParams] = useState('?page=1&sort=new&score=all')
-  const { reviewsData, loading } = useReviewsData(requestParams)
+
   const [reviewsFilter, setReviewsFilter] = useState({
     page: '1', sort: 'new', score: 'all'
   });
@@ -23,16 +22,19 @@ function Reviews() {
   const page = parseInt(searchParams.get("page") || "1");
   const sort = searchParams.get('sort') || 'new'
   const score = searchParams.get('score') || 'all'
+  const location = useLocation()
+
+  useEffect(() => {
+    setReviewsFilter({ sort, score })
+  }, [location.search])
 
   useEffect(() => {
     setSearchParams({ page: 1, sort: reviewsFilter.sort, score: reviewsFilter.score })
   }, [reviewsFilter])
 
-  useEffect(() => {
-    setRequestParams(`?page=${page}&sort=${sort}&score=${score}`)
-  }, [page, sort, score])
+  const { reviewsData, loading } = useReviewsData(`?page=${page}&sort=${sort}&score=${score}`)
 
-  if (!reviewsData) return <LoadingSpinner />
+  if (loading) return <LoadingSpinner />
 
   function handlePageClick(newPage) {
     if (newPage < 1 || newPage > reviewsData.totalPages) return

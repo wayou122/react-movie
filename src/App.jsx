@@ -11,6 +11,10 @@ import NotFoundPage from './pages/NotFoundPage.jsx'
 import TestPage from './pages/TestPage.jsx'
 import { UserProvider } from './contexts/UserContext.jsx';
 import { ThemeProvider } from './contexts/ThemeContext.jsx';
+import ResetPassword from './pages/ResetPassword.jsx';
+import ForgetPassword from './pages/ForgetPassword.jsx';
+import EmailConfirm from './pages/EmailConfirm.jsx';
+import { Watchlist } from './pages/Watchlist.jsx';
 
 function App() {
   const router = createBrowserRouter([
@@ -49,12 +53,21 @@ function App() {
     },
     {
       path: '/user/watchlist',
-      element: <Movies />
+      element: <Watchlist />
     },
     {
       path: '/user/review',
       element: <Reviews />
-    },
+    }, {
+      path: '/reset-password',
+      element: <ResetPassword />
+    }, {
+      path: '/forget-password',
+      element: <ForgetPassword />
+    }, {
+      path: '/email-confirm',
+      element: <EmailConfirm />
+    }
   ])
 
   return (

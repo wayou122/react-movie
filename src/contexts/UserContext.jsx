@@ -8,7 +8,6 @@ export function UserProvider({ children }) {
 
   useEffect(() => {
     fetchUserInfo()
-    //setUser({ username: 'happy', email: 'abc@gg.com' })
   }, [])
 
   async function fetchUserInfo() {
@@ -17,8 +16,8 @@ export function UserProvider({ children }) {
         method: 'GET',
         credentials: 'include'
       })
-      if (res.ok) {
-        const resData = await res.json()
+      const resData = await res.json()
+      if (resData.data) {
         setUser(resData.data)
       } else {
         setUser(null)
