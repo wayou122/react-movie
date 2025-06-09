@@ -1,13 +1,13 @@
-import { updateUsernameAPI } from "../api/api"
+import { updateAccountAPI } from "../api/api"
 
-export async function putAccountInfo(formData) {
+export async function postAccountInfo(formData) {
   let resData;
   try {
-    const res = await fetch(updateUsernameAPI, {
-      method: 'PUT',
+    console.log(formData)
+    const res = await fetch(updateAccountAPI, {
+      method: 'POST',
       credentials: 'include',
-      headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ 'username': formData.username })
+      body: formData
     })
     resData = await res.json()
   } catch (err) {

@@ -10,6 +10,7 @@ export const resetPasswordAPI = `${API}/reset-password`
 export const forgetPasswordAPI = `${API}/forget-password`
 export const accountAPI = `${API}/user/account`
 export const updateUsernameAPI = `${API}/user/update-username`
+export const updateAccountAPI = `${API}/user/update-account`
 export const checkUsernameAPI = (newName, oldName) => `${API}/register/check-username?newUsername=${newName}&oldUsername=${oldName}`
 export const checkEmailAPI = (email) => `${API}/register/check-email?email=${email}`
 

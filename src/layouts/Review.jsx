@@ -12,6 +12,7 @@ function Review() {
   const userId = user ? user.userId : null
   const reviewerId = review.authorId
   const reviewerName = review.authorName
+  const reviewerImg = review.authorImagePath
   const score = review.score
   const likes = review.likeCount
   const content = review.content
@@ -19,6 +20,7 @@ function Review() {
   const id = review.reviewId
   const createdDate = review.createdDate
   const title = review.title
+
 
   const [showMore, setShowMore] = useState(false);
   function toggleShowMore() { setShowMore(!showMore) };
@@ -89,8 +91,8 @@ function Review() {
       <div className="overflow-hidden">
 
         <div className='d-flex justify-content-between align-items-center'>
-          <div className='pt-2 mb-2'>
-            {title ? <span className="small">{title}．</span> : ''}
+          <div className='pt-2 mb-2 d-flex align-items-center'>
+            <img className='review-account-img me-2' src={`http://localhost:8085/${reviewerImg}`}></img>
             <span className="me-2">{reviewerName}</span>
             <span className="me-2">{scoreOptions[score].emoji}</span>
             <span className="small text-muted">{createdDate}</span>
@@ -102,6 +104,7 @@ function Review() {
 
         {/* 內容 */}
         <p className="me-3 pb-0">
+          {title ? <span >【{title}】</span> : ''}
           {showMore ? content : content.slice(0, 100)}
           {contentLess ? '' :
             <button

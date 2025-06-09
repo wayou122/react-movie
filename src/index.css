@@ -310,3 +310,17 @@ button.login-or-register-btn.select {
 .page-button {
   cursor: pointer;
 }
+
+.review-account-img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.account-page-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}

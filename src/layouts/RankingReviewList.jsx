@@ -6,7 +6,6 @@ let hue = -20
 const RankingReviewerList = ({ data }) => {
 
   const maxCount = data.reduce((max, d) => { if (d.length > max) { max = d.length } return max }, 0);
-  console.log(maxCount)
   return (
     <div className="ranking-list-container">
       {data.sort((a, b) => b.length - a.length).map((item, i) => (

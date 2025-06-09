@@ -4,7 +4,7 @@ import Menu from '../layouts/Menu'
 import { validateNameUnique, validateEmailFormat, validatePasswordFormat, validateNameFormat } from '../utils/validate_function';
 import { UserContext } from '../contexts/UserContext';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { putAccountInfo } from '../services/AccountService';
+import { postAccountInfo } from '../services/AccountService';
 
 let oldUsername = ''
 
@@ -13,9 +13,7 @@ function Account() {
   const [nameValid, setNameValid] = useState(true)
   const [nameUnique, setNameUnique] = useState(true)
   const [emailValid, setEmailValid] = useState(true);
-  const [formData, setFormData] = useState({
-    email: '', username: ''
-  })
+  const [formData, setFormData] = useState({})
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
@@ -28,14 +26,21 @@ function Account() {
     }
   }, [user])
 
-  if (!user) {
-    return <LoadingSpinner />
+  // if (!user) {
+  //   return <LoadingSpinner />
+  // }
+  function handleChange(e) {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }))
   }
 
-  function handleChange(e) {
-    setFormData(p => ({
-      ...p,
-      [e.target.name]: e.target.value,
+  //上傳圖片
+  function handleFileSelect(e) {
+    setFormData(prev => ({
+      ...prev,
+      image: e.target.files[0]
     }))
   }
 
@@ -61,7 +66,10 @@ function Account() {
       alert('請確認填寫資料');
     } else {
       try {
-        await putAccountInfo(formData)
+        const fd = new FormData()
+        fd.append('username', formData.username)
+        fd.append('image', formData.image)
+        await postAccountInfo(fd)
         window.location.reload()
       } catch (error) {
         setErrorMessage(error.message)
@@ -69,12 +77,25 @@ function Account() {
     }
   };
 
+  if (!user) {
+    return (
+      <>
+        <Menu></Menu>
+        <div className="text-center mt-5">
+          <p>請先登入再修改使用者資訊</p>
+        </div>
+      </>)
+  }
+
   return (
     <>
       <Menu></Menu>
       <div className="col-10 col-sm-6 col-lg-4 mx-auto mt-5">
 
-        <h2 className='h2-title'>帳號設定</h2>
+        <h2 className='h2-title d-flex justify-content-center align-items-center gap-3'>
+          <img className='account-page-img' src={`http://localhost:8085/${user.imagePath}`} />
+          <div>帳號設定</div>
+        </h2>
         {
           errorMessage ?
             <Alert variant='danger'>
@@ -115,35 +136,17 @@ function Account() {
               }
             </Form.Control.Feedback>
           </Form.Group>
-
-          {/* <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>目前密碼</Form.Label>
-            <Form.Control type="password"
-              name='password'
-              placeholder="請輸入目前密碼"
-              onChange={(e) => { handleChange(e); validatePassword(e.target.value) }}
-              isInvalid={!passwordValid}
-              required />
-            <Form.Control.Feedback type="invalid">
-              密碼長度8~20位，需包含數字與英文字
-            </Form.Control.Feedback>
+          <Form.Group className="mb-3" controlId="formImage">
+            <Form.Label>帳號圖片</Form.Label>
+            <Form.Control
+              type="file"
+              accept="image/*"
+              onChange={handleFileSelect}
+            />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>設定新密碼</Form.Label>
-            <Form.Control type="password"
-              name='newPassword'
-              placeholder="輸入新密碼"
-              onChange={(e) => { handleChange(e); validateNewPassword(e.target.value) }}
-              isInvalid={!newPasswordValid}
-              required />
-            <Form.Control.Feedback type="invalid">
-              密碼長度8~20位，需包含數字與英文字
-            </Form.Control.Feedback>
-          </Form.Group> */}
-
           <Button variant="primary" type="submit"
-            disabled={!nameValid || !nameUnique || formData.username == oldUsername}>
+            disabled={!nameValid || !nameUnique}>
             修改資料
           </Button>
         </Form>
