@@ -4,12 +4,12 @@ import { scoreOptions } from '../utils/scoreOptions'
 import { UserContext } from '../contexts/UserContext'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { Link } from 'react-router-dom';
-import { ReviewContext } from '../contexts/ReviewContext'
 import { postAddReview, putUpdateReview } from '../services/ReviewService'
+import { MovieContext } from '../contexts/MovieContext'
 
 function WriteReview(props) {
   const { user } = useContext(UserContext)
-  const { movie, loading } = useContext(MovieContext)
+  const { movieData, loading } = useContext(MovieContext)
   const [displayText, setDisplayText] = useState('')
   const [selectedValue, setSelectedValue] = useState();
   const [textareaValue, setTextareaValue] = useState('');
@@ -31,9 +31,8 @@ function WriteReview(props) {
   const isLogin = user ? true : false;
   const isUpdating = props.updating
   const reviewId = props.reviewId
-
-  const title = movie.title || props.title
-  const movieId = movie.movieId || ''
+  const title = movieData.title || props.title
+  const movieId = movieData.movieId || ''
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -53,7 +52,7 @@ function WriteReview(props) {
 
   async function addReviewSubmit() {
     try {
-      await postAddReview(movieId)
+      await postAddReview(movieId, selectedValue, textareaValue)
       window.location.reload()
     } catch (err) {
       setErrorMessage(err.message)
@@ -62,7 +61,7 @@ function WriteReview(props) {
 
   async function updateReviewSubmit() {
     try {
-      await putUpdateReview(reviewId)
+      await putUpdateReview(reviewId, selectedValue, textareaValue)
       window.location.reload()
     } catch (err) {
       setErrorMessage(err.message)
@@ -132,7 +131,7 @@ function WriteReview(props) {
                 <div>
                   <Form.Control as="textarea"
                     placeholder='我的評論...'
-                    className='mt-3'
+                    className='mt-2'
                     rows={3}
                     value={textareaValue}
                     ref={textareaRef}

@@ -13,7 +13,7 @@ export const updateUsernameAPI = `${API}/user/update-username`
 export const checkUsernameAPI = (newName, oldName) => `${API}/register/check-username?newUsername=${newName}&oldUsername=${oldName}`
 export const checkEmailAPI = (email) => `${API}/register/check-email?email=${email}`
 
-export const emailConfirmAPI = (email, token) => `${API}/email-confirm?email=${email}&token=${token}`
+export const emailConfirmAPI = (email, token) => `${API}/register/email-confirm?email=${email}&token=${token}`
 
 export const addReviewAPI = (movieId) => `${API}/user/review/${movieId}`
 export const deleteReviewAPI = (reviewId) => `${API}/user/review/${reviewId}`

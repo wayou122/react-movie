@@ -59,11 +59,13 @@ export async function getLogout() {
 export async function getEmailConfirm(email, token) {
   let resData;
   try {
+    console.log(emailConfirmAPI(email, token));
     const res = await fetch(emailConfirmAPI(email, token), {
       method: 'GET',
       credentials: 'include',
     })
     resData = await res.json()
+    console.log(resData);
   } catch (err) {
     throw new Error('驗證錯誤: ' + err.message)
   }

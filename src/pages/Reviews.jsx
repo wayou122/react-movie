@@ -1,45 +1,40 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext } from 'react'
 import Menu from '../layouts/Menu'
 import ReviewsFilter from '../components/ReviewsFilter'
 import ReviewMovieCard from '../layouts/ReviewMovieCard'
 import { Container, Row, Col } from 'react-bootstrap'
 import { Footer } from '../layouts/Footer'
-import { UserContext } from '../contexts/UserContext'
 import { useReviewsData } from '../hooks/useReviewsData'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { ReviewProvider } from '../contexts/ReviewContext'
-import { useSearchParams, useLocation } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 
 export const ReviewsFilterContext = createContext()
 
 function Reviews() {
-  const { user } = useContext(UserContext)
-
-  const [reviewsFilter, setReviewsFilter] = useState({
-    page: '1', sort: 'new', score: 'all'
-  });
   const [searchParams, setSearchParams] = useSearchParams()
   const page = parseInt(searchParams.get("page") || "1");
   const sort = searchParams.get('sort') || 'new'
   const score = searchParams.get('score') || 'all'
-  const location = useLocation()
-
-  useEffect(() => {
-    setReviewsFilter({ sort, score })
-  }, [location.search])
-
-  useEffect(() => {
-    setSearchParams({ page: 1, sort: reviewsFilter.sort, score: reviewsFilter.score })
-  }, [reviewsFilter])
 
   const { reviewsData, loading } = useReviewsData(`?page=${page}&sort=${sort}&score=${score}`)
 
   if (loading) return <LoadingSpinner />
 
+  const value = { page, sort, score, setFilter }
+
   function handlePageClick(newPage) {
     if (newPage < 1 || newPage > reviewsData.totalPages) return
-    setSearchParams({ page: newPage, sort, score })
+    setSearchParams({ page: newPage.toString(), sort, score })
     window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
+  function setFilter(newFilter) {
+    setSearchParams({
+      page: "1",
+      sort: newFilter.sort ?? sort,
+      score: newFilter.score ?? score,
+    })
   }
 
   return (
@@ -49,7 +44,7 @@ function Reviews() {
         <h2 className='h2-title'>評論列表</h2>
         <Row className='justify-content-center'>
           <Col xs={12} sm={9} lg={6}>
-            <ReviewsFilterContext.Provider value={[reviewsFilter, setReviewsFilter]} >
+            <ReviewsFilterContext.Provider value={value} >
               <ReviewsFilter />
             </ReviewsFilterContext.Provider>
           </Col>

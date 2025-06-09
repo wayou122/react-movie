@@ -19,7 +19,7 @@ function EmailConfirm() {
       await getEmailConfirm(email, token)
       setMessage('信箱驗證成功，請登入帳號')
     } catch (err) {
-      setMessage('信箱驗證錯誤，請確認驗證連結')
+      setMessage(err.message)
     }
   }
 

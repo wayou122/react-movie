@@ -7,39 +7,16 @@ import { ReviewProvider } from "../contexts/ReviewContext"
 import { UserContext } from '../contexts/UserContext'
 import WriteReview from './WriteReview'
 
-const testReviews = () => [
-  {
-    reviewId: 1,
-    username: 'moonlight998',
-    userId: 3,
-    score: 4,
-    likeCount: 23,
-    content: "有些事情其實也沒有解釋，只是走著走著就懂了。人們總說成長是孤獨的，卻也因此更能看清方向。",
-    reaction: 1,
-    createdDate: '2023-11-03'
-  },
-  {
-    reviewId: 2,
-    username: 'kittylover12',
-    userId: 5,
-    score: 5,
-    likeCount: 8,
-    content: "沙發邊的小被子還沒收，陽光剛好灑進來的午後，是我最喜歡的平靜時光。",
-    reaction: 0,
-    createdDate: '2025-01-19'
-  },
-];
-
 function ReviewSection() {
   const { user } = useContext(UserContext)
   const { movieData, loading } = useContext(MovieContext)
   const [filteredReviews, setFilteredReviews] = useState([])
+  console.log(filteredReviews)
   const [myFilter, setMyFilter] = useState({
     sort: '最新影評', score: '全部評價'
   });
 
   const reviews = useMemo(() => {
-    //return testReviews()
     if (!movieData) return
     return movieData.reviews
   }, [movieData])
@@ -104,7 +81,8 @@ function ReviewSection() {
           </Form.Select>
         </Col>
       </Row>
-      {
+      {console.log(filteredReviews.length)}
+      {Array.isArray(filteredReviews) && filteredReviews.length > 0 ?
         filteredReviews.map((review) => (
           <Row className='justify-content-center' key={review.reviewId}>
             <Card className='ps-3 pe-3 pt-2 pb-2 mt-2'>
@@ -114,6 +92,12 @@ function ReviewSection() {
             </Card>
           </Row>
         ))
+        :
+        <Row className='justify-content-center'>
+          <Col xs={12} sm={9} lg={6}>
+            <div className="text-center small">沒有符合條件的影評 😔</div>
+          </Col>
+        </Row>
       }
     </>
   )

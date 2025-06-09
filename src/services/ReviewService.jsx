@@ -1,6 +1,6 @@
 import { addReviewAPI, updateReviewAPI } from "../api/api";
 
-export async function postAddReview(movieId) {
+export async function postAddReview(movieId, selectedValue, textareaValue) {
   let resData;
   try {
     const res = await fetch(addReviewAPI(movieId), {
@@ -19,7 +19,7 @@ export async function postAddReview(movieId) {
   }
 }
 
-export async function putUpdateReview(reviewId) {
+export async function putUpdateReview(reviewId, selectedValue, textareaValue) {
   let resData;
   try {
     const res = await fetch(updateReviewAPI(reviewId), {

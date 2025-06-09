@@ -7,8 +7,6 @@ export function Footer() {
     <footer
       className="small"
       style={{
-        position: 'absolute',
-        bottom: 0,
         width: '100%',
         textAlign: 'center',
         padding: '30px',

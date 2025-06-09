@@ -29,44 +29,55 @@ function App() {
     },
     {
       path: '/movie',
-      element: <Movies />
+      element: <Movies />,
+      errorElement: <NotFoundPage />,
     },
     {
       path: '/movie/:id',
-      element: <Movie />
+      element: <Movie />,
+      errorElement: <NotFoundPage />,
     },
     {
       path: '/review',
-      element: <Reviews />
+      element: <Reviews />,
+      errorElement: <NotFoundPage />,
     },
     {
       path: '/reviewer',
-      element: <RankingReviewer />
+      element: <RankingReviewer />,
+      errorElement: <NotFoundPage />,
     },
     {
       path: '/login',
-      element: <Login />
+      element: <Login />,
+      errorElement: <NotFoundPage />,
     },
     {
       path: '/user/account',
-      element: <Account />
+      element: <Account />,
+      errorElement: <NotFoundPage />,
     },
     {
       path: '/user/watchlist',
-      element: <Watchlist />
+      element: <Watchlist />,
+      errorElement: <NotFoundPage />,
     },
     {
       path: '/user/review',
-      element: <Reviews />
+      element: <Reviews />,
+      errorElement: <NotFoundPage />,
     }, {
       path: '/reset-password',
-      element: <ResetPassword />
+      element: <ResetPassword />,
+      errorElement: <NotFoundPage />,
     }, {
       path: '/forget-password',
-      element: <ForgetPassword />
+      element: <ForgetPassword />,
+      errorElement: <NotFoundPage />,
     }, {
       path: '/email-confirm',
-      element: <EmailConfirm />
+      element: <EmailConfirm />,
+      errorElement: <NotFoundPage />,
     }
   ])
 

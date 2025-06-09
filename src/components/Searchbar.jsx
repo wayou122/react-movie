@@ -1,18 +1,17 @@
-import { useState, useContext, useRef } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { MoviesFilterContext } from "../pages/Movies";
 
 function Searchbar() {
-  const [moviesFilter, setMoviesFilter] = useContext(MoviesFilterContext)
-  const [inputValue, setInputValue] = useState(moviesFilter.keyword || '')
+  const { keyword, setFilter } = useContext(MoviesFilterContext)
+
+  const [inputValue, setInputValue] = useState(keyword || '')
 
   function handleChange(e) {
     setInputValue(e.target.value)
   }
 
   function handleClick() {
-    setMoviesFilter(prev => ({
-      ...prev, keyword: inputValue
-    }))
+    setFilter({ keyword: inputValue })
   }
 
   return (

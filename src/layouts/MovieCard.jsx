@@ -19,7 +19,7 @@ function MovieCard() {
   const type = movieData.type
   const length = movieData.length ? movieData.length + '分' : ''
   let posterUrl = movieData.posterUrl
-  if (posterUrl == 'https://taiwancinema.bamid.gov.tw/Images/film/film_1.jpg?v=202505281353288331007')
+  if (posterUrl.includes('/film/film'))
     posterUrl = movieData.posterUrl = `https://dummyimage.com/140x210/234/fff&text=${title}`
   const actorShow = actor && actor.length >= 28 ? actor.slice(0, actor.indexOf('、', 24)) : actor || '';
 
