@@ -1,122 +1,37 @@
-import { useContext, useEffect, useState, useRef } from "react";
-import { UserContext } from '../contexts/UserContext';
-import Menu from "../layouts/Menu";
-import LoadingSpinner from "../components/LoadingSpinner";
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
-
+import { Row, Col } from "react-bootstrap"
+import Menu from "../layouts/Menu"
 function Chat() {
-  const { user } = useContext(UserContext)
-  const [connected, setConnected] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [content, setContent] = useState('')
-  const stompClient = useRef(null) //保存stompClient實體
-
-  useEffect(() => {
-
-    getHistory()
-
-    //建立連線
-    const socket = new SockJS('http://localhost:8085/chat-websocket')
-    stompClient.current = new Client({
-      webSocketFactory: () => socket,
-      debug: (str) => { console.log(str) },
-      onConnect: () => {
-        setConnected(true)
-        stompClient.current.subscribe('/topic/messages/goldenhorse60',
-          (message) => {
-            const msgBody = JSON.parse(message.body)
-            setMessages((prev => [...prev, msgBody]))
-          })
-      },
-      onDisconnect: () => { setConnected(false) }
-    })
-    stompClient.current.activate()
-
-    return () => {
-      if (stompClient.current) {
-        stompClient.current.deactivate()
-      }
-    }
-  }, [])
-
-
-  async function getHistory() {
-    try {
-      const res = await fetch('http://localhost:8085/chat/goldenhorse60')
-      const resData = await res.json()
-      setMessages(resData.data.reverse())
-    } catch (err) {
-      alert(err.message)
-    }
-  }
-
-  function sendMessage() {
-    const userId = user.userId
-    if (stompClient.current && connected) {
-      const msg = { userId, content, chatRoomName: 'goldenhorse60' }
-      stompClient.current.publish({
-        destination: '/app/chatRoom/goldenhorse60',
-        body: JSON.stringify(msg)
-      })
-      setContent('')
-    }
-  }
-
-  if (!connected) {
-    return (<>
-      <Menu />
-      <p className="text-center">正在連線...</p>
-      <LoadingSpinner />
-    </>)
-  }
 
   return (
     <>
       <Menu />
-      <div className="chat-room-container">
-        <div className="chat-messages">
-          {messages.length > 0 ? messages.map((msg) => (
-            <Message
-              key={msg.chatMessageId}
-              imgSrc={`http://localhost:8085/${msg.userImagePath}`}
-              username={msg.username}
-              time={msg.createdDate}
-              content={msg.content}
-              isMyMessage={0}
-            />
-          )) : ''}
-        </div>
-        <div className="chat-input-area">
-          <input type="text" placeholder={user ? "輸入訊息..." : '請先登入才可傳送訊息'}
-            className="chat-input"
-            value={content}
-            onChange={(e) => setContent(e.target.value)} />
-          <button className={`send-button btn btn-lg btn-primary ${!connected || !user || !content ? 'disabled' : ''}`}
-            onClick={sendMessage}
-            disabled={!connected || !user || !content}
-          >發送</button>
-        </div>
-      </div>
+      <h2 className="text-center mb-4">聊聊電影</h2>
+      <Row className='justify-content-center'>
+        <Col xs={11} sm={7} md={5} >
+          <div className="chat-room card">
+            <img src="https://storage.googleapis.com/tghff_outland/image/recommended/1920_800/r_e11b2d7a49a7be56d410ec362ada281d.png"
+              className="chat-room card-img-top" alt="..." />
+            <div className="chat-room card-body">
+              <h5 className="chat-room card-title">聊聊 / 金馬62</h5>
+              <p className="chat-room card-text">第62屆金馬獎在2024年11月22日(六)舉行，大家觀看頒獎典禮的同時也可以在此聊聊對電影的想法，或是頒獎典禮的即時心得～</p>
+              <a href="/chat/chatRoom/GoldenHorse62" className="btn btn-primary">進入聊天室</a>
+            </div>
+          </div>
+        </Col>
+        <Col xs={11} sm={7} md={5} >
+          <div className="chat-room card">
+            <img src="https://annenberg.usc.edu/sites/default/files/styles/article_full_content_1240x600/public/shutterstock_2119939280_ext.jpg?itok=QA079mik"
+              className="chat-room card-img-top" alt="..." />
+            <div className="chat-room card-body">
+              <h5 className="chat-room card-title">聊聊 / 奧斯卡97</h5>
+              <p className="chat-room card-text">第97屆奧斯卡金像獎在2025年3月2日(日)舉行，全球電影最高榮譽，頒獎典禮眾星雲集，邊看邊聊吧！</p>
+              <a href="/chat/chatRoom/Oscar97" className="btn btn-primary">進入聊天室</a>
+            </div>
+          </div>
+        </Col>
+      </Row>
+
     </>
   )
 }
 export default Chat
-
-function Message({ imgSrc, username, time, content }) {
-  return (
-    <div className={`message-container ${false ? 'my-message' : 'other-message'}`}>
-      {console.log(imgSrc)}
-      <img src={imgSrc} alt={`${username}'s avatar`} className="message-avatar" />
-      <div className="message-content-wrapper">
-        <div className="message-header">
-          <span className="message-name">{username}</span>
-          <span className="message-time">{time}</span>
-        </div>
-        <div className="message-bubble">
-          <p className="message-text">{content}</p>
-        </div>
-      </div>
-    </div>
-  );
-}

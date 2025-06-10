@@ -16,6 +16,8 @@ import ForgetPassword from './pages/ForgetPassword.jsx';
 import EmailConfirm from './pages/EmailConfirm.jsx';
 import { Watchlist } from './pages/Watchlist.jsx';
 import Chat from './pages/Chat.jsx';
+import ChatRoom from './pages/ChatRoom.jsx';
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -81,6 +83,11 @@ function App() {
     }, {
       path: '/chat',
       element: <Chat />,
+      errorElement: <NotFoundPage />,
+    },
+    {
+      path: '/chat/chatRoom/:roomName',
+      element: <ChatRoom />,
       errorElement: <NotFoundPage />,
     }
   ])

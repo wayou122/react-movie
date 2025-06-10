@@ -331,14 +331,14 @@ button.login-or-register-btn.select {
 .chat-room-container {
   display: flex;
   flex-direction: column;
-  height: 80vh;
+  height: 75vh;
   /* 聊天室的高度 */
   max-width: 600px;
   margin: 20px auto;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  /* border: 1px solid #ddd; */
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
 .chat-messages {
@@ -346,7 +346,6 @@ button.login-or-register-btn.select {
   padding: 15px;
   overflow-y: auto;
   /* 訊息過多時滾動 */
-  background-color: #f9f9f9;
 }
 
 .message-container {
@@ -356,8 +355,8 @@ button.login-or-register-btn.select {
 }
 
 .message-avatar {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   /* 圓形照片 */
   object-fit: cover;
@@ -375,23 +374,22 @@ button.login-or-register-btn.select {
 
 .message-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   margin-bottom: 3px;
 }
 
 .message-name {
-  font-weight: bold;
+  /* font-weight: bold; */
   margin-right: 8px;
-  color: #333;
 }
 
 .message-time {
   font-size: 0.8em;
-  color: #888;
+  opacity: 60%;
 }
 
 .message-bubble {
-  background-color: #e0e0e0;
+  /* background-color: #e6e6e6; */
   border-radius: 18px;
   padding: 10px 15px;
   word-wrap: break-word;
@@ -439,14 +437,14 @@ button.login-or-register-btn.select {
 .chat-input-area {
   display: flex;
   padding: 15px;
-  border-top: 1px solid #eee;
-  background-color: #fff;
+  /* border-top: 1px solid #888; */
+  /* background-color: #fff; */
 }
 
 .chat-input {
   flex-grow: 1;
   padding: 10px 15px;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(150, 150, 150, 50%);
   border-radius: 20px;
   outline: none;
   font-size: 1em;
@@ -470,4 +468,14 @@ button.login-or-register-btn.select {
 
 .send-button:hover {
   background-color: #0056b3;
+}
+
+.chat-room-card {
+  max-width: 300px;
+}
+
+.chat-room.card-img-top {
+  height: 200px;
+  max-width: 100%;
+  object-fit: cover;
 }
