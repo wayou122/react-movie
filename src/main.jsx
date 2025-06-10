@@ -5,7 +5,7 @@ import App from './App.jsx'
 import BoxOfficeChart from './pages/BoxOfficeChart.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+
+  <App />
+
 )

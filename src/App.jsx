@@ -15,7 +15,7 @@ import ResetPassword from './pages/ResetPassword.jsx';
 import ForgetPassword from './pages/ForgetPassword.jsx';
 import EmailConfirm from './pages/EmailConfirm.jsx';
 import { Watchlist } from './pages/Watchlist.jsx';
-
+import Chat from './pages/Chat.jsx';
 function App() {
   const router = createBrowserRouter([
     {
@@ -77,6 +77,10 @@ function App() {
     }, {
       path: '/email-confirm',
       element: <EmailConfirm />,
+      errorElement: <NotFoundPage />,
+    }, {
+      path: '/chat',
+      element: <Chat />,
       errorElement: <NotFoundPage />,
     }
   ])

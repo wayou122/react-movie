@@ -53,6 +53,7 @@ function Menu() {
               <Nav.Link as={Link} to='/movie'>電影</Nav.Link>
               <Nav.Link as={Link} to='/review'>影評</Nav.Link>
               <Nav.Link as={Link} to='/reviewer'>影評人</Nav.Link>
+              <Nav.Link as={Link} to='/chat'>聊聊</Nav.Link>
             </Nav>
             {user ? (
               <Nav>

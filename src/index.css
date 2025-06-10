@@ -324,3 +324,150 @@ button.login-or-register-btn.select {
   border-radius: 50%;
   object-fit: cover;
 }
+
+/* chatroom */
+/* ChatRoom.css */
+
+.chat-room-container {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  /* 聊天室的高度 */
+  max-width: 600px;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chat-messages {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+  /* 訊息過多時滾動 */
+  background-color: #f9f9f9;
+}
+
+.message-container {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* 圓形照片 */
+  object-fit: cover;
+  margin-right: 10px;
+  flex-shrink: 0;
+  /* 防止頭像縮小 */
+}
+
+.message-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  /* 限制訊息內容的寬度 */
+}
+
+.message-header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 3px;
+}
+
+.message-name {
+  font-weight: bold;
+  margin-right: 8px;
+  color: #333;
+}
+
+.message-time {
+  font-size: 0.8em;
+  color: #888;
+}
+
+.message-bubble {
+  background-color: #e0e0e0;
+  border-radius: 18px;
+  padding: 10px 15px;
+  word-wrap: break-word;
+  /* 防止長單詞溢出 */
+}
+
+.message-text {
+  margin: 0;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* 自己的訊息樣式 */
+.my-message {
+  flex-direction: row-reverse;
+  /* 自己的訊息靠右顯示 */
+}
+
+.my-message .message-avatar {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+.my-message .message-content-wrapper {
+  align-items: flex-end;
+  /* 讓自己的訊息內容靠右對齊 */
+}
+
+.my-message .message-header {
+  flex-direction: row-reverse;
+  /* 時間和名字反轉順序 */
+}
+
+.my-message .message-name {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+.my-message .message-bubble {
+  background-color: #dcf8c6;
+  /* 自己的訊息氣泡顏色 */
+}
+
+/* 輸入區域樣式 */
+.chat-input-area {
+  display: flex;
+  padding: 15px;
+  border-top: 1px solid #eee;
+  background-color: #fff;
+}
+
+.chat-input {
+  flex-grow: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  font-size: 1em;
+}
+
+.chat-input:focus {
+  border-color: #007bff;
+}
+
+.send-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 20px !important;
+  padding: 10px 20px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.send-button:hover {
+  background-color: #0056b3;
+}

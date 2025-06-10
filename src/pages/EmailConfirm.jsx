@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react'
-import { Form, Button, Alert } from 'react-bootstrap'
 import Menu from '../layouts/Menu'
 import { useSearchParams } from 'react-router-dom';
 import { getEmailConfirm } from '../services/LoginRegisterService';
@@ -12,7 +11,7 @@ function EmailConfirm() {
 
   useEffect(() => {
     emailConfirm()
-  })
+  }, [])
 
   async function emailConfirm() {
     try {
