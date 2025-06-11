@@ -14,7 +14,7 @@ function MovieSummary() {
   return (
     <>
       <button className="btn btn-sm btn-outline-danger mt-4"
-        onClick={() => window.open(`https://www.youtube.com/results?search_query=${movieData.title}`)}>
+        onClick={() => window.open(`https://www.youtube.com/results?search_query=電影 ${movieData.title}`)}>
         YouTube 搜尋
       </button>
       <div className='movie-summary mt-1 p-2'>

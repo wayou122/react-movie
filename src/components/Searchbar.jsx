@@ -10,6 +10,10 @@ function Searchbar() {
     setInputValue(e.target.value)
   }
 
+  function handleKeyDown(e) {
+    if (e.key === 'Enter')
+      setFilter({ keyword: inputValue })
+  }
   function handleClick() {
     setFilter({ keyword: inputValue })
   }
@@ -25,7 +29,8 @@ function Searchbar() {
           placeholder="搜尋電影"
           aria-label="搜尋電影"
           value={inputValue}
-          onChange={handleChange} />
+          onChange={handleChange}
+          onKeyDown={handleKeyDown} />
         <button className="btn btn-primary"
           type="button" id="button-addon2"
           onClick={handleClick}>搜尋</button>

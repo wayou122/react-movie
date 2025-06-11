@@ -326,7 +326,6 @@ button.login-or-register-btn.select {
 }
 
 /* chatroom */
-/* ChatRoom.css */
 
 .chat-room-container {
   display: flex;
@@ -476,6 +475,6 @@ button.login-or-register-btn.select {
 
 .chat-room.card-img-top {
   height: 200px;
-  max-width: 100%;
+  width: 100%;
   object-fit: cover;
 }

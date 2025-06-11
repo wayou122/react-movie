@@ -18,8 +18,9 @@ function ChatRoom() {
 
     getHistory()
 
-    //建立連線
+    //建立 SockJS 連線
     const socket = new SockJS('http://localhost:8085/chat-websocket')
+    //建立 STOMP 客戶端 使用連線
     stompClient.current = new Client({
       webSocketFactory: () => socket,
       debug: (str) => { console.log(str) },
@@ -35,6 +36,7 @@ function ChatRoom() {
     })
     stompClient.current.activate()
 
+    //清除連線
     return () => {
       if (stompClient.current) {
         stompClient.current.deactivate()
@@ -49,14 +51,14 @@ function ChatRoom() {
       const resData = await res.json()
       setMessages(resData.data.reverse())
     } catch (err) {
-      alert(err.message)
+      console.error(err.message)
     }
   }
 
   function sendMessage() {
     const userId = user.userId
     if (stompClient.current && connected) {
-      const msg = { userId, content, chatRoomName: roomName }
+      const msg = { userId, content: content.trim(), chatRoomName: roomName }
       stompClient.current.publish({
         destination: `/app/chatRoom/${roomName}`,
         body: JSON.stringify(msg)
@@ -102,7 +104,7 @@ function ChatRoom() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             onKeyDown={handleKeyDown}
-            disabled={!connected || !user || !content}
+            disabled={!connected || !user}
           />
           <button className={`send-button btn btn-lg btn-primary ${!connected || !user || !content ? 'disabled' : ''}`}
             onClick={sendMessage}
