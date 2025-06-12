@@ -5,6 +5,7 @@ import { validateNameUnique, validateNameFormat, validateEmailFormat, validatePa
 import { authcodeAPI } from '../api/api';
 import { Link, useNavigate } from 'react-router-dom';
 import { postLogin, postRegister } from '../services/LoginRegisterService';
+import Swal from 'sweetalert2';
 
 
 function Login() {
@@ -101,7 +102,6 @@ function Login() {
     if (isLogin) {
       if (!emailValid || !passwordValid) {
         setErrorMessage('請確認填寫資料')
-        alert('請確認填寫資料')
       } else {
         loginSubmit()
       }
@@ -110,7 +110,6 @@ function Login() {
     else {
       if (!nameValid || !nameUnique || !emailValid || !emailUnique || !passwordValid) {
         setErrorMessage('請確認填寫資料')
-        alert('請確認填寫資料')
       } else {
         registerSubmit()
       }
@@ -132,7 +131,10 @@ function Login() {
   async function registerSubmit() {
     try {
       await postRegister(formData)
-      alert('註冊成功，請登入帳號')
+      Swal.fire({
+        title: "註冊成功，請登入帳號",
+        icon: "success"
+      })
       navigate('/login')
       window.location.reload()
     } catch (err) {

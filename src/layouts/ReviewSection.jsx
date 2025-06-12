@@ -11,7 +11,6 @@ function ReviewSection() {
   const { user } = useContext(UserContext)
   const { movieData, loading } = useContext(MovieContext)
   const [filteredReviews, setFilteredReviews] = useState([])
-  console.log(filteredReviews)
   const [myFilter, setMyFilter] = useState({
     sort: '最新影評', score: '全部評價'
   });
@@ -81,7 +80,6 @@ function ReviewSection() {
           </Form.Select>
         </Col>
       </Row>
-      {console.log(filteredReviews.length)}
       {Array.isArray(filteredReviews) && filteredReviews.length > 0 ?
         filteredReviews.map((review) => (
           <Row className='justify-content-center' key={review.reviewId}>

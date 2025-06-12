@@ -4,51 +4,33 @@ import ReviewsFilter from '../components/ReviewsFilter'
 import ReviewMovieCard from '../layouts/ReviewMovieCard'
 import { Container, Row, Col } from 'react-bootstrap'
 import { Footer } from '../layouts/Footer'
-import { useReviewsData } from '../hooks/useReviewsData'
+import { useReviewerData } from '../hooks/useReviewerData'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { ReviewProvider } from '../contexts/ReviewContext'
-import { useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 
-export const ReviewsFilterContext = createContext()
 
-function Reviews() {
+function Reviewer() {
+  const { reviewerName } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
   const page = parseInt(searchParams.get("page") || "1");
-  const sort = searchParams.get('sort') || 'new'
-  const score = searchParams.get('score') || 'all'
-
-  const { reviewsData, loading } = useReviewsData(`?page=${page}&sort=${sort}&score=${score}`)
+  const { reviewerData, loading } = useReviewerData(reviewerName, page)
 
   if (loading) return <LoadingSpinner />
 
-  const value = { page, sort, score, setFilter }
+  const reviewsData = reviewerData
 
   function handlePageClick(newPage) {
     if (newPage < 1 || newPage > reviewsData.totalPages) return
-    setSearchParams({ page: newPage.toString(), sort, score })
+    setSearchParams({ page: newPage.toString() })
     window.scrollTo({ top: 0, behavior: "smooth" })
-  }
-
-  function setFilter(newFilter) {
-    setSearchParams({
-      page: "1",
-      sort: newFilter.sort ?? sort,
-      score: newFilter.score ?? score,
-    })
   }
 
   return (
     <>
       <Menu />
       <Container>
-        <h2 className='h2-title'>影評列表</h2>
-        <Row className='justify-content-center'>
-          <Col xs={12} sm={9} lg={6}>
-            <ReviewsFilterContext.Provider value={value} >
-              <ReviewsFilter />
-            </ReviewsFilterContext.Provider>
-          </Col>
-        </Row>
+        <h2 className='h2-title'>{reviewerName} 的影評</h2>
         {loading && <LoadingSpinner />}
         {reviewsData.content.length > 0 ?
           reviewsData.content.map((review) => (
@@ -57,14 +39,14 @@ function Reviews() {
               <Col xs={12} sm={9} lg={6}>
                 <ReviewProvider
                   value={{ review, loading }}>
-                  <ReviewMovieCard />
+                  <ReviewMovieCard className="mb-1" />
                 </ReviewProvider>
               </Col>
             </Row>
           )) : (
             <Row className='justify-content-center'>
               <Col xs={12} sm={9} lg={6}>
-                <div className="text-center mt-3 mb-3">沒有找到符合的影評 😔</div>
+                <div className="text-center mt-3 mb-3">目前沒有影評 😔</div>
               </Col>
             </Row>
           )
@@ -91,4 +73,4 @@ function Reviews() {
     </>
   )
 }
-export default Reviews
+export default Reviewer

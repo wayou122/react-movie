@@ -23,7 +23,7 @@ function ReviewMovieCard() {
       <Card className="review-movie-card">
         <Row className='g-1'>
           <Col xs={3} sm={3} className="p-2">
-            <Card.Img src={posterUrl} className="object-fit-cover navigate-link"
+            <Card.Img src={posterUrl} className="object-fit-cover navigate-link" style={{ minHeight: '150px' }}
               onClick={() => navigate(`/movie/${movieId}`)} />
           </Col>
           <Col xs={9} sm={9} className="p-2 pt-1">

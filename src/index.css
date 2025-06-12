@@ -478,3 +478,9 @@ button.login-or-register-btn.select {
   width: 100%;
   object-fit: cover;
 }
+
+/*map*/
+.grayscale-tile {
+  filter: grayscale(100%);
+  opacity: 0.5;
+}

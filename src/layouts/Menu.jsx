@@ -52,11 +52,17 @@ function Menu() {
             <Nav className="me-auto">
               <Nav.Link as={Link} to='/movie'>電影</Nav.Link>
               <Nav.Link as={Link} to='/review'>影評</Nav.Link>
-              <Nav.Link as={Link} to='/reviewer'>影評人</Nav.Link>
+              {/* <Nav.Link as={Link} to='/reviewer'>影評人</Nav.Link> */}
               <Nav.Link as={Link} to='/chat'>聊聊</Nav.Link>
+              <Nav.Link as={Link} to='/map'>地圖</Nav.Link>
             </Nav>
             {user ? (
               <Nav>
+                <Nav.Link as={Link} to={`/reviewer/${user.username}`} >
+                  <div className="d-flex align-items-center">
+                    <span>我的影評</span>
+                  </div>
+                </Nav.Link>
                 <Nav.Link as={Link} to='/user/watchlist' >
                   <div className="d-flex align-items-center">
                     <span className="material-symbols-outlined me-1">bookmark</span>

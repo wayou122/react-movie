@@ -13,6 +13,7 @@ function ChatRoom() {
   const [messages, setMessages] = useState([]);
   const [content, setContent] = useState('')
   const stompClient = useRef(null) //保存stompClient實體
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
 
@@ -44,6 +45,12 @@ function ChatRoom() {
     }
   }, [])
 
+  // 捲動到最底
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   async function getHistory() {
     try {
@@ -86,7 +93,7 @@ function ChatRoom() {
       <Menu />
       <h2 className="text-center">{nameMap[roomName]} 聊天室</h2>
       <div className="chat-room-container bg-body-secondary">
-        <div className="chat-messages">
+        <div className="chat-messages" ref={messagesEndRef}>
           {messages.length > 0 ? messages.map((msg) => (
             <Message
               key={msg.chatMessageId}

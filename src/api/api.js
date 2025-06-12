@@ -33,4 +33,4 @@ export const watchlistAPI = `${API}/user/watchlist`
 export const reviewAPI = (params) => `${API}/review${params}`
 
 export const reviewerAPI = `${API}/reviewer`
-export const reviewerNameAPI = (name) => `${API}/reviewer/${name}`
+export const reviewerNameAPI = (name, page) => `${API}/reviewer/${name}?page=${page}`

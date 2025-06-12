@@ -9,7 +9,9 @@ import { MovieContext } from '../contexts/MovieContext'
 
 function WriteReview(props) {
   const { user } = useContext(UserContext)
-  const { movieData, loading } = useContext(MovieContext)
+  const movieContext = useContext(MovieContext)
+  const movieData = movieContext?.movieData
+  const loading = movieContext?.loading
   const [displayText, setDisplayText] = useState('')
   const [selectedValue, setSelectedValue] = useState();
   const [textareaValue, setTextareaValue] = useState('');
@@ -31,8 +33,8 @@ function WriteReview(props) {
   const isLogin = user ? true : false;
   const isUpdating = props.updating
   const reviewId = props.reviewId
-  const title = movieData.title || props.title
-  const movieId = movieData.movieId || ''
+  const title = movieData?.title || props.title
+  const movieId = movieData?.movieId || ''
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -88,8 +90,10 @@ function WriteReview(props) {
     setErrorMessage('')
     if (e) setTextareaValue(e.target.value);
     const textarea = textareaRef.current
-    textarea.style.height = 'auto'; // 重設高度
-    textarea.style.height = textarea.scrollHeight + 5 + 'px'; // 設為內容高度
+    if (textarea) {
+      textarea.style.height = 'auto'; // 重設高度
+      textarea.style.height = textarea.scrollHeight + 5 + 'px'; // 設為內容高度
+    }
   }
 
   return (

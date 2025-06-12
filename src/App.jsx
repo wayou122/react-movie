@@ -17,6 +17,9 @@ import EmailConfirm from './pages/EmailConfirm.jsx';
 import { Watchlist } from './pages/Watchlist.jsx';
 import Chat from './pages/Chat.jsx';
 import ChatRoom from './pages/ChatRoom.jsx';
+import Reviewer from './pages/Reviewer.jsx';
+import Map from './pages/Map.jsx';
+import TestMapPage from './pages/TestMapPage.jsx';
 
 function App() {
   const router = createBrowserRouter([
@@ -42,6 +45,16 @@ function App() {
     {
       path: '/review',
       element: <Reviews />,
+      errorElement: <NotFoundPage />,
+    },
+    {
+      path: '/map',
+      element: <Map />,
+      errorElement: <NotFoundPage />,
+    },
+    {
+      path: '/reviewer/:reviewerName',
+      element: <Reviewer />,
       errorElement: <NotFoundPage />,
     },
     {
@@ -88,6 +101,11 @@ function App() {
     {
       path: '/chat/chatRoom/:roomName',
       element: <ChatRoom />,
+      errorElement: <NotFoundPage />,
+    },
+    {
+      path: '/testmap',
+      element: <TestMapPage />,
       errorElement: <NotFoundPage />,
     }
   ])

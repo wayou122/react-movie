@@ -4,6 +4,7 @@ import { forgetPassword, } from "../services/LoginRegisterService"
 import { Form, Button, Alert, Row, Col, Image } from 'react-bootstrap'
 import { authcodeAPI } from '../api/api';
 import Menu from "../layouts/Menu"
+import Swal from 'sweetalert2';
 
 function ForgetPassword() {
   const [emailValid, setEmailValid] = useState(true)
@@ -49,7 +50,10 @@ function ForgetPassword() {
       try {
         await forgetPassword(formData)
         setFormData({ email: '', authcode: '' })
-        alert('已發送連結，請從email連結重設密碼')
+        Swal.fire({
+          title: "已發送連結，請從email連結重設密碼",
+          icon: "success"
+        })
       } catch (err) {
         setErrorMessage(err.message)
       }

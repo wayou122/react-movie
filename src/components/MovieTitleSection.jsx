@@ -4,6 +4,7 @@ import LoadingSpinner from "./LoadingSpinner.jsx";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext.jsx";
 import { putWatchlist } from "../services/MovieService.jsx";
+import Swal from "sweetalert2";
 
 function MovieTitleSection() {
   const { user } = useContext(UserContext)
@@ -24,7 +25,10 @@ function MovieTitleSection() {
 
   async function handleMarkClick() {
     if (!user) {
-      alert('請先登入')
+      Swal.fire({
+        title: "請先登入再收藏電影",
+        icon: "warning"
+      });
       return
     }
     try {

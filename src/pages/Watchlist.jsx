@@ -30,10 +30,9 @@ export function Watchlist() {
 
         {watchlistData.length > 0 ?
           watchlistData.map((movieData) => (
-            <Row className='justify-content-center'>
+            <Row className='justify-content-center' key={movieData.movieId}>
               <Col xs={12} sm={9} lg={6}>
                 <MovieProvider
-                  key={movieData.movieId}
                   value={{ movieData, loading, link: true }}>
                   <Card className="mb-1" >
                     <MovieCard />

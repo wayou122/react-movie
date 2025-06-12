@@ -15,7 +15,6 @@ export function useMoviesData(params) {
   //重新redner會形成新的物件會不斷重跑，文化字化比較實質內容
 
   async function fetchMoviesData() {
-    console.log(movieParamsAPI(params))
     try {
       const res = await fetch(movieParamsAPI(params), {
         method: 'GET',

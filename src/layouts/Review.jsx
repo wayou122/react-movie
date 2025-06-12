@@ -4,10 +4,13 @@ import { UserContext } from "../contexts/UserContext";
 import { toggleReviewReactionAPI } from "../api/api";
 import { scoreOptions } from "../utils/scoreOptions";
 import { ReviewContext } from "../contexts/ReviewContext"
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function Review() {
   const { user } = useContext(UserContext)
   const { review } = useContext(ReviewContext)
+  const navigate = useNavigate()
 
   const userId = user ? user.userId : null
   const reviewerId = review.authorId
@@ -31,7 +34,10 @@ function Review() {
 
   async function handleLikeClick() {
     if (!user) {
-      alert('請先登入')
+      Swal.fire({
+        title: "請先登入再按讚",
+        icon: "warning"
+      });
       return
     }
     if (sentiment === 1) {
@@ -49,7 +55,10 @@ function Review() {
 
   async function handleDislikeClick() {
     if (!user) {
-      alert('請先登入')
+      Swal.fire({
+        title: "請先登入再按",
+        icon: "warning"
+      });
       return
     }
     if (sentiment === -1) {
@@ -74,7 +83,6 @@ function Review() {
       })
       const resData = await res.json()
       if (res.ok && resData.code === 200) {
-        console.log('修改成功')
         return true
       } else {
         console.error('修改失敗: ' + resData.message)
@@ -93,7 +101,7 @@ function Review() {
         <div className='d-flex justify-content-between align-items-center'>
           <div className='pt-2 mb-2 d-flex align-items-center'>
             <img className='review-account-img me-2' src={`http://localhost:8085/${reviewerImg}`}></img>
-            <span className="me-2">{reviewerName}</span>
+            <span className="me-2 navigate-link" onClick={() => navigate(`/reviewer/${reviewerName}`)}>{reviewerName}</span>
             <span className="me-2">{scoreOptions[score].emoji}</span>
             <span className="small text-muted">{createdDate}</span>
           </div>
