@@ -1,22 +1,48 @@
 import Menu from "../layouts/Menu"
 import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMap, useMapEvents } from "react-leaflet"
 import 'leaflet/dist/leaflet.css';
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { useContext, useState } from "react";
+import { Col, Container, Nav, Row } from "react-bootstrap";
+import { createContext, useContext, useState } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
+import EditingPlace from "../layouts/EditingPlace";
+import { Icon, L } from "leaflet";
+import addIcon from "../assets/add_circle_24dp_EE5555_FILL0_wght400_GRAD0_opsz24.svg"
+import starIcon from "../assets/stars_24dp_EE8822_FILL0_wght400_GRAD0_opsz24.svg"
+import { useMapData } from "../hooks/useMapData";
+import LoadingSpinner from "../components/LoadingSpinner";
+import { Footer } from "../layouts/Footer";
+import { PlaceInfo } from "../layouts/PlaceInfo";
 
-function ListenClick({ onMapClick }) {
-  useMapEvents({
-    click(e) {
-      onMapClick(e.latlng)
-    }
-  })
-  return null
-}
+export const EditingPlaceContext = createContext()
+
+
 
 function Map() {
   const { isDarkMode } = useContext(ThemeContext)
-  const [formData, setFormData] = useState({ lat: '', lng: '', title: '', description: '' })
+  const { mapData, loading } = useMapData()
+  const [mode, setMode] = useState('info')
+  const [formData, setFormData] = useState({ lat: '', lng: '', name: '', title: '', description: '' })
+  const [infoData, setInfoData] = useState({ lat: '', lng: '', name: '', title: '', description: '' })
+  const newPlaceIcon = new Icon({
+    iconUrl: addIcon,
+    iconSize: [30, 30],
+  })
+
+  const placesIcon = new Icon({
+    iconUrl: starIcon,
+    iconSize: [30, 30],
+  })
+
+  function ListenClick({ onMapClick }) {
+    if (mode == 'add') {
+      useMapEvents({
+        click(e) {
+          onMapClick(e.latlng)
+        }
+      })
+      return null
+    }
+  }
 
   function handleClick(latlng) {
     setFormData(prev => ({
@@ -24,15 +50,42 @@ function Map() {
     }))
   }
 
-  function handleClear() {
-    setFormData({ lat: '', lng: '', title: '', description: '' })
+  function handleSelectTab(selectedKey) {
+    if (selectedKey == 'info') {
+      setMode('info')
+      setFormData({ lat: '', lng: '', name: '', title: '', description: '' })
+    } else if (selectedKey == 'add') {
+      setMode('add')
+    }
   }
+
+  function handleMarkerClick(data) {
+    if (mode == 'info') {
+      setInfoData({
+        lat: data.lat, lng: data.lng, name: data.name, title: data.title, description: data.description
+      })
+    }
+  }
+
+  let sideSection
+  if (loading) return <LoadingSpinner />
+
+  if (mode == 'add') {
+    sideSection =
+      <EditingPlaceContext.Provider value={{ formData, setFormData }} >
+        <EditingPlace />
+      </EditingPlaceContext.Provider>
+
+  } else if (mode == 'info') {
+    sideSection = <PlaceInfo infoData={infoData} />
+  }
+
   return (
     <>
       <Menu />
       <Container >
-        <Row>
-          <Col xs={12} lg={9}>
+        <Row className="d-flex justify-content-center">
+          <Col xs={12} md={8} lg={9}>
             <MapContainer center={[25.05, 121.55]} zoom={13} style={{ height: '500px', width: '100%' }}>
               {
                 isDarkMode ?
@@ -45,59 +98,47 @@ function Map() {
                     url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
               }
               <ListenClick onMapClick={handleClick} />
-              <Marker position={[25.033964, 121.564468]}>
-                <Tooltip>台北101</Tooltip>
+              {
+                mapData.map(data => (
+                  <Marker position={[data.lat, data.lng]}
+                    icon={placesIcon}
+                    eventHandlers={{
+                      click: () => {
+                        handleMarkerClick(data)
+                      }
+                    }}>
+                    <Tooltip>{data.name}</Tooltip>
+                  </Marker>
+                ))
+              }
+              <Marker position={[formData.lat, formData.lng]}
+                icon={newPlaceIcon}>
+                <Tooltip>你新增的地點</Tooltip>
               </Marker>
+
             </MapContainer>
           </Col>
 
-          <Col xs={12} lg={3}>
-            <h3 className="text-center mb-2">新增電影地點</h3>
-            <Form onSubmit={''}>
-              <Form.Group className="mb-3" controlId="form">
-                <Form.Label>地點位置</Form.Label>
-                <Form.Text className="text-muted">
-                  請點選地圖設定經緯度
-                </Form.Text>
-                <Form.Control type="text"
-                  name='position'
-                  value={formData ? `${Math.floor(formData.lng * 1000) / 1000}, ${Math.floor(formData.lat * 1000) / 1000}` : ''}
-                  onChange={''}
-                  isInvalid={false}
-                  disabled
-                  required />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="form">
-                <Form.Label>電影名稱</Form.Label>
-                <Form.Control type="text"
-                  name='title'
-                  value={''}
-                  onChange={''}
-                  isInvalid={false}
-                  required />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="form">
-                <Form.Label>地點說明</Form.Label>
-                <Form.Control as="textarea"
-                  name='description'
-                  value={''}
-                  onChange={''}
-                  isInvalid={false}
-                  required />
-              </Form.Group>
-              <Button variant="primary" type="submit"
-                disabled={!formData.lat || !formData.title || !formData.description} >
-                確認新增
-              </Button>
-              <Button variant="secondary"
-                onClick={handleClear} >
-                清除
-              </Button>
-            </Form>
+          <Col xs={11} md={4} lg={3}>
+            <Nav fill
+              variant="tabs"
+              defaultActiveKey="info"
+              onSelect={(selectedKey) => handleSelectTab(selectedKey)}
+              className="justify-content-center"
+            >
+              <Nav.Item>
+                <Nav.Link eventKey="info">景點資訊</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="add">新增景點</Nav.Link>
+              </Nav.Item>
+            </Nav>
+            <div className="mb-3"></div>
+            {sideSection}
           </Col>
         </Row>
-
       </Container>
+      <Footer />
     </>
   )
 }

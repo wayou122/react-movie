@@ -34,3 +34,6 @@ export const reviewAPI = (params) => `${API}/review${params}`
 
 export const reviewerAPI = `${API}/reviewer`
 export const reviewerNameAPI = (name, page) => `${API}/reviewer/${name}?page=${page}`
+
+export const mapDataAPI = `${API}/map`
+export const addMapDataAPI = `${API}/map`

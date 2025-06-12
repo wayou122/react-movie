@@ -39,7 +39,6 @@ body {
   line-height: 2.2rem;
 }
 
-/* styles.css 或 App.css */
 [data-bs-theme="dark"] .navbar {
   background-color: #333 !important;
   color: var(--bs-light);
@@ -68,7 +67,7 @@ nav.menu {
   position: sticky;
   top: 0;
   left: 0;
-  z-index: 5;
+  z-index: 10;
 }
 
 
