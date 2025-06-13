@@ -133,10 +133,13 @@ function Login() {
       await postRegister(formData)
       Swal.fire({
         title: "註冊成功，請登入帳號",
-        icon: "success"
+        icon: "success",
+        confirmButtonText: '確定'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload()
+        }
       })
-      navigate('/login')
-      window.location.reload()
     } catch (err) {
       setErrorMessage(err.message)
     }
@@ -198,7 +201,7 @@ function Login() {
                 required />
               <Form.Control.Feedback type="invalid">
                 {
-                  !nameValid ? '名稱長度須為5~20字，請用英數字-_或台語羅馬字' :
+                  !nameValid ? '名稱長度須為5~15字，請用英數字-_或台語羅馬字' :
                     '帳號名稱已被使用'
                 }
               </Form.Control.Feedback>
@@ -215,7 +218,7 @@ function Login() {
               isInvalid={!passwordValid}
               required />
             <Form.Control.Feedback type="invalid">
-              密碼長度8~20位，需包含數字與英文字
+              密碼長度6~20位，需包含數字與英文字
             </Form.Control.Feedback>
           </Form.Group>
 

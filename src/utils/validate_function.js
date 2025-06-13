@@ -13,7 +13,7 @@ export function validatePasswordFormat(pwd) {
 export function validateNameFormat(name) {
 
   // 1. 擴充羅馬字
-  const regex = /^[A-Za-z0-9ⁿ\u00C0-\u00FF\u0100-\u017F\u0300-\u036F\-_]{5,20}$/
+  const regex = /^[A-Za-z0-9ⁿ\-_\u00C0-\u00FF\u0100-\u017F\u0300-\u036F]{5,15}$/
   // 2. 使用 Intl.Segmenter 數「顯示的字數」
   function countGraphemes(name) {
     const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' });
@@ -23,7 +23,7 @@ export function validateNameFormat(name) {
   function isValidTaiLoInput(name) {
     if (!regex.test(name)) return false;
     const graphemeCount = countGraphemes(name);
-    return graphemeCount >= 5 && graphemeCount <= 10;
+    return graphemeCount >= 5 && graphemeCount <= 15;
   }
   return isValidTaiLoInput(name)
 

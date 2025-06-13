@@ -64,6 +64,7 @@ function WriteReview(props) {
   async function updateReviewSubmit() {
     try {
       await putUpdateReview(reviewId, selectedValue, textareaValue)
+
       window.location.reload()
     } catch (err) {
       setErrorMessage(err.message)
