@@ -123,7 +123,7 @@ function Login() {
       navigate('/')
       window.location.reload()
     } catch (err) {
-      setErrorMessage(err.message)
+      setErrorMessage('發生錯誤請重新登入')
     }
   }
 
@@ -141,7 +141,7 @@ function Login() {
         }
       })
     } catch (err) {
-      setErrorMessage(err.message)
+      setErrorMessage('發生錯誤請重新註冊')
     }
   }
 
