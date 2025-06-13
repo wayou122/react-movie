@@ -1,20 +1,42 @@
 import { Button, Form } from "react-bootstrap"
 import { EditingPlaceContext } from "../pages/Map"
-import { useContext, useRef } from "react"
+import { useContext, useRef, useState } from "react"
+import Swal from "sweetalert2";
+import { addSpotSubmit } from "../services/SpotService";
+import { UserContext } from "../contexts/UserContext";
+import { useMovieTitleData } from "../hooks/useMovieTitleData";
+import LoadingSpinner from "../components/LoadingSpinner";
+import Select from "react-select";
 
 export default function EditingPlace() {
-  const { formData, setFormData } = useContext(EditingPlaceContext)
-  const textareaRef = useRef(null); //綁定底下 ref={textareaRef}
+  const { user } = useContext(UserContext)
+  const { formData, setFormData, refetch } = useContext(EditingPlaceContext)
+  const textareaRef = useRef(null)
+  const { movieTitleData, loading } = useMovieTitleData()
+  const [selectedOption, setSelectedOption] = useState(null)
 
-  function handleChange(e) {
-    const { name, value } = e.target
+  if (loading) return <LoadingSpinner />
+
+  const options = movieTitleData.map(data => ({
+    value: data.movieId,
+    label: data.title,
+  }));
+
+  function handleChange(name, value) {
     setFormData(prev => ({
       ...prev, [name]: value
     }))
   }
 
+  function handleSelectChange(option) {
+    setSelectedOption(option);
+    const value = option ? option.value : ''
+    handleChange('movieId', value);
+  }
+
   function handleClear() {
-    setFormData({ name: '', lat: '', lng: '', title: '', description: '' })
+    setFormData({ spotName: '', lat: '', lng: '', movieId: '', description: '' })
+    setSelectedOption(null)
   }
 
   function autoGrow() {
@@ -25,8 +47,23 @@ export default function EditingPlace() {
     }
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
+    try {
+      await addSpotSubmit(formData)
+      handleClear()
+      refetch()
+      Swal.fire({
+        title: "新增成功",
+        icon: "success",
+      })
+    } catch (err) {
+      Swal.fire({
+        title: "新增失敗",
+        icon: "error",
+        text: err.message
+      })
+    }
   }
 
   return (
@@ -36,43 +73,48 @@ export default function EditingPlace() {
         <Form.Group className="mb-3" controlId="form">
           <Form.Label>景點名稱</Form.Label>
           <Form.Control type="text"
-            name='name'
-            value={formData.name}
-            onChange={handleChange}
+            name='spotName'
+            placeholder="輸入景點名稱"
+            value={formData.spotName}
+            onChange={(e) => handleChange(e.target.name, e.target.value)}
             required />
         </Form.Group>
         <Form.Group className="mb-3" controlId="form">
           <Form.Label>景點位置</Form.Label>
           <Form.Control type="text"
             name='position'
-            placeholder="請點選地圖設定經緯度"
+            placeholder="點選地圖設定位置"
             value={formData.lng ? `${Math.floor(formData.lng * 1000) / 1000}, ${Math.floor(formData.lat * 1000) / 1000}` : ''}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e.target.name, e.target.value)}
             style={{ backgroundColor: "transparent" }}
             disabled
             required />
         </Form.Group>
         <Form.Group className="mb-3" controlId="form">
           <Form.Label>電影名稱</Form.Label>
-          <Form.Control type="text"
-            name='title'
-            value={formData.title}
-            onChange={handleChange}
-            required />
+          <Select
+            options={options}
+            value={selectedOption}
+            onChange={handleSelectChange}
+            isSearchable
+            isClearable
+            placeholder="搜尋或選擇電影名稱..."
+            noOptionsMessage={() => "找不到符合的電影"}
+          />
         </Form.Group>
         <Form.Group className="mb-3" controlId="form">
           <Form.Label>地點說明</Form.Label>
           <Form.Control as="textarea"
             name='description'
             value={formData.description}
-            onChange={(e) => { autoGrow(); handleChange(e) }}
+            onChange={(e) => { autoGrow(); handleChange(e.target.name, e.target.value) }}
             ref={textareaRef}
             required />
         </Form.Group>
         <div className="d-flex justify-content-center">
           <Button variant="primary" type="submit" className="me-2"
-            disabled={!formData.lat || !formData.title || !formData.description} >
-            確認新增
+            disabled={!user || !formData.lat || !formData.movieId || !formData.description} >
+            {user ? '確認新增' : '登入才可新增'}
           </Button>
           <Button variant="secondary"
             onClick={handleClear} >

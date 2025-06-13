@@ -123,7 +123,7 @@ function Login() {
       navigate('/')
       window.location.reload()
     } catch (err) {
-      setErrorMessage(err.message)
+      setErrorMessage('發生錯誤請重新登入')
     }
   }
 
@@ -138,7 +138,7 @@ function Login() {
       navigate('/login')
       window.location.reload()
     } catch (err) {
-      setErrorMessage(err.message)
+      setErrorMessage('發生錯誤請重新註冊')
     }
   }
 
@@ -215,7 +215,7 @@ function Login() {
               isInvalid={!passwordValid}
               required />
             <Form.Control.Feedback type="invalid">
-              密碼長度8~20位，需包含數字與英文字
+              密碼長度6~20位，需包含數字與英文字
             </Form.Control.Feedback>
           </Form.Group>
 

@@ -26,7 +26,7 @@ function Movies() {
   const value = { page, sort, type, keyword, setFilter }
 
   function handlePageClick(newPage) {
-    if (newPage < 1 || newPage > moviesData.totalPages) return
+    if (newPage < 1 || newPage > moviesData?.totalPages) return
     setSearchParams({
       page: newPage.toString(),
       sort, type, keyword
@@ -56,8 +56,7 @@ function Movies() {
             </MoviesFilterContext.Provider >
           </Col>
         </Row>
-        {loading && <LoadingSpinner />}
-        {moviesData.content.length > 0 ?
+        {!loading && moviesData.content.length > 0 ?
           moviesData.content.map((movieData) => (
             <Row className='justify-content-center' key={movieData.movieId}>
               <Col xs={12} sm={9} lg={6}>
