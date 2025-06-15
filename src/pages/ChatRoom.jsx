@@ -24,7 +24,7 @@ function ChatRoom() {
     //建立 STOMP 客戶端 使用連線
     stompClient.current = new Client({
       webSocketFactory: () => socket,
-      debug: (str) => { console.log(str) },
+      //debug: (str) => { console.log(str) },
       onConnect: () => {
         setConnected(true)
         stompClient.current.subscribe(`/topic/messages/${roomName}`,

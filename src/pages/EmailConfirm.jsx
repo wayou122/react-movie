@@ -27,7 +27,11 @@ function EmailConfirm() {
         }
       })
     } catch (err) {
-      setMessage(err.message)
+      Swal.fire({
+        title: "驗證失敗",
+        icon: "error",
+        confirmButtonText: err.message
+      })
     }
   }
 

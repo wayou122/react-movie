@@ -6,6 +6,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import { Link } from 'react-router-dom';
 import { postAddReview, putUpdateReview } from '../services/ReviewService'
 import { MovieContext } from '../contexts/MovieContext'
+import Swal from 'sweetalert2'
 
 function WriteReview(props) {
   const { user } = useContext(UserContext)
@@ -55,19 +56,42 @@ function WriteReview(props) {
   async function addReviewSubmit() {
     try {
       await postAddReview(movieId, selectedValue, textareaValue)
-      window.location.reload()
+      Swal.fire({
+        title: "新增成功",
+        icon: "success",
+        confirmButtonText: '確定'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload()
+        }
+      })
     } catch (err) {
-      setErrorMessage(err.message)
+      Swal.fire({
+        title: "新增失敗",
+        icon: "error",
+        text: err.message
+      })
     }
   }
 
   async function updateReviewSubmit() {
     try {
       await putUpdateReview(reviewId, selectedValue, textareaValue)
-
-      window.location.reload()
+      Swal.fire({
+        title: "修改成功",
+        icon: "success",
+        confirmButtonText: '確定'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload()
+        }
+      })
     } catch (err) {
-      setErrorMessage(err.message)
+      Swal.fire({
+        title: "修改失敗",
+        icon: "error",
+        text: err.message
+      })
     }
   }
 

@@ -3,6 +3,7 @@ import { Dropdown, DropdownButton, ButtonGroup, Modal, Button } from "react-boot
 import WriteReview from '../layouts/WriteReview'
 import { ReviewContext } from "../contexts/ReviewContext";
 import { deleteReviewAPI } from "../api/api";
+import Swal from "sweetalert2";
 
 function ThreeDotBtn() {
   const [showEdit, setShowEdit] = useState(false);
@@ -23,12 +24,28 @@ function ThreeDotBtn() {
       })
       const resData = await res.json()
       if (res.ok && resData.code === 200) {
-        window.location.reload()
+        Swal.fire({
+          title: "刪除成功",
+          icon: "success",
+          confirmButtonText: '確定'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload()
+          }
+        })
       } else {
-        setErrorMessage('刪除失敗: ' + resData.message)
+        Swal.fire({
+          title: "刪除失敗",
+          icon: "error",
+          confirmButtonText: resData.message
+        })
       }
     } catch (err) {
-      setErrorMessage('刪除錯誤: ' + err.message)
+      Swal.fire({
+        title: "刪除失敗",
+        icon: "error",
+        confirmButtonText: err.message
+      })
     }
   }
 
@@ -59,14 +76,6 @@ function ThreeDotBtn() {
             reviewId={review.reviewId}
             title={review.title} />
         </Modal.Body>
-        {/* <Modal.Footer>
-          <Button variant="light" onClick={handleCloseEdit}>
-            關閉
-          </Button>
-          <Button variant="primary" onClick={handleCloseEdit}>
-            儲存
-          </Button>
-        </Modal.Footer> */}
       </Modal>
 
       {/* 刪除跳窗 */}

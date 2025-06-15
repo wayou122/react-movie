@@ -128,22 +128,14 @@ function Review() {
           <button onClick={handleLikeClick}
             className={sentiment === 1 ? "review-like-btn-checked" : "review-like-btn"}>
             <div className="d-flex align-items-center">
-              <span className='me-2'>
-                {sentiment === 1 ?
-                  (<span className="filled-icon">expand_circle_up</span>) :
-                  (<span className="outlined-icon">expand_circle_up</span>)
-                }</span>
+              <span className={`me-2 ${sentiment === 1 ? 'filled-icon' : 'outlined-icon'}`}>thumb_up</span>
               <span>{likeCount}</span>
             </div>
           </button>
           <button onClick={handleDislikeClick}
             className={sentiment === -1 ? "review-dislike-btn-checked" : "review-dislike-btn"}>
             <div className="d-flex align-items-center">
-              <span className='me-2'>
-                {sentiment === -1 ?
-                  (<span className="filled-icon">expand_circle_down</span>) :
-                  (<span className="outlined-icon">expand_circle_down</span>)
-                }</span>
+              <span className={`me-2 ${sentiment === -1 ? 'filled-icon' : 'outlined-icon'}`}>thumb_down</span>
             </div>
           </button>
         </div>
