@@ -17,7 +17,7 @@ function MovieCard() {
   const actor = movieData.actor
   const releaseDate = movieData.releaseDate && movieData.releaseDate.slice(0, 4) || ''
   const type = movieData.type
-  const length = movieData.length ? movieData.length + '分' : ''
+  const length = movieData.length ? movieData.length + '分鐘' : ''
   let posterUrl = movieData.posterUrl
   if (posterUrl.includes('/film/film'))
     posterUrl = movieData.posterUrl = `https://dummyimage.com/140x210/234/fff&text=${title}`

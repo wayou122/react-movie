@@ -9,7 +9,7 @@ export function Footer() {
       style={{
         width: '100%',
         textAlign: 'center',
-        padding: '30px',
+        padding: '30px'
       }}>
       本網站電影資訊及圖片取自 <a href='https://taiwancinema.bamid.gov.tw/' target="_blank">台灣電影網</a>
     </footer>

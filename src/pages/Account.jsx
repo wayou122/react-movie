@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useRef } from 'react'
 import { Form, Button, Alert } from 'react-bootstrap'
 import Menu from '../layouts/Menu'
 import { validateNameUnique, validateEmailFormat, validatePasswordFormat, validateNameFormat } from '../utils/validate_function';
@@ -15,6 +15,8 @@ function Account() {
   const [emailValid, setEmailValid] = useState(true);
   const [formData, setFormData] = useState({})
   const [errorMessage, setErrorMessage] = useState('')
+  const fileInputRef = useRef(null); // file是非受控元件必須用ref重設input
+
 
   useEffect(() => {
     if (user) {
@@ -38,10 +40,27 @@ function Account() {
 
   //上傳圖片
   function handleFileSelect(e) {
-    setFormData(prev => ({
-      ...prev,
-      image: e.target.files[0]
-    }))
+    const file = e.target.files[0]
+    if (file) {
+      const fileType = file.type;
+      if (fileType.startsWith('image/')) {
+        setErrorMessage('')
+        setFormData(prev => ({
+          ...prev,
+          image: e.target.files[0]
+        }))
+      } else {
+        setErrorMessage("檔案格式不符，請重新上傳圖片")
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+        // 同時清除 formData 中的 image（可選）
+        setFormData(prev => ({
+          ...prev,
+          image: null
+        }));
+      }
+    }
   }
 
   async function validateName(name) {
@@ -142,6 +161,7 @@ function Account() {
               type="file"
               accept="image/*"
               onChange={handleFileSelect}
+              ref={fileInputRef}
             />
           </Form.Group>
 

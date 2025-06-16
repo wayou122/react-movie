@@ -41,7 +41,16 @@ function MovieTitleSection() {
         }, 150);
       }
     } catch (err) {
-      console.error(err.message)
+      Swal.fire({
+        title: "發生錯誤請重新整理",
+        icon: "error",
+        text: err.message,
+        confirmButtonText: "確定"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload()
+        }
+      })
     }
   }
 

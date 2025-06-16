@@ -42,6 +42,8 @@ function Map() {
   }
 
   function handleClick(latlng) {
+    console.log(latlng);
+
     setFormData(prev => ({
       ...prev, lat: latlng.lat, lng: latlng.lng
     }))

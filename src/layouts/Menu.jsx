@@ -8,26 +8,8 @@ import { getLogout } from '../services/LoginRegisterService';
 
 function Menu() {
   const navigate = useNavigate()
-  //const [isLogin, setIsLogin] = useState(false)
   const { user, setUser } = useContext(UserContext)
   const { isDarkMode, toggleColorMode } = useContext(ThemeContext)
-
-  // useEffect(() => {
-  //   checkLogin()
-  // }, [])
-
-  // async function checkLogin() {
-  //   try {
-  //     const res = await fetch(checkLoginAPI, {
-  //       method: 'GET',
-  //       credentials: 'include'
-  //     })
-  //     const resData = await res.json()
-  //     setIsLogin(resData.data)
-  //   } catch (err) {
-  //     setIsLogin(false)
-  //   }
-  // }
 
   async function handleLogout() {
     try {
@@ -77,7 +59,6 @@ function Menu() {
                 </Nav.Link>
                 <Nav.Link onClick={handleLogout} >
                   <div className="d-flex align-items-center">
-                    {/* <span className="material-symbols-outlined me-1">account_circle</span> */}
                     <span>登出</span>
                   </div>
                 </Nav.Link>

@@ -84,7 +84,7 @@ export default function EditingPlace() {
           <Form.Control type="text"
             name='position'
             placeholder="點選地圖設定位置"
-            value={formData.lng ? `${Math.floor(formData.lng * 1000) / 1000}, ${Math.floor(formData.lat * 1000) / 1000}` : ''}
+            value={formData.lng ? `${Math.floor(formData.lng * 100000) / 100000}, ${Math.floor(formData.lat * 100000) / 100000}` : ''}
             onChange={(e) => handleChange(e.target.name, e.target.value)}
             style={{ backgroundColor: "transparent" }}
             disabled
