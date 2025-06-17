@@ -45,17 +45,22 @@
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(11).JPG)
 
 ### 景點地圖
-有許多電影拍攝場景會成為影迷朝聖的地點，這個頁面提供使用者自由共同編輯電影景點地圖，類似於開放街圖/地圖版維基百科，符合PPGIS公眾參與地理資訊系統的精神。此頁面使用React Leaflet套件架設，後端存取經緯度坐標呈現在地圖上。
+有許多電影拍攝場景會成為影迷朝聖的地點，此頁面提供使用者共同編輯電影景點地圖，類似於開放街圖/地圖版維基百科，符合PPGIS公眾參與地理資訊系統的精神。此頁面使用React Leaflet套件架設，後端存取經緯度坐標，前端存取坐標呈現在地圖上。
 
-使用者點選地圖會自動產出坐標，搜尋電影名稱點選出現此地點的電影（限定選擇資料庫內的電影，用於建立電影表外鍵）。新增完成後點選景點可以看到景點資訊，也可以連結至電影頁面。
+使用者搜尋電影，可以篩選出此電影的景點，地圖根據地點縮放。景點資訊卡可以連結至電影頁面，也可以連結搜尋Google地圖，方便使用者收藏和規畫路徑。相對地，電影頁面也可以連結至景點地圖，自動篩選符合景點。
 
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(12).JPG)
+
+使用者可以自由新增景點。點選地圖會自動產出坐標，並且選擇拍攝的電影（限定選擇資料庫內的電影，用於建立電影外鍵）。新增完成後點選景點可以看到景點資訊，也可以連結至電影頁面。
+
+![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(13).JPG)
+
 
 ## 專案資訊
 本專案由王昱堯在2025年5-6月獨自完成。
 * 專案後端連結 https://github.com/wayou122/springboot-movie
 * 專案前端連結 https://github.com/wayou122/react-movie
 
-![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(13).JPG)
+![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(14).JPG)
 
 
