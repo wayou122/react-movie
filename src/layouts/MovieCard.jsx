@@ -44,10 +44,7 @@ function MovieCard() {
               <p className='director'>導演 / {director}</p>
               <p className='actor'>演員 / {actorShow}</p>
             </div>
-            <div className='navigate-link'
-              onClick={() => navigate(`/movie/${id}`)}>
-              <ScoreSection />
-            </div>
+            <ScoreSection />
           </Col>
         </Row>
       </div>

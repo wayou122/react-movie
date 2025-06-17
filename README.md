@@ -52,7 +52,7 @@
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(12).JPG)
 
 ## 專案資訊
-本專案由王昱堯在2025年5-6月獨力完成。
+本專案由王昱堯在2025年5-6月獨自完成。
 * 專案後端連結 https://github.com/wayou122/springboot-movie
 * 專案前端連結 https://github.com/wayou122/react-movie
 

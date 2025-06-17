@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export function PlaceInfo({ infoData }) {
+export function PlaceInfo({ infoData, noSpot }) {
   const navigate = useNavigate()
 
   return (
@@ -19,7 +19,7 @@ export function PlaceInfo({ infoData }) {
               className="text-decoration-none small"
               target="_blank"
               rel="noopener noreferrer"
-              href={`https://www.google.com/maps/place/${infoData.lat}+${infoData.lng}`}
+              href={`https://www.google.com/maps/search/${infoData.name}/@${infoData.lat},${infoData.lng}`}
             >
               🗺️ 看 Goolge 地圖</a>
             </p>
@@ -28,8 +28,15 @@ export function PlaceInfo({ infoData }) {
       ) : (
         <div className="card shadow-sm p-3">
           <div className="text-center text-muted py-5">
-            <p>點選景點</p>
-            <p>了解更多資訊</p>
+            {
+              noSpot ?
+                <p>此電影沒有景點</p>
+                :
+                <>
+                  <p>點選景點</p>
+                  <p>了解更多資訊</p>
+                </>
+            }
           </div>
         </div>
       )}

@@ -53,6 +53,11 @@ function App() {
       errorElement: <NotFoundPage />,
     },
     {
+      path: '/map/:id',
+      element: <Map />,
+      errorElement: <NotFoundPage />,
+    },
+    {
       path: '/reviewer/:reviewerName',
       element: <Reviewer />,
       errorElement: <NotFoundPage />,
@@ -103,11 +108,6 @@ function App() {
       element: <ChatRoom />,
       errorElement: <NotFoundPage />,
     },
-    {
-      path: '/testmap',
-      element: <TestMapPage />,
-      errorElement: <NotFoundPage />,
-    }
   ])
 
   return (

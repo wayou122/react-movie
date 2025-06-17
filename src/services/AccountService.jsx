@@ -3,7 +3,6 @@ import { updateAccountAPI } from "../api/api"
 export async function postAccountInfo(formData) {
   let resData;
   try {
-    console.log(formData)
     const res = await fetch(updateAccountAPI, {
       method: 'POST',
       credentials: 'include',

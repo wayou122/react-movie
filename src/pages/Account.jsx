@@ -5,6 +5,7 @@ import { validateNameUnique, validateEmailFormat, validatePasswordFormat, valida
 import { UserContext } from '../contexts/UserContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { postAccountInfo } from '../services/AccountService';
+import Swal from 'sweetalert2';
 
 let oldUsername = ''
 
@@ -17,7 +18,6 @@ function Account() {
   const [errorMessage, setErrorMessage] = useState('')
   const fileInputRef = useRef(null); // file是非受控元件必須用ref重設input
 
-
   useEffect(() => {
     if (user) {
       oldUsername = user.username
@@ -28,9 +28,6 @@ function Account() {
     }
   }, [user])
 
-  // if (!user) {
-  //   return <LoadingSpinner />
-  // }
   function handleChange(e) {
     setFormData(prev => ({
       ...prev,
@@ -54,12 +51,17 @@ function Account() {
         if (fileInputRef.current) {
           fileInputRef.current.value = '';
         }
-        // 同時清除 formData 中的 image（可選）
+        // 清除image
         setFormData(prev => ({
           ...prev,
           image: null
         }));
       }
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        image: null
+      }));
     }
   }
 
@@ -89,9 +91,21 @@ function Account() {
         fd.append('username', formData.username)
         fd.append('image', formData.image)
         await postAccountInfo(fd)
-        window.location.reload()
+        Swal.fire({
+          title: "修改成功",
+          icon: "success",
+          confirmButtonText: '確定'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload()
+          }
+        })
       } catch (error) {
-        setErrorMessage(error.message)
+        Swal.fire({
+          title: "修改失敗",
+          icon: "error",
+          text: error.message
+        })
       }
     }
   };
@@ -166,7 +180,7 @@ function Account() {
           </Form.Group>
 
           <Button variant="primary" type="submit"
-            disabled={!nameValid || !nameUnique}>
+            disabled={!nameValid || !nameUnique || (oldUsername == formData.username && !formData.image)}>
             修改資料
           </Button>
         </Form>

@@ -98,7 +98,7 @@ export default function EditingPlace() {
             onChange={handleSelectChange}
             isSearchable
             isClearable
-            placeholder="搜尋或選擇電影名稱..."
+            placeholder="搜尋或選擇電影..."
             noOptionsMessage={() => "找不到符合的電影"}
           />
         </Form.Group>
