@@ -29,6 +29,7 @@ function Map() {
   const [selectedMovie, setSelectedMovie] = useState(null)
   const [filteredSpots, setFilteredSpots] = useState([])
   const prevFilteredSpotsRef = useRef([])
+  const [optionInputValue, setOptionInputValue] = useState('');
 
   useEffect(() => {
     if (id && options?.length > 0) {
@@ -100,6 +101,24 @@ function Map() {
       description: data.description
     })
   }
+
+  // 選項篩選器
+  function getSortedOptions(input) {
+    if (!input) return options;
+
+    const filtered = options
+      .filter(opt => opt.label.includes(input))
+      .sort((a, b) => {
+        const aIndex = a.label.indexOf(input);
+        const bIndex = b.label.indexOf(input);
+        if (aIndex === bIndex) return 0;
+        if (aIndex === 0) return -1; // a 前綴
+        if (bIndex === 0) return 1;  // b 前綴
+        return aIndex - bIndex;      // 否則比較位置
+      });
+
+    return filtered;
+  };
 
   function handleSelectChange(option) {
     setSelectedMovie(option);
@@ -178,8 +197,9 @@ function Map() {
                 <div className="mb-3" />
                 <Form.Group className="mb-3" controlId="form">
                   <Select
-                    options={options}
+                    options={getSortedOptions(optionInputValue)}
                     value={selectedMovie}
+                    onInputChange={(value) => setOptionInputValue(value)}
                     onChange={handleSelectChange}
                     isSearchable
                     isClearable

@@ -14,6 +14,7 @@ export default function EditingPlace() {
   const textareaRef = useRef(null)
   const { movieTitleData, loading } = useMovieTitleData()
   const [selectedOption, setSelectedOption] = useState(null)
+  const [optionInputValue, setOptionInputValue] = useState('');
 
   if (loading) return <LoadingSpinner />
 
@@ -21,6 +22,23 @@ export default function EditingPlace() {
     value: data.movieId,
     label: data.title,
   }));
+
+  function getSortedOptions(input) {
+    if (!input) return options;
+
+    const filtered = options
+      .filter(opt => opt.label.includes(input))
+      .sort((a, b) => {
+        const aIndex = a.label.indexOf(input);
+        const bIndex = b.label.indexOf(input);
+        if (aIndex === bIndex) return 0;
+        if (aIndex === 0) return -1; // a 前綴
+        if (bIndex === 0) return 1;  // b 前綴
+        return aIndex - bIndex;      // 否則比較位置
+      });
+
+    return filtered;
+  };
 
   function handleChange(name, value) {
     setFormData(prev => ({
@@ -93,8 +111,9 @@ export default function EditingPlace() {
         <Form.Group className="mb-3" controlId="form">
           <Form.Label>電影名稱</Form.Label>
           <Select
-            options={options}
+            options={getSortedOptions(optionInputValue)}
             value={selectedOption}
+            onInputChange={(value) => setOptionInputValue(value)}
             onChange={handleSelectChange}
             isSearchable
             isClearable

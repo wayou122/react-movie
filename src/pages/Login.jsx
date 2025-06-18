@@ -123,7 +123,7 @@ function Login() {
       navigate('/')
       window.location.reload()
     } catch (err) {
-      setErrorMessage('發生錯誤請重新登入')
+      setErrorMessage(err.message)
     }
   }
 
@@ -234,7 +234,8 @@ function Login() {
               </Col>
               <Col xs={4} className="d-flex align-items-center px-0">
                 <Image src={authcodeURL || null} />
-                <button onClick={fetchAuthcode} style={{ 'border': 'none' }}>⟳</button>
+                <button type='button' aria-label="刷新驗證碼"
+                  onClick={fetchAuthcode} style={{ 'border': 'none' }}>⟳</button>
               </Col>
             </Row>
           </Form.Group>
