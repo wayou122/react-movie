@@ -28,6 +28,7 @@ export const movieParamsAPI = (params) => `${API}/movie${params}`
 export const movieIdAPI = (id) => `${API}/movie/${id}`
 export const movieSearchAPI = `${API}/movie/search`
 export const movieFilterAPI = `${API}/movie/filter`
+export const findMovieByTitleAPI = (params) => `${API}/movie/find?title=${params}`
 
 export const watchlistAPI = `${API}/user/watchlist`
 export const reviewAPI = (params) => `${API}/review${params}`
@@ -39,3 +40,5 @@ export const mapDataAPI = `${API}/spot`
 export const addSpotAPI = `${API}/spot`
 
 export const movieTitleAPI = `${API}/movie/title`
+
+export const AIrecommendAPI = (params) => `${API}/ai/recommend-movie?keywords=${params}`

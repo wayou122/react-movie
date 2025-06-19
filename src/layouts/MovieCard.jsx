@@ -19,7 +19,7 @@ function MovieCard() {
   const type = movieData.type
   const length = movieData.length ? movieData.length + '分鐘' : ''
   let posterUrl = movieData.posterUrl
-  if (posterUrl.includes('/film/film'))
+  if (posterUrl?.includes('/film/film'))
     posterUrl = movieData.posterUrl = `https://dummyimage.com/140x210/234/fff&text=${title}`
   const actorShow = actor && actor.length >= 28 ? actor.slice(0, actor.indexOf('、', 24)) : actor || '';
 

@@ -37,7 +37,9 @@ function Menu() {
               {/* <Nav.Link as={Link} to='/reviewer'>影評人</Nav.Link> */}
               <Nav.Link as={Link} to='/chat'>聊聊</Nav.Link>
               <Nav.Link as={Link} to='/map'>地圖</Nav.Link>
+              <Nav.Link as={Link} to='/recommend'>AI 推薦</Nav.Link>
             </Nav>
+
             {user ? (
               <Nav>
                 <Nav.Link as={Link} to={`/reviewer/${user.username}`} >

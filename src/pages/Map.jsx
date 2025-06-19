@@ -25,7 +25,7 @@ function Map() {
 
   const [activeTab, setActiveTab] = useState('info')
   const [formData, setFormData] = useState({ lat: '', lng: '', spotName: '', movieId: '', description: '' })
-  const [infoData, setInfoData] = useState({ lat: '', lng: '', name: '', title: '', description: '' })
+  const [infoData, setInfoData] = useState({})
   const [selectedMovie, setSelectedMovie] = useState(null)
   const [filteredSpots, setFilteredSpots] = useState([])
   const prevFilteredSpotsRef = useRef([])
@@ -121,7 +121,8 @@ function Map() {
   };
 
   function handleSelectChange(option) {
-    setSelectedMovie(option);
+    setSelectedMovie(option)
+    setInfoData({})
   }
 
   function MapController() {
@@ -153,7 +154,7 @@ function Map() {
       <Menu />
       <Container >
         <Row className="d-flex justify-content-center">
-          <Col xs={12} md={8} lg={9}>
+          <Col xs={12} md={8} lg={9} className="mb-3 mb-md-0">
             <MapContainer
               center={[25.0, 121.56]}
               zoom={13}

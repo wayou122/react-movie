@@ -6,22 +6,23 @@ export function PlaceInfo({ infoData, noSpot }) {
   return (
     <>
       {infoData?.name ? (
-        <div className="card shadow-sm p-3">
+        <div className="card p-2">
           <div className="card-body">
-            <h5 className="card-title mb-3">{infoData.name}</h5>
-            <p className="mb-3 navigate-link" onClick={() => navigate(`/movie/${infoData.movieId}`)}>
+            <h5 className="card-title mb-2">{infoData.name}</h5>
+            <p className="mb-2 navigate-link" onClick={() => navigate(`/movie/${infoData.movieId}`)}>
               🎬<span className="text-primary"> {infoData.title}</span>
             </p>
-            <p className="mb-3">
+            <p className="mb-2">
               {infoData.description}
             </p>
-            <p><a
-              className="text-decoration-none small"
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`https://www.google.com/maps/search/${infoData.name}/@${infoData.lat},${infoData.lng}`}
-            >
-              🗺️ 看 Goolge 地圖</a>
+            <p className="mb-1">
+              <a
+                className="text-decoration-none small"
+                target="_blank"
+                rel="noopener noreferrer"
+                href={`https://www.google.com/maps/search/${infoData.name}/@${infoData.lat},${infoData.lng}`}
+              >
+                🗺️ 看 Goolge 地圖</a>
             </p>
           </div>
         </div>

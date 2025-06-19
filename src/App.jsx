@@ -20,6 +20,7 @@ import ChatRoom from './pages/ChatRoom.jsx';
 import Reviewer from './pages/Reviewer.jsx';
 import Map from './pages/Map.jsx';
 import TestMapPage from './pages/TestMapPage.jsx';
+import Recommend from './pages/Recommend.jsx';
 
 function App() {
   const router = createBrowserRouter([
@@ -65,6 +66,11 @@ function App() {
     {
       path: '/reviewer',
       element: <RankingReviewer />,
+      errorElement: <NotFoundPage />,
+    },
+    {
+      path: '/recommend',
+      element: <Recommend />,
       errorElement: <NotFoundPage />,
     },
     {
