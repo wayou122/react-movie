@@ -56,11 +56,16 @@
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(13).JPG)
 
 
+## AI 推薦電影
+此頁面讓使用者輸入或點選關鍵字，讓AI根據關鍵字推薦電影，解決許多人不知道看什麼的問題。前端發送請求，後端取得關鍵字組合成 prompt。後端使用 Spring AI，並在本地用 Ollama 運行 gemma3 模型，生成資料用 WebFlux 資料流回傳前端。前端用 EventSource 建立連線，讓結果可以逐字顯示（如同chatGPT）。最後根據結果顯示電影連結。
+
+![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(14).JPG)
+
 ## 專案資訊
 本專案由王昱堯在2025年5-6月獨自完成。
 * 專案後端連結 https://github.com/wayou122/springboot-movie
 * 專案前端連結 https://github.com/wayou122/react-movie
 
-![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(14).JPG)
+![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(15).JPG)
 
 
