@@ -1,5 +1,5 @@
 # 鼎電影專案
-這是一個影評系統，功能類似於國外IMDb影評網站。使用者可以查尋電影、收藏電影、瀏覽影評、撰寫影評、按讚影評。還有即時聊天論壇、景點地圖共同編輯等功能。
+這是一個電影影評網站。使用者可以查尋電影、收藏電影、瀏覽影評、撰寫影評、按讚影評。還有即時聊天論壇（WebSocket）、景點地圖（React Leaflet）、AI 推薦電影（Spring AI）等功能。
 
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(4).JPG)
 
