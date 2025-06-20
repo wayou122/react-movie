@@ -4,8 +4,8 @@
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(4).JPG)
 
 ## 系統架構
-本系統採用前後端分離架構，後端使用Java、SpringBoot框架完成，採用Spring MVC架構。即時聊天訊息使用WebSocket技術。資料存取使用JPA與資料庫連結。
-前後端之間使用REST API互相溝通。前端使用React構成，以Bootstrap設定基礎樣式。地圖部分則是採用React Leaflet套件完成。
+本系統採用前後端分離架構，後端使用Java、SpringBoot框架，採用Spring MVC架構。即時聊天訊息使用WebSocket技術、STOMP傳輸協定。資料存取使用JPA與資料庫連結。
+前後端之間使用REST API互相溝通。前端使用React構成，以Bootstrap設定基礎樣式。地圖採用React Leaflet套件完成。
 
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(5).JPG)
 
@@ -15,18 +15,19 @@
 2. 所有非主鍵欄位都依賴於整個主鍵，也就是沒有部份相依。
 3. 所有非主鍵欄位之間沒有依賴關係，也就是沒有移轉相依。
 
+電影收藏表的關聯是使用者1:1電影，所以設計2個外鍵組成複合主鍵。影評按讚表的關聯是使用者1:1影評，所以也是2個外鑑組成複合主鍵。影評表的關聯是使用者1:1電影，但為了方便其他表格引用，設計獨立主鍵，不使用複合主鍵。
+
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(6).JPG)
 
-## 系統功能展示
-
-這是電影列表頁。使用者可以搜尋電影（電影標題）、排序（依評價高低、依評論數量、依上映日期）、篩選電影（依照電影類型劇情片/紀錄片/動畫/短片）。此處的查詢使用Spring Data Pageable達到分頁查詢的效果，減低傳輸負擔。查詢參數顯示在網址，讓使用者點選瀏覽器上下頁能夠符合個人體驗。
+## 電影列表頁
+使用者可以搜尋電影（電影標題）、排序（依評價高低、依評論數量、依上映日期）、篩選電影（依照電影類型劇情片/紀錄片/動畫/短片）。資料查詢使用Spring Data Pageable達到分頁查詢的效果，減低查詢與傳輸負擔。查詢參數顯示在網址，讓使用者切換瀏覽器上下頁可以符合直覺體驗。
 
 登入帳號後在卡片右側可以點選收藏。點選標題或電影海報則可以進入電影專頁。
 
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(7).JPG)
 
 ### 電影專頁
-使用者可以撰寫影評，此處限定一個人對一部電影只能評論一次。若已評論則可以點選編輯和刪除。
+使用者可以撰寫影評，此處限定一個人對一部電影只能評論一次。若已評論則可以點選編輯和刪除。此處API設計REST風格，編輯是PUT請求，刪除是DELETE請求。
 
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(8).JPG)
 
@@ -40,7 +41,7 @@
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(10).JPG)
 
 ### 聊天論壇頁
-此頁面可以在電影大型活動時啟用（如：頒獎典禮），讓使用者即時聊天互動交流。此處使用WebSocket即時通訊技術。訊息協定則使用STOMP協定，讓訂閱和發布訊息更有效率。
+此頁面可以在電影大型活動時啟用（如：頒獎典禮），讓使用者即時聊天互動交流。後端使用WebSocket傳輸技術，並且用STOMP協定實作即時通訊功能，讓訂閱和發布訊息更有效率。前端用SockJS連線至後端，並且建立stompClient客戶端連線，訂閱與發送消息。
 
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(11).JPG)
 
@@ -55,9 +56,8 @@
 
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(13).JPG)
 
-
 ## AI 推薦電影
-此頁面讓使用者輸入或點選關鍵字，讓AI根據關鍵字推薦電影，解決許多人不知道看什麼的問題。前端發送請求，後端取得關鍵字組合成 prompt。後端使用 Spring AI，並在本地用 Ollama 運行 gemma3 模型，生成資料用 WebFlux 資料流回傳前端。前端用 EventSource 建立連線，讓結果可以逐字顯示（如同chatGPT）。最後根據結果顯示電影連結。
+此頁面讓使用者輸入或點選關鍵字，讓AI根據關鍵字推薦電影，解決許多人不知道看什麼的問題。前端發送請求，後端取得關鍵字組合成 prompt。後端使用 Spring AI 作為框架，並在本地用 Ollama 運行 gemma3 模型。為了讓前端有良好體驗採用SSE技術。後端生成資料用 WebFlux 回傳資料流。前端用 EventSource API 建立連線逐步接收結果，讓結果可以逐字顯示（如同chatGPT）。最後根據結果顯示本網站的電影連結。
 
 ![image](https://github.com/wayou122/react-movie/blob/master/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E%E5%9C%96/%E5%B0%88%E6%A1%88%E8%AA%AA%E6%98%8E(14).JPG)
 
