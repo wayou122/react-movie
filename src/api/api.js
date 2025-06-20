@@ -41,4 +41,4 @@ export const addSpotAPI = `${API}/spot`
 
 export const movieTitleAPI = `${API}/movie/title`
 
-export const AIrecommendAPI = (params) => `${API}/ai/recommend-movie?keywords=${params}`
+export const AIrecommendAPI = (params) => `${API}/ai/recommend-movie?${params}`

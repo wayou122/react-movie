@@ -11,7 +11,6 @@ import NotFoundPage from './pages/NotFoundPage.jsx'
 import TestPage from './pages/TestPage.jsx'
 import { UserProvider } from './contexts/UserContext.jsx';
 import { ThemeProvider } from './contexts/ThemeContext.jsx';
-import ResetPassword from './pages/ResetPassword.jsx';
 import ForgetPassword from './pages/ForgetPassword.jsx';
 import EmailConfirm from './pages/EmailConfirm.jsx';
 import { Watchlist } from './pages/Watchlist.jsx';
@@ -19,7 +18,6 @@ import Chat from './pages/Chat.jsx';
 import ChatRoom from './pages/ChatRoom.jsx';
 import Reviewer from './pages/Reviewer.jsx';
 import Map from './pages/Map.jsx';
-import TestMapPage from './pages/TestMapPage.jsx';
 import Recommend from './pages/Recommend.jsx';
 
 function App() {
@@ -91,10 +89,6 @@ function App() {
     {
       path: '/user/review',
       element: <Reviews />,
-      errorElement: <NotFoundPage />,
-    }, {
-      path: '/reset-password',
-      element: <ResetPassword />,
       errorElement: <NotFoundPage />,
     }, {
       path: '/forget-password',

@@ -137,7 +137,7 @@ function Map() {
       if (locations.length > 0) {
         const bounds = L.latLngBounds(locations)
         map.fitBounds(bounds, {
-          padding: [50, 50], // 避免點太靠邊界
+          padding: [30, 30], // 避免點太靠邊界
           animate: true,
         })
         prevFilteredSpotsRef.current = filteredSpots
