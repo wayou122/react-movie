@@ -24,7 +24,7 @@ function Menu() {
 
   return (
     <>
-      <Navbar collapseOnSelect expand="sm" className="bg-body-tertiary mb-3 menu">
+      <Navbar collapseOnSelect expand="md" className="bg-body-tertiary mb-3 menu">
         <Container>
           <div className="d-flex justify-content-start align-items-center">
             <Navbar.Toggle aria-controls="responsive-navbar-nav" className='me-3' />
